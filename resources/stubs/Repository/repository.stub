@@ -1,0 +1,22 @@
+<?php
+
+namespace RepositoryNamespace;
+
+use App\Model\ModelName;
+
+class DummyClass
+{
+    use BaseRepository;
+
+    protected $model;
+
+    /**
+     * Constructor.
+     *
+     * @param Category $category
+     */
+    public function __construct(ModelName $model = null)
+    {
+        $this->model = $model ? $model : new ModelName();
+    }
+}
