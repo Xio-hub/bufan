@@ -13,7 +13,7 @@
                                 <span class="text-muted text-xs block">menu <b class="caret"></b></span>
                             </a>
                             <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                                <li><a class="dropdown-item" href="#" onclick="event.preventDefault();document.getElementById('logout-form').submit();>Logout</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="event.preventDefault();document.getElementById('logout-form').submit();">Logout</a></li>
                                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                     {{ csrf_field() }}
                                 </form>
