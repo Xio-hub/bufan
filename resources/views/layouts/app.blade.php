@@ -16,7 +16,20 @@
 
 </head>
 
-@yield('content')
+<body>
+    <div id="wrapper">
+
+        @include('sidebar')
+
+        <div id="page-wrapper" class="gray-bg">
+            @include('navbar')
+
+            @yield('content')
+
+            @include('footer')
+        </div>
+    </div>
+</body>
 
 <!-- Mainly scripts -->
 <script src="{{asset('js/jquery-3.1.1.min.js')}}"></script>

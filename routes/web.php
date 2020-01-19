@@ -16,3 +16,7 @@ Route::get('/', 'HomeController@index');
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::namespace('Admin')->group(function () {
+    Route::get('add_user', 'UserController@showAddUserView')->name('add_user');
+});
