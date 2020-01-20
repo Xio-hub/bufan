@@ -7,10 +7,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>INSPINIA | Main view</title>
-
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+    
+    <link href="{{asset('css/bootstrap.min.css')}}" rel="stylesheet">
     <link href="{{asset('font-awesome/css/font-awesome.css')}}" rel="stylesheet">
-
+    <link href="{{asset('css/plugins/footable/footable.core.css')}}" rel="stylesheet">
     <link href="{{asset('css/animate.css')}}" rel="stylesheet">
     <link href="{{asset('css/style.css')}}" rel="stylesheet">
 
@@ -38,7 +38,22 @@
 <script src="{{asset('js/plugins/metisMenu/jquery.metisMenu.js')}}"></script>
 <script src="{{asset('js/plugins/slimscroll/jquery.slimscroll.min.js')}}"></script>
 
+<!-- FooTable -->
+<script src="js/plugins/footable/footable.all.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+
+        $('.footable').footable();
+        $('.footable2').footable();
+
+    });
+
+</script>
+
 <!-- Custom and plugin javascript -->
+<!-- sidebar.js必须放在inspinia.js前面 -->
+<script src="{{asset('js/sidebar.js')}}"></script>
 <script src="{{asset('js/inspinia.js')}}"></script>
 <script src="{{asset('js/plugins/pace/pace.min.js')}}"></script>
 
