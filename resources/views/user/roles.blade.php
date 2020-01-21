@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title','角色列表')
+
 @section('content')
 <div class="wrapper wrapper-content animated fadeInRight">
     <div class="row">
@@ -9,15 +11,15 @@
                     <table class="table table-striped">
                         <thead>
                         <tr>
-                            <th class="col-lg-1">#</th>
-                            <th class="col-lg-2">角色</th>
-                            <th class="col-lg-6">拥有权限</th>
-                            <th class="col-lg-3">操作</th>
+                            <th scope="col">#</th>
+                            <th scope="col">角色</th>
+                            <th scope="col" class="col-md-5">拥有权限</th>
+                            <th scope="col">操作</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr>
-                            <td>1</td>
+                            <td scope="row">1</td>
                             <td><span class="line">系统管理员</span></td>
                             <td>Samantha</td>
                             <td class="text-navy">
@@ -26,7 +28,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>2</td>
+                            <td scope="row">2</td>
                             <td><span class="line">商家</span></td>
                             <td>Samantha</td>
                             <td class="text-navy">
@@ -35,7 +37,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>3</td>
+                            <td scope="row">3</td>
                             <td><span class="line">系统管理员</span></td>
                             <td>Samantha</td>
                             <td class="text-navy">

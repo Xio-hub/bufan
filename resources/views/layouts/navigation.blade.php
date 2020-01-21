@@ -45,6 +45,13 @@
                     <li><a href="index.html">添加图册</a></li>
                 </ul>
             </li>
+
+            <li>
+                <a href="#"><i class="fa fa-th-large"></i> <span class="nav-label">个人管理</span> <span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li><a href="{{route('reset_password')}}">修改密码</a></li>
+                </ul>
+            </li>
         </ul>
 
     </div>

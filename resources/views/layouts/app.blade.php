@@ -6,27 +6,32 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>INSPINIA | Main view</title>
+    <title>@yield('title') </title>
     
     <link href="{{asset('css/bootstrap.min.css')}}" rel="stylesheet">
     <link href="{{asset('font-awesome/css/font-awesome.css')}}" rel="stylesheet">
-    <link href="{{asset('css/plugins/footable/footable.core.css')}}" rel="stylesheet">
     <link href="{{asset('css/animate.css')}}" rel="stylesheet">
     <link href="{{asset('css/style.css')}}" rel="stylesheet">
+    @section('css')
+    @show
 
 </head>
 
 <body>
     <div id="wrapper">
 
-        @include('sidebar')
+        <!-- Navigation -->
+        @include('layouts.navigation')
 
         <div id="page-wrapper" class="gray-bg">
-            @include('navbar')
+            <!-- Page wrapper -->
+            @include('layouts.topnavbar')
 
+            <!-- Main view  -->
             @yield('content')
 
-            @include('footer')
+            <!-- Footer -->
+            @include('layouts.footer')
         </div>
     </div>
 </body>
@@ -38,23 +43,11 @@
 <script src="{{asset('js/plugins/metisMenu/jquery.metisMenu.js')}}"></script>
 <script src="{{asset('js/plugins/slimscroll/jquery.slimscroll.min.js')}}"></script>
 
-<!-- FooTable -->
-<script src="js/plugins/footable/footable.all.min.js"></script>
-
-<script>
-    $(document).ready(function() {
-
-        $('.footable').footable();
-        $('.footable2').footable();
-
-    });
-
-</script>
-
 <!-- Custom and plugin javascript -->
 <!-- sidebar.js必须放在inspinia.js前面 -->
 <script src="{{asset('js/sidebar.js')}}"></script>
 <script src="{{asset('js/inspinia.js')}}"></script>
 <script src="{{asset('js/plugins/pace/pace.min.js')}}"></script>
-
+@section('scripts')
+@show
 </html>

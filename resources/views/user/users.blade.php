@@ -1,5 +1,11 @@
 @extends('layouts.app')
 
+@section('title','用户列表')
+
+@section('css')
+    <link href="{{asset('css/plugins/footable/footable.core.css')}}" rel="stylesheet">
+@endsection
+
 @section('content')
 <div class="wrapper wrapper-content animated fadeInRight">
     <div class="row">
@@ -282,4 +288,18 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('scripts')
+    <script src="js/plugins/footable/footable.all.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+
+            $('.footable').footable();
+            $('.footable2').footable();
+
+        });
+
+    </script>
 @endsection
