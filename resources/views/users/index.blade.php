@@ -40,10 +40,8 @@
 @endsection
 
 @section('scripts')
-    <script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
-    <script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
-    <script src="js/plugins/dataTables/datatables.min.js"></script>
-    <script src="js/plugins/dataTables/dataTables.bootstrap4.min.js"></script>
+    <script src="{{asset('js/plugins/dataTables/datatables.min.js')}}"></script>
+    <script src="{{asset('js/plugins/dataTables/dataTables.bootstrap4.min.js')}}"></script>
 
     <script>
         $(document).ready(function(){

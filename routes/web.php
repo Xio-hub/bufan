@@ -16,10 +16,12 @@ Auth::routes();
 Route::get('/', 'HomeController@index');
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::namespace('Admin')->group(function () {
-    Route::get('show_users', 'IndexController@showUsersView')->name('show_users');
-    Route::get('add_user', 'IndexController@showAddUserView')->name('add_user');
-    Route::get('show_roles', 'IndexController@showRolesView')->name('show_roles');
-    Route::get('show_permission', 'IndexController@showPermissionsView')->name('show_permission');
-    Route::get('reset_password', 'IndexController@showResetView')->name('reset_password');
+Route::group([
+    'prefix' => 'admin'
+], function () {
+    Route::get('users', 'UserController@index')->name('show_users');
+    Route::get('user/create', 'UserController@create')->name('add_user');
+    Route::get('roles', 'RoleController@index')->name('show_roles');
+    Route::get('permissions', 'PermissionController@index')->name('show_permission');
+    Route::get('reset_password', 'UserController@showResetView')->name('reset_password');
 });
