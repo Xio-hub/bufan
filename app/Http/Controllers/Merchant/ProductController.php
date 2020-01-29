@@ -1,0 +1,44 @@
+<?php
+
+namespace App\Http\Controllers\Merchant;
+
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+
+class ProductController extends Controller
+{
+    public function index()
+    {
+        return view('merchants.products.index');
+    }
+
+    public function create()
+    {
+        return view('merchants.products.create');
+    }
+
+    public function store(Request $request)
+    {
+
+    }
+
+    public function edit()
+    {
+        return view('merchants.products.edit');
+    }
+
+    public function update(Request $request)
+    {
+
+    }
+
+    public function uploadProductImage()
+    {
+
+    }
+
+    public function uploadProductVideo()
+    {
+
+    }
+}

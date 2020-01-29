@@ -13,18 +13,6 @@
                         <a class="collapse-link">
                             <i class="fa fa-chevron-up"></i>
                         </a>
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                            <i class="fa fa-wrench"></i>
-                        </a>
-                        <ul class="dropdown-menu dropdown-user">
-                            <li><a href="#" class="dropdown-item">Config option 1</a>
-                            </li>
-                            <li><a href="#" class="dropdown-item">Config option 2</a>
-                            </li>
-                        </ul>
-                        <a class="close-link">
-                            <i class="fa fa-times"></i>
-                        </a>
                     </div>
                 </div>
                 <div class="ibox-content">
@@ -32,40 +20,19 @@
                     <table class="table">
                         <thead>
                         <tr>
-                            <th>#</th>
-                            <th>角色</th>
-                            <th>拥有权限</th>
-                            <th>操作</th>
+                            <th>No.</th>
+                            <th>权限</th>
+                            <th>guard</th>
                         </tr>
                         </thead>
                         <tbody>
+                            @foreach ($permissions as $i => $permission)
                             <tr>
-                                <td scope="row">1</td>
-                                <td><span class="line">系统管理员</span></td>
-                                <td>Samantha</td>
-                                <td class="text-navy">
-                                    <button class="btn btn-w-m btn-primary">修改</button>
-                                    <button class="btn btn-w-m btn-danger">删除</button>
-                                </td>
+                                <td scope="row">{{$i+1}}</td>
+                                <td><span class="line">{{$permission->name}}</span></td>
+                                <td><span class="line">{{$permission->guard_name}}</span></td>
                             </tr>
-                            <tr>
-                                <td scope="row">2</td>
-                                <td><span class="line">商家</span></td>
-                                <td>Samantha</td>
-                                <td class="text-navy">
-                                    <button class="btn btn-w-m btn-primary">修改</button>
-                                    <button class="btn btn-w-m btn-danger">删除</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td scope="row">3</td>
-                                <td><span class="line">系统管理员</span></td>
-                                <td>Samantha</td>
-                                <td class="text-navy">
-                                    <button class="btn btn-w-m btn-primary">修改</button>
-                                    <button class="btn btn-w-m btn-danger">删除</button>
-                                </td>
-                            </tr>
+                            @endforeach
                             </tbody>
                     </table>
 
