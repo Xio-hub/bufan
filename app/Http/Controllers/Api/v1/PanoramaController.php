@@ -84,7 +84,7 @@ class PanoramaController extends Controller
         return response()->json($result);
     }
 
-    public function getPanorama()
+    public function detail()
     {
         $data = [
             'id' => '1',

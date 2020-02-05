@@ -23,6 +23,7 @@ Route::group([
     Route::get('init', 'InitController@init');
     Route::get('background', 'InitController@getIndexBackground');
     Route::get('categories', 'CategoryController@list');
+    Route::get('search', 'SearchController@search');
 
     Route::get('products', 'ProductController@list');
     Route::get('products/{id}', 'ProductController@detail')->where('id','\d+');
@@ -30,26 +31,24 @@ Route::group([
     Route::get('spaces/categories', 'SpaceController@getCategories');
     Route::get('spaces','SpaceController@list');
     Route::get('spaces/{id}','SpaceController@detail')->where('id','\d+');
-    Route::get('spaces/search','SpaceController@search');
 
     Route::get('styles/categories', 'StyleController@categories');
     Route::get('styles','StyleController@list');
     Route::get('styles/{id}','StyleController@detail')->where('id','\d+');
 
-    Route::get('materials', 'PanoramaController@getMaterials');
+    Route::get('panoramas/materials', 'PanoramaController@getMaterials');
     Route::get('panoramas/styles', 'PanoramaController@getStyles');
-    Route::get('panoramas/{id}', 'PanoramaController@getPanorama');
-    Route::get('vertical_views', 'PanoramaController@getVerticalView');
+    Route::get('panoramas/detail', 'PanoramaController@detail');
+    Route::get('panoramas/vertical_views', 'PanoramaController@getVerticalView');
 
     Route::get('courses/background', 'CourseController@background');
     Route::get('courses', 'CourseController@list');
-    Route::get('courses/{id}', 'CourseController@detail');
-    Route::get('courses/orders', 'CourseControlelr@getUserOrders');
-    Route::get('courses/orders/search', 'CourseControlelr@searchUserOrders');
-    Route::get('users/{user_id}/courses', 'CourseController@checkUserIsBought');
+    Route::get('courses/{course_id}', 'CourseController@detail');
+    Route::get('users/{merchant_id}/courses/orders', 'CourseController@getUserOrders');
+    Route::get('users/{merchant_id}/courses/{course_id}', 'CourseController@checkUserIsBought');
 
-    Route::get('introductions/categories', 'IntroductionController@categories');
-    Route::get('introductions/{id}', 'IntroductionController@detail')->where('id', '\d+');
+    Route::get('merchants/{merchant_id}/introductions/categories', 'IntroductionController@categories');
+    Route::get('merchants/{merchant_id}/introductions/{id}', 'IntroductionController@detail')->where('id', '\d+');
 });
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
