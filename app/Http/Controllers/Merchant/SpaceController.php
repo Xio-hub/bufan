@@ -3,38 +3,59 @@
 namespace App\Http\Controllers\Merchant;
 
 use Exception;
-use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
-use App\Models\ProductResource;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use App\Models\Space;
+use App\Models\SpaceResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
-class ProductController extends Controller
+class SpaceController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
         $merchant = Auth::guard('merchant')->user();
-        $merchant::with(['products' => function ($query) {
+
+        $merchant::with(['spaces' => function ($query) {
             $query->orderBy('created_at', 'desc');
         }])->get();
-        $products = $merchant->products;
-        foreach($products as $k => $product){
-            $product->cover = Storage::url($product->cover);
+
+        $spaces = $merchant->spaces;
+        foreach($spaces as $k => $space){
+            $space->cover = Storage::url($space->cover);
         }
-        return view('merchants.products.index')->with('products',$products);
+        return view('merchants.spaces.index')->with('spaces',$spaces);
     }
 
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function create()
     {
-        return view('merchants.products.create');
+        $merchant = Auth::guard('merchant')->user();
+        $categories = $merchant->spaceCategories;
+        return view('merchants.spaces.create')->with('categories', $categories);
     }
 
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function store(Request $request)
     {
+        $category_id = $request->input('category','0');
         $name = $request->input('name','');
         $detail_type = $request->input('detail_type','');
         $cover = $request->input('cover','');
@@ -43,13 +64,13 @@ class ProductController extends Controller
 
         if($name == ''){
             $error = 1;
-            $message = '请输入产品名称';
+            $message = '请输入名称';
             return response()->json(compact('error','message'));
         }
 
         if(!in_array($detail_type,['image','video'])){
             $error = 1;
-            $message = '产品详细类型错误';
+            $message = '空间详细类型错误';
             return response()->json(compact('error','message'));
         }
 
@@ -75,8 +96,10 @@ class ProductController extends Controller
         try{
             DB::beginTransaction();
             $merchant = Auth::guard('merchant')->user();
-            $product = Product::create([
+
+            $space = Space::create([
                 'merchant_id' => $merchant->id,
+                'category_id' => $category_id,
                 'name' => $name,
                 'cover' => $cover,
                 'type' => $detail_type,
@@ -86,44 +109,74 @@ class ProductController extends Controller
             foreach($detail as $i => $v){
                 $now = Carbon::now()->toDateTimeString();
                 $detail_data[$i]['merchant_id'] = $merchant->id;
-                $detail_data[$i]['product_id'] = $product->id;
+                $detail_data[$i]['space_id'] = $space->id;
                 $detail_data[$i]['source_type'] = $detail_type;
                 $detail_data[$i]['source_url'] = $v;
                 $detail_data[$i]['created_at'] = $now;
                 $detail_data[$i]['updated_at'] = $now;
             }
-            ProductResource::insert($detail_data);
+            SpaceResource::insert($detail_data);
             DB::commit();
             $error = 0;
             $message = 'success';
         }catch(Exception $e){
             DB::rollBack();
             $error = 1;
-            $message = '添加商品失败，请稍后再试或联系管理员';
+            $message = '添加空间失败，请稍后再试或联系管理员';
             Log::error($e);
         }finally{
             return response()->json(compact('error','message'));
         }
     }
 
-    public function edit()
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
     {
-        // return view('merchants.products.edit');
+        //
     }
 
-    public function update(Request $request)
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
     {
-
+        //
     }
 
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function destroy(Request $request)
     {
         $id = $request->id;
         try{
             DB::beginTransaction();
-            $product = Product::findOrFail($id);
-            $product->delete();
-            $product->resources()->delete();
+            $space = Space::findOrFail($id);
+            $space->resources()->delete();
+            $space->delete();
             DB::commit();
 
             $error = 0;
@@ -138,23 +191,21 @@ class ProductController extends Controller
         }
     }
 
-
     public function storeCover(Request $request)
     {
-        $path = $request->file('file')->store("images/products/cover");
+        $path = $request->file('file')->store("images/spaces/cover");
         return $path;
     }
 
-
     public function storeImage(Request $request)
     {
-        $path = $request->file('file')->store("images/products/detail");
+        $path = $request->file('file')->store("images/spaces/detail");
         return $path;
     }
 
     public function storeVideo(Request $request)
     {
-        $path = $request->file('file')->store("videos/products");
+        $path = $request->file('file')->store("videos/spaces");
         return $path;
     }
 }

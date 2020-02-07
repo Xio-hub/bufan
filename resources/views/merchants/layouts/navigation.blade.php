@@ -35,10 +35,10 @@
             <li>
                 <a href="#"><i class="fa fa-th-large"></i> <span class="nav-label">空间管理</span> <span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
-                    <li><a href="index.html">空间分类</a></li>
-                    <li><a href="index.html">添加分类</a></li>
-                    <li><a href="index.html">空间列表</a></li>
-                    <li><a href="index.html">添加空间</a></li>
+                    <li><a href="{{route('merchant.space.category.index')}}">空间分类</a></li>
+                    <li><a href="{{route('merchant.space.category.create')}}">添加分类</a></li>
+                    <li><a href="{{route('merchant.space.index')}}">空间列表</a></li>
+                    <li><a href="{{route('merchant.space.create')}}">添加空间</a></li>
                 </ul>
             </li>
 

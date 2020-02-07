@@ -1,6 +1,6 @@
 @extends('merchants.layouts.app')
 
-@section('title','添加新品')
+@section('title','添加空间')
 
 @section('styles')
 <link href="{{asset('css/plugins/iCheck/custom.css')}}" rel="stylesheet">
@@ -23,7 +23,19 @@
                 <div class="ibox-content">
                     <form id='dataForm' enctype="multipart/form-data">
                         <div class="form-group  row">
-                            <label class="col-sm-2 col-form-label">新品名称</label>
+                            <label class="col-sm-2 col-form-label">所属分类</label>
+                            <div class="col-sm-5">
+                                <select class="form-control m-b" name="category">
+                                    @foreach($categories as $category)
+                                    <option value="{{$category->id}}">{{$category->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+
+                        <div class="form-group  row">
+                            <label class="col-sm-2 col-form-label">空间名称</label>
                             <div class="col-sm-5"><input type="text" class="form-control" name='name'></div>
                         </div>
                         <div class="hr-line-dashed"></div>
@@ -41,13 +53,11 @@
                             <label class="col-sm-2 col-form-label">产品详细</label>
                             <div class='col-sm-5'>
                                 <div id="image_fileinput_box">
-
                                     <div class="dropzone" id="image_detail_box">
                                         <div class="fallback">
                                             <input name="file" type="file" multiple />
                                         </div>
                                     </div>
-
                                 </div>
 
                                 <div id="video_fileinput_box" style="display: none">
@@ -66,11 +76,12 @@
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">封面设置</label>
                             <div class='col-sm-5'>
-                                <div class="dropzone" id="cover_box">
-                                    <div class="fallback">
-                                        <input name="file" type="file" />
+       
+                                    <div class="dropzone" id="cover_box">
+                                        <div class="fallback">
+                                            <input name="file" type="file" />
+                                        </div>
                                     </div>
-                                </div>
                             </div>
                         </div>
                         <div class="hr-line-dashed"></div>
@@ -96,7 +107,7 @@
         $("#image_detail_box").dropzone({
             acceptedFiles: 'image/*',
             params:{'_token':$('meta[name="csrf-token"]').attr('content')},
-            url: "{{route('product.image.upload')}}",
+            url: "{{route('space.image.upload')}}",
             addRemoveLinks: true,
             maxFiles: 9,
             paramName: "file", // The name that will be used to transfer the file
@@ -118,7 +129,7 @@
         $("#video_detail_box").dropzone({
             acceptedFiles: 'video/*',
             params:{'_token':$('meta[name="csrf-token"]').attr('content')},
-            url: "{{route('product.video.upload')}}",
+            url: "{{route('space.video.upload')}}",
             addRemoveLinks: true,
             maxFiles: 1,
             paramName: "file", // The name that will be used to transfer the file
@@ -140,7 +151,7 @@
         $("#cover_box").dropzone({
             acceptedFiles: 'image/*',
             params:{'_token':$('meta[name="csrf-token"]').attr('content')},
-            url: "{{route('product.cover.upload')}}",
+            url: "{{route('space.cover.upload')}}",
             addRemoveLinks: true,
             maxFiles: 1,
             paramName: "file", // The name that will be used to transfer the file
@@ -161,14 +172,14 @@
         $('#btn-commit').click(function(){
             $.ajax({
                 type : 'post',
-                url : "{{route('merchant.product.store')}}",
+                url : "{{route('merchant.space.store')}}",
                 headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                 dataType : 'json',
                 data: $('#dataForm').serialize(),
                 success : function(data,textStatus,jqXHR){
                     if(data.error == 0){
                         alert('添加成功');
-                        window.location.href = "{{route('merchant.product.index')}}";
+                        window.location.href = "{{route('merchant.space.index')}}";
                     }else{
                         alert(data.message);
                     }
@@ -177,7 +188,7 @@
         });
         
         $('#btn-cancel').click(function(){
-            window.location.href = "{{route('merchant.space.category.index')}}";
+            window.location.href = "{{route('merchant.space.index')}}";
         });
 
 

@@ -522,7 +522,7 @@
             if(confirm('该操作不可回撤，确认删除商家吗？')){
                 $.ajax({
                     type : 'delete',
-                    url : "{{env('APP_URL')}}/management/admin/merchants/"+id,
+                    url : "{{env('APP_URL')}}/administer/management/merchants/"+id,
                     contentType : 'application/json;charset=UTF-8',
                     headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
                     dataType : 'json',

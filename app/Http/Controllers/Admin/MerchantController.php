@@ -48,23 +48,23 @@ class MerchantController extends Controller
         $categories = $request->input('categories') ?? '';
         $permissions = $request->input('permissions') ?? '';
 
-        $top_logo = '';
-        if ($request->hasFile('top_logo')) {
-            $this->validate($request, ['top_logo'=>'image',]);
-            $top_logo =  $request->top_logo->store('top_logo');
-        }
-
-        $sitebar_logo = '';
-        if ($request->hasFile('sitebar_logo')) {
-            $this->validate($request, ['sitebar_logo'=>'image',]);
-            $sitebar_logo =  $request->sitebar_logo->store('sitebar_logo');
-        }
-
         $merchant = Merchant::create([
             'username' => $username,
             'email' => $email,
             'password' => bcrypt($password)
         ]);
+
+        $top_logo = '';
+        if ($request->hasFile('top_logo')) {
+            $this->validate($request, ['top_logo'=>'image',]);
+            $top_logo =  $request->top_logo->store("images/top_logo/{$merchant->id}");
+        }
+
+        $sitebar_logo = '';
+        if ($request->hasFile('sitebar_logo')) {
+            $this->validate($request, ['sitebar_logo'=>'image',]);
+            $sitebar_logo =  $request->sitebar_logo->store("images/sitebar_logo/{$merchant->id}");
+        }
         
         MerchantBase::create([
             'merchant_id' => $merchant->id,
