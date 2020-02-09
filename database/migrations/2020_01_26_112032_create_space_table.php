@@ -18,6 +18,7 @@ class CreateSpaceTable extends Migration
             $table->unsignedInteger('merchant_id');
             $table->string('name');
             $table->string('cover')->default('');
+            $table->smallInteger('priority')->default(0);
             $table->timestamps();
 
             $table->index('merchant_id');
@@ -29,6 +30,8 @@ class CreateSpaceTable extends Migration
             $table->unsignedMediumInteger('category_id');
             $table->string('name');
             $table->string('cover');
+            $table->string('type');
+            $table->smallInteger('priority')->default(0);
             $table->timestamps();
 
             $table->index('merchant_id');
@@ -41,6 +44,7 @@ class CreateSpaceTable extends Migration
             $table->unsignedMediumInteger('space_id');
             $table->string('source_url');
             $table->string('source_type');
+            $table->smallInteger('priority')->default(0);
             $table->timestamps();
 
             $table->index('merchant_id');

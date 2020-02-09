@@ -101,6 +101,13 @@ Route::group([
     Route::put('/spaces/{id}', 'SpaceController@update')->where('id','\d+')->name('merchant.space.update');
     Route::delete('/spaces/{id}', 'SpaceController@destroy')->where('id','\d+')->name('merchant.space.destroy');
 
+    Route::get('/styles/categories', 'StyleCategoryController@index')->name('merchant.style.category.index');
+    Route::get('/styles/categories/create', 'StyleCategoryController@create')->name('merchant.style.category.create');
+    Route::post('/styles/categories', 'StyleCategoryController@store')->name('merchant.style.category.store');
+    Route::get('/styles/categories/{id}/edit', 'StyleCategoryController@edit')->name('merchant.style.category.edit');
+    Route::patch('/styles/categories/{id}', 'StyleCategoryController@update')->name('merchant.style.category.update');
+    Route::delete('/styles/categories/{id}', 'StyleCategoryController@destroy')->name('merchant.style.category.destroy');
+
     Route::get('/styles', 'StyleController@index')->name('merchant.style.index');
     Route::get('/styles/create', 'StyleController@create')->name('merchant.style.create');
     Route::post('/styles', 'StyleController@store')->name('merchant.style.store');
@@ -132,8 +139,9 @@ Route::group([
     Route::get('categories/{id}/edit' , 'CategoryController@edit')->where('id', '\d+')->name('merchant.category.edit');
     Route::patch('categories/{id}' , 'CategoryController@update')->where('id', '\d+')->name('merchant.category.update');
 
-    Route::get('introduction/{id}/edit' , 'IntroductionController@edit')->where('id', '\d+')->name('merchant.introduction.edit');
-    Route::patch('introduction/{id}' , 'IntroductionController@update')->where('id', '\d+')->name('merchant.introduction.update');
+    Route::get('introductions' , 'IntroductionController@index')->where('id', '\d+')->name('merchant.introduction.index');
+    Route::get('introductions/{id}/edit' , 'IntroductionController@edit')->where('id', '\d+')->name('merchant.introduction.edit');
+    Route::patch('introductions/{id}' , 'IntroductionController@update')->where('id', '\d+')->name('merchant.introduction.update');
 
     Route::post('products/images' ,'ProductController@storeImage')->name('product.image.upload');
     Route::post('products/cover' ,'ProductController@storeCover')->name('product.cover.upload');
@@ -144,4 +152,8 @@ Route::group([
     Route::post('spaces/cover' ,'SpaceController@storeCover')->name('space.cover.upload');
     Route::post('spaces/videos' ,'SpaceController@storeVideo')->name('space.video.upload');
 
+    Route::post('styles/categories/cover' ,'StyleCategoryController@storeCover')->name('style.category.cover.upload');
+    Route::post('styles/images' ,'StyleController@storeImage')->name('style.image.upload');
+    Route::post('styles/cover' ,'StyleController@storeCover')->name('style.cover.upload');
+    Route::post('styles/videos' ,'StyleController@storeVideo')->name('style.video.upload');
 });

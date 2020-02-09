@@ -4,14 +4,14 @@ namespace App\Http\Controllers\Merchant;
 
 use Exception;
 use Illuminate\Http\Request;
-use App\Models\SpaceCategory;
+use App\Models\StyleCategory;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
-class SpaceCategoryController extends Controller
+class StyleCategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -21,14 +21,14 @@ class SpaceCategoryController extends Controller
     public function index()
     {
         $merchant = Auth::guard('merchant')->user();
-        $merchant::with(['spaceCategories' => function ($query) {
+        $merchant::with(['styleCategories' => function ($query) {
             $query->orderBy('created_at', 'desc');
         }])->get();
-        $categories = $merchant->spaceCategories;
+        $categories = $merchant->styleCategories;
         foreach($categories as $k => $category){
             $category->cover = Storage::url($category->cover);
         }
-        return view('merchants.space_categories.index')->with('categories',$categories);
+        return view('merchants.style_categories.index')->with('categories',$categories);
     }
 
     /**
@@ -38,7 +38,7 @@ class SpaceCategoryController extends Controller
      */
     public function create()
     {
-        return view('merchants.space_categories.create');
+        return view('merchants.style_categories.create');
     }
 
     /**
@@ -66,7 +66,7 @@ class SpaceCategoryController extends Controller
 
         try{
             $merchant = Auth::guard('merchant')->user();
-            $space_category = SpaceCategory::create([
+            $space_category = StyleCategory::create([
                 'merchant_id' => $merchant->id,
                 'name' => $name,
                 'cover' => $cover,
@@ -128,9 +128,9 @@ class SpaceCategoryController extends Controller
         $id = $request->id;
         try{
             DB::beginTransaction();
-            $category = SpaceCategory::findOrFail($id);
+            $category = StyleCategory::findOrFail($id);
             $category->resources()->delete();
-            $category->spaces()->delete();
+            $category->styles()->delete();
             $category->delete();
             DB::commit();
 
@@ -150,7 +150,7 @@ class SpaceCategoryController extends Controller
     {
         $merchant = Auth::guard('merchant')->user();
         $merchant_id = $merchant->id;
-        $path = $request->file('file')->store("images/spaces/category/{$merchant_id}");
+        $path = $request->file('file')->store("images/styles/category/{$merchant_id}");
         return $path;
     }
 }

@@ -46,4 +46,19 @@ class Merchant extends Model implements
     {
         return $this->hasMany('App\Models\Space', 'merchant_id');
     }
+
+    public function styleCategories()
+    {
+        return $this->hasMany('App\Models\StyleCategory', 'merchant_id');
+    }
+
+    public function styles()
+    {
+        return $this->hasMany('App\Models\Style', 'merchant_id');
+    }
+
+    public function introductions()
+    {
+        return $this->hasMany('App\Models\Introduction', 'merchant_id');
+    }
 }

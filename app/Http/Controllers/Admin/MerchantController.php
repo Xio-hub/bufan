@@ -10,9 +10,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use App\Models\Introduction;
 use App\Models\MerchantIndex;
 use Spatie\Permission\Models\Permission;
 use Auth;
+use Illuminate\Support\Carbon;
 
 class MerchantController extends Controller
 {
@@ -78,6 +80,54 @@ class MerchantController extends Controller
         MerchantIndex::create([
             'merchant_id' => $merchant->id,
         ]);
+
+        $now = Carbon::now()->toDateTimeString();
+        Introduction::insert(
+            [
+                [
+                    'merchant_id' => $merchant->id,
+                    'title' => '品牌介绍',
+                    'content' => '',
+                    'created_at' => $now,
+                    'updated_at' => $now
+                ],
+                [
+                    'merchant_id' => $merchant->id,
+                    'title' => '企业文化',
+                    'content' => '',
+                    'created_at' => $now,
+                    'updated_at' => $now
+                ],
+                [
+                    'merchant_id' => $merchant->id,
+                    'title' => '发展历程',
+                    'content' => '',
+                    'created_at' => $now,
+                    'updated_at' => $now
+                ],
+                [
+                    'merchant_id' => $merchant->id,
+                    'title' => '硬件实力',
+                    'content' => '',
+                    'created_at' => $now,
+                    'updated_at' => $now
+                ],
+                [
+                    'merchant_id' => $merchant->id,
+                    'title' => '员工风采',
+                    'content' => '',
+                    'created_at' => $now,
+                    'updated_at' => $now
+                ],
+                [
+                    'merchant_id' => $merchant->id,
+                    'title' => '实际案例',
+                    'content' => '',
+                    'created_at' => $now,
+                    'updated_at' => $now
+                ],
+            ]
+        );
 
         $merchant->givePermissionTo($permissions);
 

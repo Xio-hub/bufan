@@ -18,6 +18,7 @@ class CreateStyleTable extends Migration
             $table->unsignedInteger('merchant_id');
             $table->string('name');
             $table->string('cover');
+            $table->smallInteger('priority')->default(0);
             $table->timestamps();
 
             $table->index('merchant_id');
@@ -29,8 +30,8 @@ class CreateStyleTable extends Migration
             $table->unsignedInteger('category_id');
             $table->string('name');
             $table->string('cover');
-            $table->string('source_url');
-            $table->string('source_type');
+            $table->string('type');
+            $table->smallInteger('priority')->default(0);
             $table->timestamps();
 
             $table->index('merchant_id');
@@ -43,6 +44,7 @@ class CreateStyleTable extends Migration
             $table->unsignedMediumInteger('style_id');
             $table->string('source_url');
             $table->string('source_type');
+            $table->smallInteger('priority')->default(0);
             $table->timestamps();
 
             $table->index('merchant_id');

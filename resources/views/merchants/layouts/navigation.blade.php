@@ -20,7 +20,7 @@
             </li>
 
             <li>
-                <a href="{{route('merchant.index.edit')}}"><i class="fa fa-th-large"></i> <span class="nav-label">首页设置</span> <span class="fa arrow"></span></a>
+                <a href="{{route('merchant.index.edit')}}"><i class="fa fa-th-large"></i> <span class="nav-label">首页设置</span></a>
             </li>
    
             <li>
@@ -45,33 +45,74 @@
             <li>
                 <a href="#"><i class="fa fa-th-large"></i> <span class="nav-label">风格管理</span> <span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
-                    <li><a href="index.html">风格分类</a></li>
-                    <li><a href="index.html">添加分类</a></li>
-                    <li><a href="index.html">风格列表</a></li>
-                    <li><a href="index.html">添加风格</a></li>
+                    <li><a href="{{route('merchant.style.category.index')}}">风格分类</a></li>
+                    <li><a href="{{route('merchant.style.category.create')}}">添加分类</a></li>
+                    <li><a href="{{route('merchant.style.index')}}">风格列表</a></li>
+                    <li><a href="{{route('merchant.style.create')}}">添加风格</a></li>
                 </ul>
             </li>
 
             <li>
                 <a href="#"><i class="fa fa-th-large"></i> <span class="nav-label">全景管理</span> <span class="fa arrow"></span></a>
-                <ul class="nav nav-second-level">
+                {{-- <ul class="nav nav-second-level">
                     <li><a href="index.html">材质管理</a></li>
                     <li><a href="index.html">空间管理</a></li>
                     <li><a href="index.html">鸟瞰图</a></li>
                     <li><a href="index.html">全景图</a></li>
+                </ul> --}}
+
+                <ul class="nav nav-second-level collapse">
+                    <li>
+                        <a href="#" id="damian">材质管理<span class="fa arrow"></span></a>
+                        <ul class="nav nav-third-level">
+                            <li>
+                                <a href="#">材质列表</a>
+                            </li>
+                            <li>
+                                <a href="#">添加材质</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#" id="damian">空间管理<span class="fa arrow"></span></a>
+                        <ul class="nav nav-third-level">
+                            <li>
+                                <a href="#">空间列表</a>
+                            </li>
+                            <li>
+                                <a href="#">添加空间</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a href="#" id="damian">全景图管理<span class="fa arrow"></span></a>
+                        <ul class="nav nav-third-level">
+                            <li>
+                                <a href="#">全景图列表</a>
+                            </li>
+                            <li>
+                                <a href="#">添加全景图</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a href="#" id="damian">鸟瞰图管理<span class="fa arrow"></span></a>
+                        <ul class="nav nav-third-level">
+                            <li>
+                                <a href="#">鸟瞰图列表</a>
+                            </li>
+                            <li>
+                                <a href="#">添加鸟瞰图</a>
+                            </li>
+                        </ul>
+                    </li>
                 </ul>
             </li>
 
             <li>
-                <a href="#"><i class="fa fa-th-large"></i> <span class="nav-label">企业风采管理</span> <span class="fa arrow"></span></a>
-                <ul class="nav nav-second-level">
-                    <li><a href="index.html">品牌介绍</a></li>
-                    <li><a href="index.html">企业文化</a></li>
-                    <li><a href="index.html">发展历程</a></li>
-                    <li><a href="index.html">硬件实力</a></li>
-                    <li><a href="index.html">员工风采</a></li>
-                    <li><a href="index.html">实际案例</a></li>
-                </ul>
+                <a href="{{route('merchant.introduction.index')}}"><i class="fa fa-th-large"></i> <span class="nav-label">企业风采管理</span></a>
             </li>
 
             <!-- all user -->
