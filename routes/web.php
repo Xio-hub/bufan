@@ -129,6 +129,13 @@ Route::group([
     Route::put('/panoramas/{id}', 'PanoramaController@update')->where('id','\d+')->name('merchant.panorama.update');
     Route::delete('/panoramas/{id}', 'PanoramaController@destroy')->where('id','\d+')->name('merchant.panorama.destroy');
 
+    Route::get('/panoramas/styles', 'PanoramaStyleController@index')->name('merchant.panorama.style.index');
+    Route::get('/panoramas/styles/create', 'PanoramaStyleController@create')->name('merchant.panorama.style.create');
+    Route::post('/panoramas/styles', 'PanoramaStyleController@store')->name('merchant.panorama.style.store');
+    Route::get('/panoramas/styles/{id}', 'PanoramaStyleController@edit')->where('id','\d+')->name('merchant.panorama.style.edit');
+    Route::put('/panoramas/styles/{id}', 'PanoramaStyleController@update')->where('id','\d+')->name('merchant.panorama.style.update');
+    Route::delete('/panoramas/styles/{id}', 'PanoramaStyleController@destroy')->where('id','\d+')->name('merchant.panorama.style.destroy');
+
     Route::get('/vertical_views', 'VerticalViewController@index')->name('merchant.vertical_view.index');
     Route::get('/vertical_views/create', 'VerticalViewController@create')->name('merchant.vertical_view.create');
     Route::post('/vertical_views', 'VerticalViewController@store')->name('merchant.vertical_view.store');
@@ -156,4 +163,7 @@ Route::group([
     Route::post('styles/images' ,'StyleController@storeImage')->name('style.image.upload');
     Route::post('styles/cover' ,'StyleController@storeCover')->name('style.cover.upload');
     Route::post('styles/videos' ,'StyleController@storeVideo')->name('style.video.upload');
+
+    Route::post('/materials/cover' ,'MaterialController@storeCover')->name('material.cover.upload');
+    Route::post('/panoramas/styles/cover' ,'PanoramaStyleController@storeCover')->name('panoramas.style.cover.upload');
 });

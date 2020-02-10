@@ -26,7 +26,6 @@
             <li>
                 <a href="#"><i class="fa fa-th-large"></i> <span class="nav-label">新品管理</span> <span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
-                    {{-- <li><a href="{{route('merchant.product.index')}}">封面管理</a></li> --}}
                     <li><a href="{{route('merchant.product.index')}}">新品列表</a></li>
                     <li><a href="{{route('merchant.product.create')}}">添加新品</a></li>
                 </ul>
@@ -66,10 +65,10 @@
                         <a href="#" id="damian">材质管理<span class="fa arrow"></span></a>
                         <ul class="nav nav-third-level">
                             <li>
-                                <a href="#">材质列表</a>
+                                <a href="{{route('merchant.material.index')}}">材质列表</a>
                             </li>
                             <li>
-                                <a href="#">添加材质</a>
+                                <a href="{{route('merchant.material.create')}}">添加材质</a>
                             </li>
                         </ul>
                     </li>
@@ -77,10 +76,10 @@
                         <a href="#" id="damian">空间管理<span class="fa arrow"></span></a>
                         <ul class="nav nav-third-level">
                             <li>
-                                <a href="#">空间列表</a>
+                                <a href="{{route('merchant.panorama.style.index')}}">空间列表</a>
                             </li>
                             <li>
-                                <a href="#">添加空间</a>
+                                <a href="{{route('merchant.panorama.style.create')}}">添加空间</a>
                             </li>
                         </ul>
                     </li>

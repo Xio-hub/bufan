@@ -61,4 +61,24 @@ class Merchant extends Model implements
     {
         return $this->hasMany('App\Models\Introduction', 'merchant_id');
     }
+
+    public function materials()
+    {
+        return $this->hasMany('App\Models\Material', 'merchant_id');
+    }
+
+    public function panorama_styles()
+    {
+        return $this->hasMany('App\Models\PanoramaStyle', 'merchant_id');
+    }
+
+    public function panoramas()
+    {
+        return $this->hasMany('App\Models\Panoramas', 'merchant_id');
+    }
+
+    public function vertical_views()
+    {
+        return $this->hasMany('App\Models\VerticalView', 'merchant_id');
+    }
 }

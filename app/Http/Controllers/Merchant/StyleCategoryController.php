@@ -150,7 +150,7 @@ class StyleCategoryController extends Controller
     {
         $merchant = Auth::guard('merchant')->user();
         $merchant_id = $merchant->id;
-        $path = $request->file('file')->store("images/styles/category/{$merchant_id}");
+        $path = $request->file('file')->store("images/styles/categories/covers");
         return $path;
     }
 }

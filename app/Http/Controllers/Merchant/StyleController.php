@@ -193,13 +193,13 @@ class StyleController extends Controller
 
     public function storeCover(Request $request)
     {
-        $path = $request->file('file')->store("images/styles/cover");
+        $path = $request->file('file')->store("images/styles/covers");
         return $path;
     }
 
     public function storeImage(Request $request)
     {
-        $path = $request->file('file')->store("images/styles/detail");
+        $path = $request->file('file')->store("images/styles/details");
         return $path;
     }
 

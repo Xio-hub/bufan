@@ -141,14 +141,14 @@ class ProductController extends Controller
 
     public function storeCover(Request $request)
     {
-        $path = $request->file('file')->store("images/products/cover");
+        $path = $request->file('file')->store("images/products/covers");
         return $path;
     }
 
 
     public function storeImage(Request $request)
     {
-        $path = $request->file('file')->store("images/products/detail");
+        $path = $request->file('file')->store("images/products/details");
         return $path;
     }
 

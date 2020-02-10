@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers\Merchant;
 
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use App\Models\Material;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class MaterialController extends Controller
 {
@@ -14,7 +19,15 @@ class MaterialController extends Controller
      */
     public function index()
     {
-        //
+        $merchant = Auth::guard('merchant')->user();
+        $merchant::with(['materials' => function ($query) {
+            $query->orderBy('created_at', 'desc');
+        }])->get();
+        $materials = $merchant->materials;
+        foreach($materials as $k => $material){
+            $material->cover = Storage::url($material->cover);
+        }
+        return view('merchants.materials.index')->with('materials', $materials);
     }
 
     /**
@@ -24,7 +37,7 @@ class MaterialController extends Controller
      */
     public function create()
     {
-        //
+        return view('merchants.materials.create');
     }
 
     /**
@@ -35,7 +48,38 @@ class MaterialController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $name = $request->input('name', '');
+        $cover = $request->input('cover', '');
+
+        if($name == ''){
+            $error = 1;
+            $message = '请输入名称';
+            return response()->json(compact('error','message'));
+        }
+
+        if($cover == ''){
+            $error = 1;
+            $message = '请上传封面';
+            return response()->json(compact('error','message'));
+        }
+
+        try{
+            $merchant = Auth::guard('merchant')->user();
+            $space_category = Material::create([
+                'merchant_id' => $merchant->id,
+                'name' => $name,
+                'cover' => $cover,
+            ]);
+            $error = 0;
+            $message = 'success';
+        }
+        catch(Exception $e){
+            Log::error($e);
+            $error = 0;
+            $message = '添加失败，请稍后再试或者联系管理员';
+        }finally{
+            return response()->json(compact('error','message'));
+        }
     }
 
     /**
@@ -81,5 +125,11 @@ class MaterialController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function storeCover(Request $request)
+    {
+        $path = $request->file('file')->store("images/matetials/covers");
+        return $path;
     }
 }

@@ -4,14 +4,13 @@ namespace App\Http\Controllers\Merchant;
 
 use Exception;
 use Illuminate\Http\Request;
-use App\Models\SpaceCategory;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use App\Models\PanoramaStyle;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
-class SpaceCategoryController extends Controller
+class PanoramaStyleController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -21,14 +20,14 @@ class SpaceCategoryController extends Controller
     public function index()
     {
         $merchant = Auth::guard('merchant')->user();
-        $merchant::with(['spaceCategories' => function ($query) {
+        $merchant::with(['panorama_styles' => function ($query) {
             $query->orderBy('created_at', 'desc');
         }])->get();
-        $categories = $merchant->spaceCategories;
-        foreach($categories as $k => $category){
-            $category->cover = Storage::url($category->cover);
+        $styles = $merchant->panorama_styles;
+        foreach($styles as $k => $style){
+            $style->cover = Storage::url($style->cover);
         }
-        return view('merchants.space_categories.index')->with('categories',$categories);
+        return view('merchants.panoramas.styles.index')->with('styles', $styles);
     }
 
     /**
@@ -38,7 +37,7 @@ class SpaceCategoryController extends Controller
      */
     public function create()
     {
-        return view('merchants.space_categories.create');
+        return view('merchants.panoramas.styles.create');
     }
 
     /**
@@ -54,7 +53,7 @@ class SpaceCategoryController extends Controller
 
         if($name == ''){
             $error = 1;
-            $message = '请输入目录名称';
+            $message = '请输入名称';
             return response()->json(compact('error','message'));
         }
 
@@ -66,7 +65,7 @@ class SpaceCategoryController extends Controller
 
         try{
             $merchant = Auth::guard('merchant')->user();
-            $space_category = SpaceCategory::create([
+            PanoramaStyle::create([
                 'merchant_id' => $merchant->id,
                 'name' => $name,
                 'cover' => $cover,
@@ -123,34 +122,14 @@ class SpaceCategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request)
+    public function destroy($id)
     {
-        $id = $request->id;
-        try{
-            DB::beginTransaction();
-            $category = SpaceCategory::findOrFail($id);
-            $category->resources()->delete();
-            $category->spaces()->delete();
-            $category->delete();
-            DB::commit();
-
-            $error = 0;
-            $message = 'success';
-        }catch(Exception $e){
-            DB::rollBack();
-            $error = 1;
-            $message = '';
-            Log::error($e);
-        }finally{
-            return response()->json(compact('error','message'));
-        }
+        //
     }
 
     public function storeCover(Request $request)
     {
-        $merchant = Auth::guard('merchant')->user();
-        $merchant_id = $merchant->id;
-        $path = $request->file('file')->store("images/spaces/categories/covers");
+        $path = $request->file('file')->store("images/panoramas/styles/covers");
         return $path;
     }
 }
