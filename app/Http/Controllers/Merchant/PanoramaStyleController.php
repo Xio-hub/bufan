@@ -3,15 +3,15 @@
 namespace App\Http\Controllers\Merchant;
 
 use Exception;
-use App\Models\Panorama;
 use Illuminate\Http\Request;
+use App\Models\PanoramaStyle;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
-class PanoramaController extends Controller
+class PanoramaStyleController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -21,14 +21,14 @@ class PanoramaController extends Controller
     public function index()
     {
         $merchant = Auth::guard('merchant')->user();
-        $merchant::with(['panoramas' => function ($query) {
+        $merchant::with(['panorama_styles' => function ($query) {
             $query->orderBy('created_at', 'desc');
         }])->get();
-        $panoramas = $merchant->panoramas;
-        foreach($panoramas as $k => $panorama){
-            $panorama->cover = Storage::url($panorama->cover);
+        $styles = $merchant->panorama_styles;
+        foreach($styles as $k => $style){
+            $style->source_url = Storage::url($style->source_url);
         }
-        return view('merchants.panoramas.index')->with('panoramas', $panoramas);
+        return view('merchants.panoramas.styles.index')->with('styles', $styles);
     }
 
     /**
@@ -38,13 +38,7 @@ class PanoramaController extends Controller
      */
     public function create()
     {
-        $merchant = Auth::guard('merchant')->user();
-        $styles = $merchant->panorama_styles;
-        $materials = $merchant->materials;
-        return view('merchants.panoramas.create')->with([
-            'styles' => $styles,
-            'materials' => $materials
-        ]);
+        return view('merchants.panoramas.styles.create');
     }
 
     /**
@@ -55,35 +49,27 @@ class PanoramaController extends Controller
      */
     public function store(Request $request)
     {
-        $style = $request->input('style', '');
-        $material = $request->input('material', '');
-        $panorama = $request->input('panorama', '');
+        $name = $request->input('name', '');
+        $cover = $request->input('cover', '');
 
-        if($style == ''){
+        if($name == ''){
             $error = 1;
-            $message = '请选择风格';
+            $message = '请输入名称';
             return response()->json(compact('error','message'));
         }
 
-        if($material == ''){
+        if($cover == ''){
             $error = 1;
-            $message = '请选择材质';
-            return response()->json(compact('error','message'));
-        }
-
-        if($panorama == ''){
-            $error = 1;
-            $message = '请上传全景图';
+            $message = '请上传封面';
             return response()->json(compact('error','message'));
         }
 
         try{
             $merchant = Auth::guard('merchant')->user();
-            Panorama::create([
+            PanoramaStyle::create([
                 'merchant_id' => $merchant->id,
-                'style_id' => $style,
-                'material_id' => $material,
-                'source_url' => $panorama,
+                'name' => $name,
+                'cover' => $cover,
             ]);
             $error = 0;
             $message = 'success';
@@ -142,8 +128,9 @@ class PanoramaController extends Controller
         $id = $request->id;
         try{
             DB::beginTransaction();
-            $panorama = Panorama::findOrFail($id);
-            $panorama->delete();
+            $panorama_style = PanoramaStyle::findOrFail($id);
+            $panorama_style->panoramas->delete();
+            $panorama_style->delete();
             DB::commit();
 
             $error = 0;
@@ -158,9 +145,9 @@ class PanoramaController extends Controller
         }
     }
 
-    public function storeImage(Request $request)
+    public function storeCover(Request $request)
     {
-        $path = $request->file('file')->store("images/panoramas");
+        $path = $request->file('file')->store("images/panoramas/styles/covers");
         return $path;
     }
 }

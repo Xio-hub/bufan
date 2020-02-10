@@ -26,7 +26,6 @@
             <li>
                 <a href="#"><i class="fa fa-th-large"></i> <span class="nav-label">新品管理</span> <span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
-                    {{-- <li><a href="{{route('merchant.product.index')}}">封面管理</a></li> --}}
                     <li><a href="{{route('merchant.product.index')}}">新品列表</a></li>
                     <li><a href="{{route('merchant.product.create')}}">添加新品</a></li>
                 </ul>
@@ -54,22 +53,15 @@
 
             <li>
                 <a href="#"><i class="fa fa-th-large"></i> <span class="nav-label">全景管理</span> <span class="fa arrow"></span></a>
-                {{-- <ul class="nav nav-second-level">
-                    <li><a href="index.html">材质管理</a></li>
-                    <li><a href="index.html">空间管理</a></li>
-                    <li><a href="index.html">鸟瞰图</a></li>
-                    <li><a href="index.html">全景图</a></li>
-                </ul> --}}
-
                 <ul class="nav nav-second-level collapse">
                     <li>
                         <a href="#" id="damian">材质管理<span class="fa arrow"></span></a>
                         <ul class="nav nav-third-level">
                             <li>
-                                <a href="#">材质列表</a>
+                                <a href="{{route('merchant.material.index')}}">材质列表</a>
                             </li>
                             <li>
-                                <a href="#">添加材质</a>
+                                <a href="{{route('merchant.material.create')}}">添加材质</a>
                             </li>
                         </ul>
                     </li>
@@ -77,10 +69,10 @@
                         <a href="#" id="damian">空间管理<span class="fa arrow"></span></a>
                         <ul class="nav nav-third-level">
                             <li>
-                                <a href="#">空间列表</a>
+                                <a href="{{route('merchant.panorama.style.index')}}">空间列表</a>
                             </li>
                             <li>
-                                <a href="#">添加空间</a>
+                                <a href="{{route('merchant.panorama.style.create')}}">添加空间</a>
                             </li>
                         </ul>
                     </li>
@@ -89,10 +81,10 @@
                         <a href="#" id="damian">全景图管理<span class="fa arrow"></span></a>
                         <ul class="nav nav-third-level">
                             <li>
-                                <a href="#">全景图列表</a>
+                                <a href="{{route('merchant.panorama.index')}}">全景图列表</a>
                             </li>
                             <li>
-                                <a href="#">添加全景图</a>
+                                <a href="{{route('merchant.panorama.create')}}">添加全景图</a>
                             </li>
                         </ul>
                     </li>
@@ -101,10 +93,10 @@
                         <a href="#" id="damian">鸟瞰图管理<span class="fa arrow"></span></a>
                         <ul class="nav nav-third-level">
                             <li>
-                                <a href="#">鸟瞰图列表</a>
+                                <a href="{{route('merchant.vertical_view.index')}}">鸟瞰图列表</a>
                             </li>
                             <li>
-                                <a href="#">添加鸟瞰图</a>
+                                <a href="{{route('merchant.vertical_view.create')}}">添加鸟瞰图</a>
                             </li>
                         </ul>
                     </li>

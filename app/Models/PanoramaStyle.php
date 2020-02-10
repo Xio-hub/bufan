@@ -4,9 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Material extends Model
+class PanoramaStyle extends Model
 {
-    protected $table = 'materials';
+    protected $table = 'panorama_styles';
     protected $guarded = [];
 
     public function panoramas()

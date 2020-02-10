@@ -20,6 +20,8 @@ Route::group([
     Route::get('admins','AdminController@list');
     Route::get('merchants','MerchantController@list');
 
+    Route::post('users/login', 'PassportController@login');
+
     Route::get('init', 'InitController@init');
     Route::get('background', 'InitController@getIndexBackground');
     Route::get('categories', 'CategoryController@list');

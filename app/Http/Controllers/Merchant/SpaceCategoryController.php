@@ -150,7 +150,7 @@ class SpaceCategoryController extends Controller
     {
         $merchant = Auth::guard('merchant')->user();
         $merchant_id = $merchant->id;
-        $path = $request->file('file')->store("images/spaces/category/{$merchant_id}");
+        $path = $request->file('file')->store("images/spaces/categories/covers");
         return $path;
     }
 }

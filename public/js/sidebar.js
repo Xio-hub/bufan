@@ -12,4 +12,11 @@ function setNavigation() {
             $(this).parent().closest('li').addClass('active');
         }
     });
+
+    $("ul.metismenu .nav-second-level .nav-third-level a").each(function() {
+        var href = $(this).attr('href');
+        if (route === href) {
+
+        }
+    });
 }

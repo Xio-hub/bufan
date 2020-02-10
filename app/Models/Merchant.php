@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Spatie\Permission\Traits\HasRoles;
-
+use Laravel\Passport\HasApiTokens;
 use Illuminate\Auth\Authenticatable;
+
+use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
@@ -16,6 +17,7 @@ class Merchant extends Model implements
 {
     use Authenticatable, Authorizable;
     use HasRoles;
+    use HasApiTokens;
     protected $guard_name = 'merchant';
 
     protected $table = 'merchants';
@@ -60,5 +62,25 @@ class Merchant extends Model implements
     public function introductions()
     {
         return $this->hasMany('App\Models\Introduction', 'merchant_id');
+    }
+
+    public function materials()
+    {
+        return $this->hasMany('App\Models\Material', 'merchant_id');
+    }
+
+    public function panorama_styles()
+    {
+        return $this->hasMany('App\Models\PanoramaStyle', 'merchant_id');
+    }
+
+    public function panoramas()
+    {
+        return $this->hasMany('App\Models\Panorama', 'merchant_id');
+    }
+
+    public function vertical_views()
+    {
+        return $this->hasMany('App\Models\VerticalView', 'merchant_id');
     }
 }

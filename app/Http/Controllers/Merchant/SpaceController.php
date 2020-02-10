@@ -193,13 +193,13 @@ class SpaceController extends Controller
 
     public function storeCover(Request $request)
     {
-        $path = $request->file('file')->store("images/spaces/cover");
+        $path = $request->file('file')->store("images/spaces/covers");
         return $path;
     }
 
     public function storeImage(Request $request)
     {
-        $path = $request->file('file')->store("images/spaces/detail");
+        $path = $request->file('file')->store("images/spaces/details");
         return $path;
     }
 

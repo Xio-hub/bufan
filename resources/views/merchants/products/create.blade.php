@@ -177,7 +177,7 @@
         });
         
         $('#btn-cancel').click(function(){
-            window.location.href = "{{route('merchant.space.category.index')}}";
+            window.location.href = "{{route('merchant.product.index')}}";
         });
 
 
