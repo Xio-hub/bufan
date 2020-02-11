@@ -13,27 +13,18 @@ class CreateCoursesTable extends Migration
      */
     public function up()
     {
-        Schema::create('course_info', function (Blueprint $table) {
+        Schema::create('course_init', function (Blueprint $table) {
             $table->increments('id');
             $table->string('backgroung')->nullable()->default('');
             $table->string('introduction')->default('');
             $table->timestamps();
         });
 
-        Schema::create('course_outline', function (Blueprint $table) {
+        Schema::create('courses', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
+            $table->string('title');
+            $table->text('content');
             $table->timestamps();
-        });
-
-        Schema::create('course_outline_resource', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('outline_id');
-            $table->string('source_url');
-            $table->string('source_type');
-            $table->timestamps();
-
-            $table->index('outline_id');
         });
     }
 
@@ -44,8 +35,7 @@ class CreateCoursesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('course_info');
-        Schema::dropIfExists('course_outline');
-        Schema::dropIfExists('course_outline_resource');
+        Schema::dropIfExists('course_init');
+        Schema::dropIfExists('courses');
     }
 }

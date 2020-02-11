@@ -47,7 +47,8 @@
                 <a href="#"><i class="fa fa-th-large"></i> <span class="nav-label">课程管理</span> <span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
                     <li><a href="index.html">基础设置</a></li>
-                    <li><a href="index.html">大纲管理</a></li>
+                    <li><a href="index.html">大纲列表</a></li>
+                    <li><a href="index.html">添加大纲</a></li>
                 </ul>
             </li>
 

@@ -173,14 +173,20 @@ class StyleController extends Controller
     {
         $id = $request->id;
         try{
-            DB::beginTransaction();
             $style = Style::findOrFail($id);
-            $style->resources()->delete();
-            $style->delete();
-            DB::commit();
+            $merchant = Auth::guard('merchant')->user();
+            if($merchant->can('delete',$style)){
+                DB::beginTransaction();
+                $style->resources()->delete();
+                $style->delete();
+                DB::commit();
 
-            $error = 0;
-            $message = 'success';
+                $error = 0;
+                $message = 'success';
+            }else{
+                $error = 1;
+                $message = 'UnAuthorized';
+            }
         }catch(Exception $e){
             DB::rollBack();
             $error = 1;

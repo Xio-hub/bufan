@@ -173,14 +173,20 @@ class SpaceController extends Controller
     {
         $id = $request->id;
         try{
-            DB::beginTransaction();
             $space = Space::findOrFail($id);
-            $space->resources()->delete();
-            $space->delete();
-            DB::commit();
+            $merchant = Auth::guard('merchant')->user();
+            if($merchant->can('delete',$space)){
+                DB::beginTransaction();
+                $space->resources()->delete();
+                $space->delete();
+                DB::commit();
 
-            $error = 0;
-            $message = 'success';
+                $error = 0;
+                $message = 'success';
+            }else{
+                $error = 1;
+                $message = 'UnAuthorized';
+            }
         }catch(Exception $e){
             DB::rollBack();
             $error = 1;

@@ -127,14 +127,20 @@ class MaterialController extends Controller
     {
         $id = $request->id;
         try{
-            DB::beginTransaction();
             $material = Material::findOrFail($id);
-            $material->panoramas->delete();
-            $material->delete();
-            DB::commit();
+            $merchant = Auth::guard('merchant')->user();
+            if($merchant->can('delete', $material)){
+                DB::beginTransaction();
+                $material->panoramas->delete();
+                $material->delete();
+                DB::commit();
 
-            $error = 0;
-            $message = 'success';
+                $error = 0;
+                $message = 'success';
+            }else{
+                $error = 1;
+                $message = 'UnAuthorized';
+            }
         }catch(Exception $e){
             DB::rollBack();
             $error = 1;

@@ -141,15 +141,18 @@ class PanoramaController extends Controller
     {
         $id = $request->id;
         try{
-            DB::beginTransaction();
             $panorama = Panorama::findOrFail($id);
-            $panorama->delete();
-            DB::commit();
+            $merchant = Auth::guard('merchant')->user();
+            if($merchant->can('delete', $panorama)){
+                $panorama->delete();
 
-            $error = 0;
-            $message = 'success';
+                $error = 0;
+                $message = 'success';
+            }else{
+                $error = 1;
+                $message = 'UnAuthorized';
+            }
         }catch(Exception $e){
-            DB::rollBack();
             $error = 1;
             $message = '删除失败，请稍后再试或联系管理员';
             Log::error($e);

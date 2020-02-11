@@ -23,6 +23,7 @@
                 <a href="{{route('merchant.index.edit')}}"><i class="fa fa-th-large"></i> <span class="nav-label">首页设置</span></a>
             </li>
    
+            @can('新品管理')
             <li>
                 <a href="#"><i class="fa fa-th-large"></i> <span class="nav-label">新品管理</span> <span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
@@ -30,7 +31,9 @@
                     <li><a href="{{route('merchant.product.create')}}">添加新品</a></li>
                 </ul>
             </li>
+            @endcan
 
+            @can('空间管理')
             <li>
                 <a href="#"><i class="fa fa-th-large"></i> <span class="nav-label">空间管理</span> <span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
@@ -40,7 +43,10 @@
                     <li><a href="{{route('merchant.space.create')}}">添加空间</a></li>
                 </ul>
             </li>
+            @endcan
 
+
+            @can('风格管理')
             <li>
                 <a href="#"><i class="fa fa-th-large"></i> <span class="nav-label">风格管理</span> <span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
@@ -50,7 +56,9 @@
                     <li><a href="{{route('merchant.style.create')}}">添加风格</a></li>
                 </ul>
             </li>
+            @endcan
 
+            @can('全景管理')
             <li>
                 <a href="#"><i class="fa fa-th-large"></i> <span class="nav-label">全景管理</span> <span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level collapse">
@@ -102,10 +110,13 @@
                     </li>
                 </ul>
             </li>
+            @endcan
 
+            @can('风采管理')
             <li>
                 <a href="{{route('merchant.introduction.index')}}"><i class="fa fa-th-large"></i> <span class="nav-label">企业风采管理</span></a>
             </li>
+            @endcan
 
             <!-- all user -->
             <li>

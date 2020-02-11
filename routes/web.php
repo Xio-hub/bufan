@@ -58,11 +58,19 @@ Route::group([
     Route::put('merchants/{id}', 'MerchantController@update')->name('merchants.update');
     Route::delete('merchants/{id}', 'MerchantController@destroy');
 
+    Route::get('courses/init/edit', 'CourseController@initEdit')->name('courses.init.edit');
+    Route::patch('courses/init', 'CourseController@initUpdate')->name('courses.init.update');
+    Route::get('courses', 'CourseController@index')->name('courses.index');
+    Route::get('courses/create', 'CourseController@create')->name('courses.create');
+    Route::post('courses', 'CourseController@store')->name('courses.store');
+    Route::get('courses/{id}/edit', 'CourseController@edit')->name('courses.edit');
+    Route::patch('courses/{id}', 'CourseController@update')->name('courses.update');
+    Route::delete('courses/{id}', 'CourseController@store')->name('courses.destroy');
+
     Route::get('merchants/{id}/password', 'MerchantController@showResetView')->name('admin.merchant.password.edit');
     Route::patch('merchants/{id}/password', 'MerchantController@updatePassword')->name('admin.merchant.password.update');
 });
 
-//==========================================================================================================================
 Route::get('merchant/management/login', 'Merchant\LoginController@showLoginForm')->name('merchant.login');
 Route::post('merchant/management/login', 'Merchant\LoginController@login');
 Route::post('merchant/management/logout', 'Merchant\LoginController@logout')->name('merchant.logout');

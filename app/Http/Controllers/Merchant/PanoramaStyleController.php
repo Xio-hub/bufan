@@ -127,14 +127,20 @@ class PanoramaStyleController extends Controller
     {
         $id = $request->id;
         try{
-            DB::beginTransaction();
             $panorama_style = PanoramaStyle::findOrFail($id);
-            $panorama_style->panoramas->delete();
-            $panorama_style->delete();
-            DB::commit();
+            $merchant = Auth::guard('merchant')->user();
+            if($merchant->can('delete', $panorama_style)){
+                DB::beginTransaction();
+                $panorama_style->panoramas->delete();
+                $panorama_style->delete();
+                DB::commit();
 
-            $error = 0;
-            $message = 'success';
+                $error = 0;
+                $message = 'success';
+            }else{
+                $error = 1;
+                $message = 'UnAuthorized';
+            }
         }catch(Exception $e){
             DB::rollBack();
             $error = 1;

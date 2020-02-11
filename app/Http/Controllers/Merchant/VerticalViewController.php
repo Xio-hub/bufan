@@ -132,15 +132,18 @@ class VerticalViewController extends Controller
     {
         $id = $request->id;
         try{
-            DB::beginTransaction();
-            $panorama = VerticalView::findOrFail($id);
-            $panorama->delete();
-            DB::commit();
+            $vertical_view = VerticalView::findOrFail($id);
+            $merchant = Auth::guard('merchant')->user();
+            if($merchant->can('delete', $vertical_view)){
+                $vertical_view->delete();
 
-            $error = 0;
-            $message = 'success';
+                $error = 0;
+                $message = 'success';
+            }else{
+                $error = 1;
+                $message = 'UnAuthorized';
+            }
         }catch(Exception $e){
-            DB::rollBack();
             $error = 1;
             $message = '删除失败，请稍后再试或联系管理员';
             Log::error($e);

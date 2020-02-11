@@ -127,15 +127,22 @@ class SpaceCategoryController extends Controller
     {
         $id = $request->id;
         try{
-            DB::beginTransaction();
             $category = SpaceCategory::findOrFail($id);
-            $category->resources()->delete();
-            $category->spaces()->delete();
-            $category->delete();
-            DB::commit();
+            $merchant = Auth::guard('merchant')->user();
+            if($merchant->can('delete',$category)){
+                DB::beginTransaction();
+                
+                $category->resources()->delete();
+                $category->spaces()->delete();
+                $category->delete();
+                DB::commit();
 
-            $error = 0;
-            $message = 'success';
+                $error = 0;
+                $message = 'success';
+            }else{
+                $error = 1;
+                $message = 'UnAuthorized';
+            }
         }catch(Exception $e){
             DB::rollBack();
             $error = 1;

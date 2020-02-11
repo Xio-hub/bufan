@@ -120,14 +120,19 @@ class ProductController extends Controller
     {
         $id = $request->id;
         try{
-            DB::beginTransaction();
             $product = Product::findOrFail($id);
-            $product->delete();
-            $product->resources()->delete();
-            DB::commit();
-
-            $error = 0;
-            $message = 'success';
+            $merchant = Auth::guard('merchant')->user();
+            if($merchant->can('delete', $product)){
+                DB::beginTransaction();
+                $product->delete();
+                $product->resources()->delete();
+                DB::commit();
+                $error = 0;
+                $message = 'success';
+            }else{
+                $error = 1;
+                $message = 'UnAuthorized';
+            }
         }catch(Exception $e){
             DB::rollBack();
             $error = 1;

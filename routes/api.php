@@ -51,6 +51,8 @@ Route::group([
 
     Route::get('merchants/{merchant_id}/introductions/categories', 'IntroductionController@categories');
     Route::get('merchants/{merchant_id}/introductions/{id}', 'IntroductionController@detail')->where('id', '\d+');
+
+    Route::get('search', 'SearchController@search');
 });
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
