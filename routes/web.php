@@ -49,7 +49,7 @@ Route::group([
 Route::group([
     'namespace' => 'Admin',
     'prefix' => 'administer/management',
-    'middleware' => ['auth','permission:商家管理']
+    'middleware' => ['auth']
 ], function () {
     Route::get('merchants', 'MerchantController@index')->name('merchants.index');
     Route::get('merchants/create', 'MerchantController@create')->name('merchants.create');
@@ -58,14 +58,20 @@ Route::group([
     Route::put('merchants/{id}', 'MerchantController@update')->name('merchants.update');
     Route::delete('merchants/{id}', 'MerchantController@destroy');
 
-    Route::get('courses/init/edit', 'CourseController@initEdit')->name('courses.init.edit');
-    Route::patch('courses/init', 'CourseController@initUpdate')->name('courses.init.update');
+    Route::get('courses/configs/background/edit', 'CourseConfigController@editBackground')->name('courses.config.background.edit');
+    Route::get('courses/config/sintroduction/edit', 'CourseConfigController@editIntroduction')->name('courses.config.introduction.edit');
+    Route::patch('courses/configs/introduction', 'CourseConfigController@updateIntroduction')->name('courses.config.introduction.update');
+    Route::patch('courses/configs/background', 'CourseConfigController@updateBackground')->name('courses.config.background.update');
+    Route::post('/courses/background' ,'CourseConfigController@storeBackground')->name('courses.background.upload');
+
     Route::get('courses', 'CourseController@index')->name('courses.index');
     Route::get('courses/create', 'CourseController@create')->name('courses.create');
     Route::post('courses', 'CourseController@store')->name('courses.store');
     Route::get('courses/{id}/edit', 'CourseController@edit')->name('courses.edit');
     Route::patch('courses/{id}', 'CourseController@update')->name('courses.update');
     Route::delete('courses/{id}', 'CourseController@store')->name('courses.destroy');
+    Route::post('courses/resources', 'CourseController@storeUploadData')->name('courses.upload.store');
+    
 
     Route::get('merchants/{id}/password', 'MerchantController@showResetView')->name('admin.merchant.password.edit');
     Route::patch('merchants/{id}/password', 'MerchantController@updatePassword')->name('admin.merchant.password.update');
@@ -177,3 +183,5 @@ Route::group([
     Route::post('/panoramas/images' ,'PanoramaController@storeImage')->name('panorama.upload');
     Route::post('/vertical_views/images' ,'VerticalViewController@storeImage')->name('vertical_view.upload');
 });
+
+Route::get('test' ,'HomeController@test');

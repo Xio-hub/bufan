@@ -14,7 +14,7 @@ class CourseController extends Controller
      */
     public function index()
     {
-        //
+
     }
 
     /**
@@ -24,7 +24,7 @@ class CourseController extends Controller
      */
     public function create()
     {
-        //
+        return view('admins.courses.create');
     }
 
     /**
@@ -81,5 +81,10 @@ class CourseController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function storeUploadData()
+    {
+
     }
 }

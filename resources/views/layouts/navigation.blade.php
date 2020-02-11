@@ -46,9 +46,10 @@
             <li>
                 <a href="#"><i class="fa fa-th-large"></i> <span class="nav-label">课程管理</span> <span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
-                    <li><a href="index.html">基础设置</a></li>
-                    <li><a href="index.html">大纲列表</a></li>
-                    <li><a href="index.html">添加大纲</a></li>
+                    <li><a href="{{route('courses.config.background.edit')}}">更换背景</a></li>
+                    <li><a href="{{route('courses.config.introduction.edit')}}">课程简介</a></li>
+                    <li><a href="{{route('courses.index')}}">课程列表</a></li>
+                    <li><a href="{{route('courses.create')}}">添加课程</a></li>
                 </ul>
             </li>
 

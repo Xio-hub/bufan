@@ -18,10 +18,10 @@ class RedirectIfAuthenticated
     public function handle($request, Closure $next, $guard = null)
     {
         if (Auth::guard($guard)->check()) {
-            if($guard == null or $guard == 'admin' or $guard == 'web'){
-                return redirect('/administer/management/home');
-            }else if($guard == 'merchant'){
+            if($guard == 'merchant'){
                 return redirect('merchant/management/home');
+            }else{
+                return redirect('/administer/management/home');
             }
         }
 

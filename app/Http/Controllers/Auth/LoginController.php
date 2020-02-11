@@ -54,6 +54,6 @@ class LoginController extends Controller
 
         $request->session()->invalidate();
 
-        return redirect('/administer/management/');
+        return redirect('/administer/management/login');
     }
 }

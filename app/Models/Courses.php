@@ -4,8 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class CourseInit extends Model
+class Courses extends Model
 {
-    protected $table = 'course_init';
+    protected $table = 'courses';
     protected $guarded = [];
 }
