@@ -42,7 +42,7 @@
 
                         <div class="form-group row">
                             <div class="col-sm-4 col-sm-offset-2">
-                                <a class="btn btn-white btn-lg" id='btn-cancel'>Cancel</a>
+                                <a class="btn btn-white btn-lg" id='btn-cancel'>取消</a>
                                 <a class="btn btn-primary btn-lg" id="btn-commit">确认</a>
                             </div>
                         </div>

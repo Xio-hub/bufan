@@ -58,20 +58,21 @@ Route::group([
     Route::put('merchants/{id}', 'MerchantController@update')->name('merchants.update');
     Route::delete('merchants/{id}', 'MerchantController@destroy');
 
-    Route::get('courses/configs/background/edit', 'CourseConfigController@editBackground')->name('courses.config.background.edit');
-    Route::get('courses/config/sintroduction/edit', 'CourseConfigController@editIntroduction')->name('courses.config.introduction.edit');
-    Route::patch('courses/configs/introduction', 'CourseConfigController@updateIntroduction')->name('courses.config.introduction.update');
-    Route::patch('courses/configs/background', 'CourseConfigController@updateBackground')->name('courses.config.background.update');
+    Route::get('courses/background/edit', 'CourseConfigController@editBackground')->name('courses.background.edit');
+    Route::patch('courses/background', 'CourseConfigController@updateBackground')->name('courses.background.update');
     Route::post('/courses/background' ,'CourseConfigController@storeBackground')->name('courses.background.upload');
 
-    Route::get('courses', 'CourseController@index')->name('courses.index');
-    Route::get('courses/create', 'CourseController@create')->name('courses.create');
-    Route::post('courses', 'CourseController@store')->name('courses.store');
-    Route::get('courses/{id}/edit', 'CourseController@edit')->name('courses.edit');
-    Route::patch('courses/{id}', 'CourseController@update')->name('courses.update');
-    Route::delete('courses/{id}', 'CourseController@store')->name('courses.destroy');
-    Route::post('courses/resources', 'CourseController@storeUploadData')->name('courses.upload.store');
-    
+    Route::get('courses/info/edit', 'CourseController@editInfo')->name('courses.info.edit');
+    Route::get('courses/teacher/edit', 'CourseController@editTeacherInfo')->name('courses.teacher.edit');
+    Route::get('courses/price/edit', 'CourseController@editPrice')->name('courses.price.edit');
+    Route::patch('courses', 'CourseController@update')->name('courses.update');
+
+    Route::get('courses/outlines/index', 'CourseOutlineController@index')->name('courses.outline.index');
+    Route::get('courses/outlines/create', 'CourseOutlineController@create')->name('courses.outline.create');
+    Route::post('courses/outlines', 'CourseOutlineController@store')->name('courses.outline.store');
+    Route::get('courses/outlines/{id}/edit', 'CourseOutlineController@edit')->name('courses.outline.edit');
+    Route::patch('courses/outlines/{id}', 'CourseOutlineController@update')->name('courses.outline.update');
+    Route::delete('courses/outlines/{id}', 'CourseOutlineController@destroy')->name('courses.outline.destroy');
 
     Route::get('merchants/{id}/password', 'MerchantController@showResetView')->name('admin.merchant.password.edit');
     Route::patch('merchants/{id}/password', 'MerchantController@updatePassword')->name('admin.merchant.password.update');

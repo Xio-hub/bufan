@@ -13,44 +13,17 @@ class CourseConfigController extends Controller
 {
     public function editBackground()
     {
-        $config = CourseConfig::first();
-        $background = $config->background;
+        $config = CourseConfig::where(['config_name'=>'background'])->firstOrFail();
+        $background = $config->value;
         $background = $background ? Storage::url($background) : '';
-        return view('admins.courses.configs.background')->with('background', $background);
-    }
-
-    public function editIntroduction()
-    {
-        $config = CourseConfig::first();
-        $introduction = $config->introduction;
-        return view('admins.courses.configs.introduction')->with('introduction', $introduction);
-    }
-
-    public function updateIntroduction(Request $request)
-    {
-        $config = CourseConfig::first();
-        $introduction = $request->input('introduction');
-        $config->introduction = $introduction;
-        try{
-            $config->save();
-            $error = 0;
-            $message = 'success';
-        }catch(Exception $e){
-            $error = 1;
-            $message = '更新失败';
-            Log::error($e);
-        }finally{
-            return response()->json(compact('error', 'message'));
-        }
-
-
+        return view('admins.courses.background')->with('background', $background);
     }
 
     public function updateBackground(Request $request)
     {
-        $config = CourseConfig::first();
+        $config = CourseConfig::where(['config_name'=>'background'])->first();
         $background = $request->input('background','') ?? '';
-        $config->background = $background;
+        $config->value = $background;
 
         try{
             $config->save();
@@ -63,8 +36,6 @@ class CourseConfigController extends Controller
         }finally{
             return response()->json(compact('error', 'message'));
         }
-
-
     }
 
     public function storeBackground(Request $request)

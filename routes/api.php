@@ -44,8 +44,9 @@ Route::group([
     Route::get('panoramas/vertical_views', 'PanoramaController@getVerticalView');
 
     Route::get('courses/background', 'CourseController@background');
-    Route::get('courses', 'CourseController@list');
-    Route::get('courses/{course_id}', 'CourseController@detail');
+    Route::get('courses/outlines', 'CourseController@outlines');
+    Route::get('courses/{course_id}', 'CourseController@getCourse');
+    Route::get('courses/outlines/{outline_id}', 'CourseController@getOutline');
     Route::get('users/{merchant_id}/courses/orders', 'CourseController@getUserOrders');
     Route::get('users/{merchant_id}/courses/{course_id}', 'CourseController@checkUserIsBought');
 
