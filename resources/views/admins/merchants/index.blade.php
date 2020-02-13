@@ -73,7 +73,7 @@
                         "title" : "商家名称",
                     },
                     { 
-                        "data": "options"
+                        "data": "options",
                         "title": "操作"
                     }
                 ],

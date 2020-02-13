@@ -15,7 +15,7 @@ class CreateMerchantsTable extends Migration
     {
         Schema::create('merchants', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
+            $table->string('username');
             $table->string('email')->unique()->nullable()->default('');
             $table->string('password');
             $table->rememberToken();
@@ -26,7 +26,7 @@ class CreateMerchantsTable extends Migration
         Schema::create('merchant_base', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('merchant_id');
-            $table->string('username');
+            $table->string('name');
             $table->string('top_logo')->default('');
             $table->string('sitebar_logo')->default('');
             $table->string('slogan')->default('');
