@@ -18,7 +18,7 @@
                         <table class="table table-striped table-bordered table-hover dataTables-example" >
                             <thead>
                             <tr>
-                                <th>no</th>
+                                <th>id</th>
                                 <th>merchant_id</th>
                                 <th>name</th>
                                 <th>optoions</th>
@@ -56,7 +56,7 @@
                 },
                 columns: [
                     {
-                        "data": "no",
+                        "data": "id",
                         "orderable" : false,
                         "className" : "text-center", //居中显示
                         "title" : "序号", //表头
@@ -68,7 +68,7 @@
                         "data": "merchant_id",
                         "title" : "商家ID"
                     },
-                    { 
+                    {
                         "data": "name" ,
                         "title" : "商家名称",
                     },

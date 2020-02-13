@@ -2,21 +2,23 @@
 
 namespace App\Http\Controllers\Api\v1;
 
-use App\Models\Merchant;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\MerchantBase;
 use Yajra\DataTables\Facades\DataTables;
 
-class MerchantController extends Controller
+class AdminController extends Controller
 {
     public function list(Request $request)
     {
         $start = $request->input('start');
         $length = $request->input('length');
         
-        $total = Merchant::all()->count();
-        $model = MerchantBase::query()->offset($start)->limit($length)->select(['merchant_id', 'name']);
+        $total = User::all()->count();
+        $model = User::query()
+                    ->select(['id', 'name', 'email'])
+                    ->offset($start)
+                    ->limit($length);
 
         return DataTables::eloquent($model)->setTotalRecords($total)->toJson();
     }

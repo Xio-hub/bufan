@@ -74,11 +74,12 @@ class MerchantController extends Controller
             'top_logo' => $top_logo,
             'sitebar_logo' => $sitebar_logo,
             'slogan' => $slogan,
-            'category_ids' => implode(',', $categories)
+            'category_ids' => json_encode($categories)
         ]);
 
         MerchantIndex::create([
             'merchant_id' => $merchant->id,
+            'content' => '',
         ]);
 
         $now = Carbon::now()->toDateTimeString();
