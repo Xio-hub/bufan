@@ -16,7 +16,7 @@ class MerchantController extends Controller
         $length = $request->input('length');
         
         $total = Merchant::all()->count();
-        $model = Merchant::query()->offset($start)->limit($length)->select(['id', 'name']);
+        $model = Merchant::query()->offset($start)->limit($length)->select(['id', 'username']);
 
         return DataTables::eloquent($model)->setTotalRecords($total)->toJson();
     }
