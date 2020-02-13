@@ -7,6 +7,7 @@ use Illuminate\Auth\Authenticatable;
 
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
@@ -18,6 +19,7 @@ class Merchant extends Model implements
     use Authenticatable, Authorizable;
     use HasRoles;
     use HasApiTokens;
+    use SoftDeletes;
     protected $guard_name = 'merchant';
 
     protected $table = 'merchants';

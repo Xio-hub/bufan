@@ -208,7 +208,6 @@ class MerchantController extends Controller
             DB::beginTransaction();
             $merchant = Merchant::findOrFail($id);
             $merchant->delete();
-            $merchant->base->delete();
             DB::commit();
 
             $error = 0;

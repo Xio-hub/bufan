@@ -17,8 +17,8 @@ class CreateMerchantIndexTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('merchant_id');
             $table->string('cover')->default('');
-            $table->string('cover_type')->default('');
-            $table->text('content')->default('');
+            $table->string('cover_type')->default(''); 
+            $table->text('content');
             $table->timestamps();
 
             $table->unique('merchant_id');

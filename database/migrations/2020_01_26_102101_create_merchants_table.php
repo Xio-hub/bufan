@@ -34,25 +34,17 @@ class CreateMerchantsTable extends Migration
             $table->timestamps();
         });
 
-        Schema::create('merchant_site_categories', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('merchant_id');
-            $table->string('name');
-            $table->boolean('is_show')->default(1);
-            $table->timestamps();
-        });
-
         Schema::create('introductions', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('merchant_id');
             $table->unsignedInteger('title');
-            $table->text('content')->default('');
+            $table->text('content');
             $table->smallInteger('priority')->default(0);
             $table->smallInteger('status')->default(1);
             $table->timestamps();
 
             $table->index('merchant_id');
-            $table->unique(['merchant_id','site_category_id']);
+            $table->unique(['merchant_id','title']);
         });
     }
 
