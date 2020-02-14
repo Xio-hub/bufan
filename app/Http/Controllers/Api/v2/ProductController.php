@@ -12,8 +12,8 @@ class ProductController extends Controller
 {
     public function list(Request $request, Product $product)
     {
-        $merchant_id = $request->input('merchant_id', 0) ?? 0;
-        if($merchant_id == 0){
+        $merchant_id = $request->input('merchant_id');
+        if(is_null($merchant_id) or !is_positive_integer($merchant_id)){
             $error = 1;
             $message = '参数错误';
             return response()->json(compact('error', 'message'));
@@ -32,12 +32,12 @@ class ProductController extends Controller
     {
         $id = $request->id;
 
-        $product = $product->select('id','name')
+        $data = $product->select('id','name')
                         ->where(['id' => $id])
                         ->first();
 
-        if($product){
-            $data = $product->toArray();
+        if($data){
+            $data = $data->toArray();
             $resources = $product_resource->select('source_type as type','source_url')
                             ->where(['product_id' => $id])    
                             ->orderBy('priority', 'asc')

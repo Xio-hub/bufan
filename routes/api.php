@@ -51,7 +51,7 @@ Route::group([
     Route::get('users/{merchant_id}/courses/{course_id}', 'CourseController@checkUserIsBought');
 
     Route::get('merchants/{merchant_id}/introductions/categories', 'IntroductionController@categories');
-    Route::get('merchants/{merchant_id}/introductions/{id}', 'IntroductionController@detail')->where('id', '\d+');
+    Route::get('merchants/introductions/{id}', 'IntroductionController@detail')->where('id', '\d+');
 
     Route::get('search', 'SearchController@search');
 });
@@ -95,7 +95,7 @@ Route::group([
     Route::get('users/{merchant_id}/courses/{course_id}', 'CourseController@checkUserIsBought');
 
     Route::get('merchants/{merchant_id}/introductions/categories', 'IntroductionController@categories');
-    Route::get('merchants/{merchant_id}/introductions/{id}', 'IntroductionController@detail')->where('id', '\d+');
+    Route::get('merchants/introductions/{id}', 'IntroductionController@detail')->where('id', '\d+');
 
     Route::get('search', 'SearchController@search');
 });
