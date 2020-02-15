@@ -5,10 +5,11 @@ namespace App\Http\Controllers\Api\v2;
 use App\Org\Page;
 use App\Models\Material;
 use App\Models\Panorama;
+use App\Models\VerticalView;
 use Illuminate\Http\Request;
 use App\Models\PanoramaStyle;
 use App\Http\Controllers\Controller;
-use App\Models\VerticalView;
+use Illuminate\Support\Facades\Storage;
 
 class PanoramaController extends Controller
 {
@@ -23,15 +24,22 @@ class PanoramaController extends Controller
             return response()->json(compact('error', 'message'));
         }
 
-        $data = $material->select('id','name','cover')
+        $total = $material->where(['merchant_id' => $merchant_id])->count();
+        if($total > 0){
+            $data = $material->select('id','name','cover')
                         ->where(['merchant_id' => $merchant_id])
                         ->orderBy('priority', 'asc')
                         ->offset($offset)
                         ->limit($limit)
                         ->get()
                         ->toArray();
-        
-        $total = $material->where(['merchant_id' => $merchant_id])->count();
+                        
+            foreach($data as $k => $v){
+                $data[$k]['cover'] = $v['cover'] ? Storage::url($v['cover']) : '';
+            }
+        }else{
+            $data = [];
+        }
 
         $page = new Page($total, $limit);
         return response()->json(['data' => $data, 'meta' => ['total_count' => $total, 'next' => $page->getNext(), 'previous' => $page->getPrev()]]);
@@ -48,15 +56,23 @@ class PanoramaController extends Controller
             return response()->json(compact('error', 'message'));
         }
 
-        $data = $panorama_style->select('id','name','cover')
+        $total = $panorama_style->where(['merchant_id' => $merchant_id])->count();
+
+        if($total > 0){
+            $data = $panorama_style->select('id','name','cover')
                         ->where(['merchant_id' => $merchant_id])
                         ->orderBy('priority', 'asc')
                         ->offset($offset)
                         ->limit($limit)
                         ->get()
                         ->toArray();
-        
-        $total = $panorama_style->where(['merchant_id' => $merchant_id])->count();
+
+            foreach($data as $k => $v){
+                $data[$k]['cover'] = $v['cover'] ? Storage::url($v['cover']) : '';
+            }
+        }else{
+            $data = [];
+        }
 
         $page = new Page($total, $limit);
         return response()->json(['data' => $data, 'meta' => ['total_count' => $total, 'next' => $page->getNext(), 'previous' => $page->getPrev()]]);
@@ -74,7 +90,11 @@ class PanoramaController extends Controller
         }
 
         $data = $panorama->select('id', 'source_url as url')->where(['style_id'=>$style_id,'material_id'=>$material_id])->first();
- 
+
+        if(!is_null($data)){
+            $data->url = $data->url ? Storage::url($data->url) : '';
+        }
+
         return response()->json($data);
     }
 
@@ -89,6 +109,10 @@ class PanoramaController extends Controller
         }
 
         $data = $vertical_view->select('id', 'source_url as url')->where(['style_id'=>$style_id])->first();
+
+        if(!is_null($data)){
+            $data->url = $data->url ? Storage::url($data->url) : '';
+        }
 
         return response()->json($data);
     }

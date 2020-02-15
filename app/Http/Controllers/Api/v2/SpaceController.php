@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\SpaceCategory;
 use App\Http\Controllers\Controller;
 use App\Models\SpaceResource;
+use Illuminate\Support\Facades\Storage;
 
 class SpaceController extends Controller
 {
@@ -22,16 +23,24 @@ class SpaceController extends Controller
             return response()->json(compact('error', 'message'));
         }
 
-        $data = $space_category->select('id','name','cover')
+        $total = $space_category->where(['merchant_id' => $merchant_id])->count();
+
+        if($total > 0){
+            $data = $space_category->select('id','name','cover')
                         ->where(['merchant_id' => $merchant_id])
                         ->orderBy('priority', 'asc')
                         ->offset($offset)
                         ->limit($limit)
                         ->get()
                         ->toArray();
+            foreach($data as $k => $v)
+            {
+                $data[$k]['cover'] = $v['cover'] ? Storage::url($v['cover']) : '';
+            }
+        }else{
+            $data = [];
+        }
         
-        $total = $space_category->where(['merchant_id' => $merchant_id])
-                        ->count();
 
         $page = new Page($total, $limit);
         return response()->json(['data' => $data, 'meta' => ['total_count' => $total, 'next' => $page->getNext(), 'previous' => $page->getPrev()]]);
@@ -42,23 +51,28 @@ class SpaceController extends Controller
 
         $offset = $request->input('offset',0) ?? 0;
         $limit = $request->input('limit', 8) ?? 8;
-        $space_id = $request->input('filter_id', 0) ?? 0;
-        if($space_id == 0){
+        $category_id = $request->input('filter_id', 0) ?? 0;
+        if($category_id == 0){
             $error = 1;
             $message = '参数错误';
             return response()->json(compact('error', 'message'));
         }
 
-        $data = $space->select('id','name','cover')
-                        ->where(['space_id' => $space_id])
+        $total = $space->where(['category_id' => $category_id])
+                        ->count();
+        if($total > 0){
+            $data = $space->select('id','name','cover')
+                        ->where(['category_id' => $category_id])
                         ->orderBy('priority', 'asc')
                         ->offset($offset)
                         ->limit($limit)
                         ->get()
                         ->toArray();
-        
-        $total = $space->where(['space_id' => $space_id])
-                        ->count();
+            
+            foreach($data as $k => $v){
+                $data[$k]['cover'] = $v['cover'] ? Storage::url($v['cover']) : '';
+            }
+        }
 
         $page = new Page($total, $limit);
         return response()->json(['data' => $data, 'meta' => ['total_count' => $total, 'next' => $page->getNext(), 'previous' => $page->getPrev()]]);
@@ -75,10 +89,15 @@ class SpaceController extends Controller
         if($data){
             $data = $data->toArray();
             $resources = $space_resource->select('source_type as type','source_url')
-                            ->where(['product_id' => $id])    
+                            ->where(['space_id' => $id])    
                             ->orderBy('priority', 'asc')
                             ->get()
                             ->toArray();
+
+            foreach($resources as $k => $v){
+                $resources[$k]['source_url'] = $v['source_url'] ? Storage::url($v['source_url']) : '';
+            }
+
             $data['content'] = $resources;              
         }else{
             $data = null;

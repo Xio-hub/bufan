@@ -20,17 +20,10 @@ class InitController extends Controller
             return response()->json(compact('error', 'message'));
         }
 
-        $merchant = Merchant::exists($merchant_id);
-        if(!$merchant){
-            $error = 1;
-            $message = '商家不存在';
-            return response()->json(compact('error', 'message'));
-        }
-
         $data = MerchantBase::select('top_logo','sitebar_logo','slogan')
                             ->where(['merchant_id'=>$merchant_id])
-                            ->first()
-                            ->toArray();
+                            ->first();
+                            
         return response()->json($data);
     }
 

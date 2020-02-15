@@ -88,7 +88,7 @@ Route::group([
     Route::get('panoramas/vertical_views', 'PanoramaController@getVerticalView');
 
     Route::get('courses/background', 'CourseController@background');
-    Route::get('courses/outlines', 'CourseController@getOutlines');
+    Route::get('courses/outlines', 'CourseController@getAllOutlines');
     Route::get('courses/detail', 'CourseController@getCourseDetail');
     Route::get('courses/outlines/{id}', 'CourseController@getOutlineDetail');
     
@@ -98,9 +98,16 @@ Route::group([
     Route::get('merchants/{merchant_id}/introductions/categories', 'IntroductionController@categories');
     Route::get('merchants/introductions/{id}', 'IntroductionController@detail')->where('id', '\d+');
 
-    Route::get('search', 'SearchController@search');
+
 });
 
+Route::group([
+    'namespace' => 'Api\v2',
+    'prefix'    => 'v2',
+    'middleware' => ['auth:api']
+], function() {
+    
+});
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();

@@ -7,6 +7,7 @@ use App\Models\Merchant;
 use Illuminate\Http\Request;
 use App\Models\ProductResource;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -24,6 +25,10 @@ class ProductController extends Controller
                         ->orderBy('priority', 'asc')
                         ->get()
                         ->toArray();
+
+        foreach($data as $k => $v){
+            $data[$k]['cover'] = $v['cover'] ? Storage::url($v['cover']) : '';
+        }
         
         return response()->json($data);
     }
@@ -43,6 +48,11 @@ class ProductController extends Controller
                             ->orderBy('priority', 'asc')
                             ->get()
                             ->toArray();
+
+            foreach($resources as $k => $v){
+                $resources[$k]['source_url'] = $v['source_url'] ? Storage::url($v['source_url']) : '';
+            }
+            
             $data['content'] = $resources;              
         }else{
             $data = null;

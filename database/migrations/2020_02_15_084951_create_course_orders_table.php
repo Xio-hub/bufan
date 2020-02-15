@@ -15,11 +15,13 @@ class CreateCourseOrdersTable extends Migration
     {
         Schema::create('course_orders', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('order_number');
             $table->unsignedInteger('course_id');
             $table->string('course_name');
             $table->decimal('price');
             $table->unsignedInteger('user_id');
             $table->string('username');
+            $table->string('status');
             $table->timestamps();
         });
     }

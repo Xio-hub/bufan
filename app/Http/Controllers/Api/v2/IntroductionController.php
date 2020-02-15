@@ -11,7 +11,7 @@ class IntroductionController extends Controller
     public function categories(Request $request,Introduction $instruduction)
     {
 
-        $merchant_id = $request->input('merchant_id');
+        $merchant_id = $request->merchant_id;
         if(is_null($merchant_id) or !is_positive_integer($merchant_id)){
             $error = 1;
             $message = '参数错误';
@@ -19,7 +19,7 @@ class IntroductionController extends Controller
         }
 
         $data = $instruduction->select('id', 'title as name')
-                            ->where(['merchant_id', $merchant_id])
+                            ->where(['merchant_id' => $merchant_id])
                             ->get()
                             ->toArray();
 

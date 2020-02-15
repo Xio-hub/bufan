@@ -6,8 +6,9 @@ use App\Org\Page;
 use App\Models\Style;
 use Illuminate\Http\Request;
 use App\Models\StyleCategory;
-use App\Http\Controllers\Controller;
 use App\Models\StyleResource;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 
 class StyleController extends Controller
 {
@@ -22,16 +23,25 @@ class StyleController extends Controller
             return response()->json(compact('error', 'message'));
         }
 
-        $data = $style_category->select('id','name','cover')
+        $total = $style_category->where(['merchant_id' => $merchant_id])->count();
+
+        if($total > 0){
+            $data = $style_category->select('id','name','cover')
                         ->where(['merchant_id' => $merchant_id])
                         ->orderBy('priority', 'asc')
                         ->offset($offset)
                         ->limit($limit)
                         ->get()
                         ->toArray();
-        
-        $total = $style_category->where(['merchant_id' => $merchant_id])
-                        ->count();
+
+            foreach($data as $k => $v)
+            {
+                $data[$k]['cover'] = $v['cover'] ? Storage::url($v['cover']) : '';
+            }
+        }else{
+            $data = [];
+        }
+    
 
         $page = new Page($total, $limit);
         return response()->json(['data' => $data, 'meta' => ['total_count' => $total, 'next' => $page->getNext(), 'previous' => $page->getPrev()]]);
@@ -41,23 +51,28 @@ class StyleController extends Controller
     {
         $offset = $request->input('offset',0) ?? 0;
         $limit = $request->input('limit', 8) ?? 8;
-        $style_id = $request->input('filter_id', 0) ?? 0;
-        if($style_id == 0){
+        $category_id = $request->input('filter_id', 0) ?? 0;
+        if($category_id == 0){
             $error = 1;
             $message = '参数错误';
             return response()->json(compact('error', 'message'));
         }
 
-        $data = $style->select('id','name','cover')
-                        ->where(['space_id' => $style_id])
+        $total = $style->where(['category_id' => $category_id])->count();
+        if($total > 0){
+            $data = $style->select('id','name','cover')
+                        ->where(['category_id' => $category_id])
                         ->orderBy('priority', 'asc')
                         ->offset($offset)
                         ->limit($limit)
                         ->get()
                         ->toArray();
-        
-        $total = $style->where(['space_id' => $style_id])
-                        ->count();
+            foreach($data as $k => $v){
+                $data[$k]['cover'] = $v['cover'] ? Storage::url($v['cover']) : '';
+            }
+        }else{
+            $data = [];
+        }
 
         $page = new Page($total, $limit);
         return response()->json(['data' => $data, 'meta' => ['total_count' => $total, 'next' => $page->getNext(), 'previous' => $page->getPrev()]]);
@@ -74,10 +89,15 @@ class StyleController extends Controller
         if($data){
             $data = $data->toArray();
             $resources = $style_resource->select('source_type as type','source_url')
-                            ->where(['product_id' => $id])    
+                            ->where(['style_id' => $id])    
                             ->orderBy('priority', 'asc')
                             ->get()
                             ->toArray();
+
+            foreach($resources as $k => $v){
+                $resources[$k]['source_url'] = $v['source_url'] ? Storage::url($v['source_url']) : '';
+            }
+            
             $data['content'] = $resources;              
         }else{
             $data = null;
