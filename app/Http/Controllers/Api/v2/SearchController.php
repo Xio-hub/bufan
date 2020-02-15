@@ -1,13 +1,16 @@
 <?php
 
-namespace App\Http\Controllers\Api\v1;
+namespace App\Http\Controllers\Api\v2;
 
+use App\Models\Space;
+use App\Models\Style;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class SearchController extends Controller
 {
-    public function search(Request $request)
+    public function search(Request $request,Product $product, Space $space, Style $style)
     {
         $keyword = $request->input('keyword', '') ?? '';
 
@@ -15,51 +18,33 @@ class SearchController extends Controller
             return [];
         }
 
+        $product_result = $product->select('id', 'name', 'cover')
+                                ->where(['name', 'like' , "%{$keyword}%"])
+                                ->get()
+                                ->toArray();
+
+        $space_result = $space->select('id', 'name', 'cover')
+                                ->where(['name', 'like' , "%{$keyword}%"])
+                                ->get()
+                                ->toArray();
+
+        $style_result = $style->select('id', 'name', 'cover')
+                                ->where(['name', 'like' , "%{$keyword}%"])
+                                ->get()
+                                ->toArray();
+                                
         $data = [
             'product' => [
                 'title' => '新品鉴赏',
-                'data' =>[
-                    [
-                        'id' => 1,
-                        'name' => '新品1',  
-                        'cover' => 'http://imageurl.com'
-                    ],
-                    [
-                        'id' => 2,
-                        'name' => '新品2',  
-                        'cover' => 'http://imageurl.com'
-                    ],
-                ]
+                'data' => $product_result,
             ],
             'space' => [
                 'title' => '功能空间',
-                'data' =>[
-                    [
-                        'id' => 1,
-                        'name' => '空间1',  
-                        'cover' => 'http://imageurl.com'
-                    ],
-                    [
-                        'id' => 2,
-                        'name' => '空间2',  
-                        'cover' => 'http://imageurl.com'
-                    ],
-                ]
+                'data' => $space_result
             ],
             'style' => [
                 'title' => '风格鉴赏',
-                'data' =>[
-                    [
-                        'id' => 1,
-                        'name' => '风格1',  
-                        'cover' => 'http://imageurl.com'
-                    ],
-                    [
-                        'id' => 2,
-                        'name' => '风格2',  
-                        'cover' => 'http://imageurl.com'
-                    ],
-                ]
+                'data' => $style_result
             ]
         ];
 

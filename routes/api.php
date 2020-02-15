@@ -45,7 +45,7 @@ Route::group([
 
     Route::get('courses/background', 'CourseController@background');
     Route::get('courses/outlines', 'CourseController@outlines');
-    Route::get('courses/{course_id}', 'CourseController@getCourse');
+    Route::get('courses/detail', 'CourseController@getCourse');
     Route::get('courses/outlines/{outline_id}', 'CourseController@getOutline');
     Route::get('users/{merchant_id}/courses/orders', 'CourseController@getUserOrders');
     Route::get('users/{merchant_id}/courses/{course_id}', 'CourseController@checkUserIsBought');
@@ -91,6 +91,7 @@ Route::group([
     Route::get('courses/outlines', 'CourseController@getOutlines');
     Route::get('courses/detail', 'CourseController@getCourseDetail');
     Route::get('courses/outlines/{id}', 'CourseController@getOutlineDetail');
+    
     Route::get('users/{merchant_id}/courses/orders', 'CourseController@getUserOrders');
     Route::get('users/{merchant_id}/courses/{course_id}', 'CourseController@checkUserIsBought');
 
