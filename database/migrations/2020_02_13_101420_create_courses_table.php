@@ -17,6 +17,7 @@ class CreateCoursesTable extends Migration {
 		{
 			$table->increments('id');
 			$table->string('title');
+			$table->string('background');
 			$table->text('info', 65535)->nullable();
 			$table->text('teacher_info', 65535)->nullable();
 			$table->decimal('price', 10)->nullable();
