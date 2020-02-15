@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title','新品列表')
+@section('title','商家列表')
 
 @section('styles')
     <link href="{{asset('css/plugins/dataTables/datatables.min.css')}}" rel="stylesheet">
@@ -12,7 +12,7 @@
         <div class="col-lg-12">
             <div class="ibox ">
                 <div class="ibox-title">
-                    <h5>新品列表</h5>
+                    <h5>商家列表</h5>
                 </div>
                 <div class="ibox-content">
                         <table class="table table-striped table-bordered table-hover dataTables-example" >

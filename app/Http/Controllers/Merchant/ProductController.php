@@ -106,9 +106,11 @@ class ProductController extends Controller
         }
     }
 
-    public function edit()
+    public function edit(Request $request, Product $product)
     {
-        // return view('merchants.products.edit');
+        $id = $request->id;
+        $product = Product::findOrFail($id);
+        return view('merchants.products.edit')->with('product',$product);
     }
 
     public function update(Request $request)

@@ -26,7 +26,6 @@
 
             </div>
             <h3>Welcome to 布凡企业管理后台</h3>
-            <p>Login in. To see it in action.</p>
             <form class="m-t" role="form" method="POST" action="{{ route('merchant.login') }}">
                 {{ csrf_field() }}
                 <div class="form-group">

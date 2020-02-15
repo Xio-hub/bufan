@@ -22,7 +22,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="ibox-content">
-                    <form method="POST" action="{{route('merchants.store')}}" enctype="multipart/form-data">
+                    <form id="dataForm">
                         {{ csrf_field() }}
                         <div class="form-group  row"><label class="col-sm-2 col-form-label">用户名</label>
                         <div class="col-sm-5"><input type="text" class="form-control" name='username'></div>
@@ -90,8 +90,7 @@
                         
                         <div class="form-group row">
                             <div class="col-sm-4 col-sm-offset-2">
-                                <button class="btn btn-white btn-lg" type="submit">Cancel</button>
-                                <button class="btn btn-primary btn-lg" type="submit">确认</button>
+                                <a class="btn btn-primary btn-lg" id="btn-commit">确认</a>
                             </div>
                         </div>
                     </form>
@@ -119,6 +118,28 @@
             $('.i-checks').iCheck({
                 checkboxClass: 'icheckbox_square-green',
                 radioClass: 'iradio_square-green',
+            });
+        });
+
+        $('#btn-commit').click(function(){
+            var formData = new FormData($('#dataForm')[0]);
+            $.ajax({
+                type : 'post',
+                url : "{{route('merchants.store')}}",
+                headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                dataType : 'json',
+                processData: false,		//用于对data参数进行序列化处理 这里必须false
+               	contentType: false, 	//必
+                // data: $('#dataForm').serialize(),
+                data: formData,
+                success : function(data,textStatus,jqXHR){
+                    if(data.error == 0){
+                        alert('添加成功');
+                        window.location.href = "{{route('merchants.index')}}";
+                    }else{
+                        alert(data.message);
+                    }
+                }
             });
         });
     </script>

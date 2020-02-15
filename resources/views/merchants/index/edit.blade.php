@@ -37,7 +37,7 @@
 
                         <div class="form-group  row"><label class="col-sm-2 col-form-label">封面文字</label></div>
                         <div class="ibox-content no-padding">            
-                            <textarea id="summernote" name="editordata">{{$data->content}}</textarea>
+                            <textarea id="editor" type="text/plain" style="height:500px;" name='editordata'>{{$data->content}}</textarea>
                         </div>
                         <div class="hr-line-dashed"></div>
 
@@ -71,24 +71,7 @@
     <script>
         $(document).ready(function(){
 
-            $('#summernote').summernote(
-                {
-                    height: 500,
-                    tabsize: 2,
-                    lang: 'zh-CN',
-                    toolbar: [
-				              [ 'style', [ 'style' ] ],
-				              [ 'font', [ 'bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear'] ],
-				              [ 'fontname', [ 'fontname' ] ],
-				              [ 'fontsize', [ 'fontsize' ] ],
-				              [ 'color', [ 'color' ] ],
-				              [ 'para', [ 'ol', 'ul', 'paragraph', 'height' ] ],
-				              [ 'table', [ 'table' ] ],
-				              [ 'insert', [ 'link'] ],
-				              [ 'view', [ 'undo', 'redo', 'fullscreen', 'codeview', 'help' ] ]
-				          ]
-                }
-            );
+            var ue = UE.getEditor('editor');
         });
 
         function saveData()

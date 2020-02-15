@@ -15,7 +15,7 @@ class CreateMerchantsTable extends Migration
     {
         Schema::create('merchants', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('username');
+            $table->string('username')->unique();
             $table->string('email')->unique()->nullable()->default('');
             $table->string('password');
             $table->rememberToken();

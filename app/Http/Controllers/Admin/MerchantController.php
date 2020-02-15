@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Models\Introduction;
 use App\Models\MerchantIndex;
+use App\Services\MerchantService;
 use Spatie\Permission\Models\Permission;
 use Auth;
 use Illuminate\Support\Carbon;
@@ -31,110 +32,115 @@ class MerchantController extends Controller
     }
 
 
-    public function store(Request $request)
+    public function store(Request $request,MerchantService $merchant_service)
     {
-        $this->validate($request, [
-            'username'=>'required|max:120',
-            'email'=>'required|email|unique:merchants',
-            'password'=>'required|min:6',
-            'merchant_name'=>'required',
-            'categories'=>'required',
-            'permissions'=>'required'
-        ]);
-
-        $username = $request->input('username');
-        $email = $request->input('email');
-        $password = $request->input('password');
-        $merchant_name = $request->input('merchant_name');
+        $username = $request->input('username','') ?? '';
+        $email = $request->input('email','') ?? '';
+        $password = $request->input('password', '') ?? '';
+        $merchant_name = $request->input('merchant_name','') ?? '';
         $slogan = $request->input('slogan') ?? '';
         $categories = $request->input('categories') ?? '';
         $permissions = $request->input('permissions') ?? '';
-
-        $merchant = Merchant::create([
-            'username' => $username,
-            'email' => $email,
-            'password' => bcrypt($password)
-        ]);
-
-        $top_logo = '';
-        if ($request->hasFile('top_logo')) {
-            $this->validate($request, ['top_logo'=>'image',]);
-            $top_logo =  $request->top_logo->store("images/top_logo/{$merchant->id}");
-        }
-
-        $sitebar_logo = '';
-        if ($request->hasFile('sitebar_logo')) {
-            $this->validate($request, ['sitebar_logo'=>'image',]);
-            $sitebar_logo =  $request->sitebar_logo->store("images/sitebar_logo/{$merchant->id}");
-        }
         
-        MerchantBase::create([
-            'merchant_id' => $merchant->id,
-            'name' => $merchant_name,
-            'top_logo' => $top_logo,
-            'sitebar_logo' => $sitebar_logo,
-            'slogan' => $slogan,
-            'category_ids' => json_encode($categories)
-        ]);
+        $validate = $merchant_service->validateCreateMerchantForm($request);
+        if($validate['error'] == 1){
+            return response()->json($validate);
+        }
 
-        MerchantIndex::create([
-            'merchant_id' => $merchant->id,
-            'content' => '',
-        ]);
+        try{
+            DB::beginTransaction();
+            $merchant = Merchant::create([
+                'username' => $username,
+                'email' => $email,
+                'password' => bcrypt($password)
+            ]);
 
-        $now = Carbon::now()->toDateTimeString();
-        Introduction::insert(
-            [
-                [
-                    'merchant_id' => $merchant->id,
-                    'title' => '品牌介绍',
-                    'content' => '',
-                    'created_at' => $now,
-                    'updated_at' => $now
-                ],
-                [
-                    'merchant_id' => $merchant->id,
-                    'title' => '企业文化',
-                    'content' => '',
-                    'created_at' => $now,
-                    'updated_at' => $now
-                ],
-                [
-                    'merchant_id' => $merchant->id,
-                    'title' => '发展历程',
-                    'content' => '',
-                    'created_at' => $now,
-                    'updated_at' => $now
-                ],
-                [
-                    'merchant_id' => $merchant->id,
-                    'title' => '硬件实力',
-                    'content' => '',
-                    'created_at' => $now,
-                    'updated_at' => $now
-                ],
-                [
-                    'merchant_id' => $merchant->id,
-                    'title' => '员工风采',
-                    'content' => '',
-                    'created_at' => $now,
-                    'updated_at' => $now
-                ],
-                [
-                    'merchant_id' => $merchant->id,
-                    'title' => '实际案例',
-                    'content' => '',
-                    'created_at' => $now,
-                    'updated_at' => $now
-                ],
-            ]
-        );
+            $top_logo = '';
+            if ($request->hasFile('top_logo')) {
+                $this->validate($request, ['top_logo'=>'image',]);
+                $top_logo =  $request->top_logo->store("images/top_logo/{$merchant->id}");
+            }
 
-        $merchant->givePermissionTo($permissions);
+            $sitebar_logo = '';
+            if ($request->hasFile('sitebar_logo')) {
+                $this->validate($request, ['sitebar_logo'=>'image',]);
+                $sitebar_logo =  $request->sitebar_logo->store("images/sitebar_logo/{$merchant->id}");
+            }
+            
+            MerchantBase::create([
+                'merchant_id' => $merchant->id,
+                'name' => $merchant_name,
+                'top_logo' => $top_logo,
+                'sitebar_logo' => $sitebar_logo,
+                'slogan' => $slogan,
+                'category_ids' => json_encode($categories)
+            ]);
 
-        return redirect()->route('merchants.index')
-        ->with('flash_message',
-         'Merchant successfully added.');
+            MerchantIndex::create([
+                'merchant_id' => $merchant->id,
+                'content' => '',
+            ]);
+
+            $now = Carbon::now()->toDateTimeString();
+            Introduction::insert(
+                [
+                    [
+                        'merchant_id' => $merchant->id,
+                        'title' => '品牌介绍',
+                        'content' => '',
+                        'created_at' => $now,
+                        'updated_at' => $now
+                    ],
+                    [
+                        'merchant_id' => $merchant->id,
+                        'title' => '企业文化',
+                        'content' => '',
+                        'created_at' => $now,
+                        'updated_at' => $now
+                    ],
+                    [
+                        'merchant_id' => $merchant->id,
+                        'title' => '发展历程',
+                        'content' => '',
+                        'created_at' => $now,
+                        'updated_at' => $now
+                    ],
+                    [
+                        'merchant_id' => $merchant->id,
+                        'title' => '硬件实力',
+                        'content' => '',
+                        'created_at' => $now,
+                        'updated_at' => $now
+                    ],
+                    [
+                        'merchant_id' => $merchant->id,
+                        'title' => '员工风采',
+                        'content' => '',
+                        'created_at' => $now,
+                        'updated_at' => $now
+                    ],
+                    [
+                        'merchant_id' => $merchant->id,
+                        'title' => '实际案例',
+                        'content' => '',
+                        'created_at' => $now,
+                        'updated_at' => $now
+                    ],
+                ]
+            );
+
+            $merchant->givePermissionTo($permissions);
+            DB::commit();
+            $error = 0;
+            $message = 'success';
+        }catch(Exception $e){
+            DB::rollBack();
+            $error = 1;
+            Log::error($e);
+            $message = '添加商家失败，请稍后重试或联系管理员';
+        }finally{
+            return response()->json(compact('error','message'));
+        }
     }
 
     public function show()
@@ -242,6 +248,6 @@ class MerchantController extends Controller
         $merchant->save();
         return redirect()->route('merchants.index')
         ->with('flash_message',
-         'Merchant password successfully updated.');
+         '密码修改成功.');
     }
 }
