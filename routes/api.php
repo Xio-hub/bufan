@@ -109,6 +109,14 @@ Route::group([
     
 });
 
+Route::group([
+    'namespace' => 'Api\payments',
+    'prefix'    => 'payments',
+], function() {
+    Route::post('/wechat/order', 'WechatController@order');
+    Route::post('/wechat-notify', 'WechatController@notify');
+});
+
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });

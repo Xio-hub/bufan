@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "01a4155a938cc37a4bd8a9ea8df75848",
+    "content-hash": "17076ec76ba1723aaf70bc4f492c8812",
     "packages": [
         {
             "name": "defuse/php-encryption",
@@ -1770,6 +1770,65 @@
             "description": "UEditor integration for Laravel.",
             "abandoned": true,
             "time": "2018-12-22T07:40:09+00:00"
+        },
+        {
+            "name": "overtrue/laravel-wechat",
+            "version": "4.0.23",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/overtrue/laravel-wechat.git",
+                "reference": "64d424a9cb8ce82321f1d6e5a053c53e82afcb32"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/overtrue/laravel-wechat/zipball/64d424a9cb8ce82321f1d6e5a053c53e82afcb32",
+                "reference": "64d424a9cb8ce82321f1d6e5a053c53e82afcb32",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "illuminate/container": "^5.1",
+                "overtrue/wechat": "^4.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Overtrue\\LaravelWeChat\\ServiceProvider"
+                    ],
+                    "aliases": {
+                        "EasyWeChat": "Overtrue\\LaravelWeChat\\Facade"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Overtrue\\LaravelWeChat\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "overtrue",
+                    "email": "anzhengchao@gmail.com"
+                }
+            ],
+            "description": "微信 SDK for Laravel",
+            "keywords": [
+                "laravel",
+                "sdk",
+                "wechat",
+                "weixin"
+            ],
+            "time": "2019-03-01T10:43:18+00:00"
         },
         {
             "name": "overtrue/socialite",
