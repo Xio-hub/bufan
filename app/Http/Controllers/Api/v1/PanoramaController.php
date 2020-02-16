@@ -103,4 +103,14 @@ class PanoramaController extends Controller
 
         return response()->json($data);
     }
+
+    public function getTargetView()
+    {
+        $data = [
+            'id' => '1',
+            'url' => 'http://imageurl.com',
+        ];
+
+        return response()->json($data);
+    }
 }

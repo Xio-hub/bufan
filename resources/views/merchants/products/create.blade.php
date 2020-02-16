@@ -8,7 +8,6 @@
 <link href="{{asset('css/plugins/jasny/jasny-bootstrap.min.css')}}" rel="stylesheet">
 <link href="{{asset('css/plugins/dropzone/basic.css')}}" rel="stylesheet">
 <link href="{{asset('css/plugins/dropzone/dropzone.css')}}" rel="stylesheet">
-
 @endsection
 
 @section('content')
@@ -89,6 +88,8 @@
 @endsection
 
 @section('scripts')
+
+    <script src="{{asset('js/plugins/jasny/jasny-bootstrap.min.js')}}"></script>
     <script src="{{asset('js/plugins/dropzone/dropzone.js')}}"></script>
     <script src="{{asset('js/plugins/iCheck/icheck.min.js')}}"></script>
     <script>

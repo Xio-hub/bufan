@@ -17,12 +17,7 @@ class PanoramaController extends Controller
     {
         $offset = $request->input('offset',0) ?? 0;
         $limit = $request->input('limit', 20) ?? 20;
-        $merchant_id = $request->input('merchant_id');
-        if(is_null($merchant_id) or !is_positive_integer($merchant_id)){
-            $error = 1;
-            $message = '参数错误';
-            return response()->json(compact('error', 'message'));
-        }
+        $merchant_id = $request->user()->id;
 
         $total = $material->where(['merchant_id' => $merchant_id])->count();
         if($total > 0){
@@ -49,12 +44,7 @@ class PanoramaController extends Controller
     {
         $offset = $request->input('offset',0) ?? 0;
         $limit = $request->input('limit', 20) ?? 20;
-        $merchant_id = $request->input('merchant_id');
-        if(is_null($merchant_id) or !is_positive_integer($merchant_id)){
-            $error = 1;
-            $message = '参数错误';
-            return response()->json(compact('error', 'message'));
-        }
+        $merchant_id = $request->user()->id;
 
         $total = $panorama_style->where(['merchant_id' => $merchant_id])->count();
 

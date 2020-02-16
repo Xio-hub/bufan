@@ -16,12 +16,7 @@ class SpaceController extends Controller
     {
         $offset = $request->input('offset',0) ?? 0;
         $limit = $request->input('limit', 8) ?? 8;
-        $merchant_id = $request->input('merchant_id');
-        if(is_null($merchant_id) or !is_positive_integer($merchant_id)){
-            $error = 1;
-            $message = '参数错误';
-            return response()->json(compact('error', 'message'));
-        }
+        $merchant_id = $request->user()->id;
 
         $total = $space_category->where(['merchant_id' => $merchant_id])->count();
 

@@ -54,17 +54,16 @@ class Handler extends ExceptionHandler
 
     protected function unauthenticated($request, AuthenticationException $exception)
     {
-        if (auth()->guard('merchant')->guest()) {
-            if ($request->ajax() || $request->wantsJson()) {
+        $guards = $exception->guards();
+        if (auth()->guard()->guest()) {
+            if ($request->ajax() || $request->wantsJson() || in_array('api',$guards)) {
                 return response('Unauthorized.', 401);
             } else {
-                return redirect()->guest(route('merchant.login')); // 这里指定重定向后的路由
-            }
-        }elseif (auth()->guard('admin')->guest()) {
-            if ($request->ajax() || $request->wantsJson()) {
-                return response('Unauthorized.', 401);
-            } else {
-                return redirect()->guest(route('login')); // 这里指定重定向后的路由
+                if(in_array('merchant',$guards)){
+                    return redirect()->guest(route('merchant.login')); // 这里指定重定向后的路由
+                }else{
+                    return redirect()->guest(route('login')); // 这里指定重定向后的路由
+                }
             }
         }
     }

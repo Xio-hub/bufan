@@ -13,13 +13,7 @@ class InitController extends Controller
 {
     public function init(Request $request)
     {
-        $merchant_id = $request->input('merchant_id');
-        if($merchant_id == 0){
-            $error = 1;
-            $message = '参数错误';
-            return response()->json(compact('error', 'message'));
-        }
-
+        $merchant_id = $request->user()->id;
         $data = MerchantBase::select('top_logo','sitebar_logo','slogan')
                             ->where(['merchant_id'=>$merchant_id])
                             ->first();
@@ -29,20 +23,7 @@ class InitController extends Controller
 
     public function index(Request $request)
     {
-        $merchant_id = $request->input('merchant_id');
-        if($merchant_id == 0){
-            $error = 1;
-            $message = '参数错误';
-            return response()->json(compact('error', 'message'));
-        }
-
-        $merchant = Merchant::find($merchant_id);
-        if(!$merchant){
-            $error = 1;
-            $message = '商家不存在';
-            return response()->json(compact('error', 'message'));
-        }
-    
+        $merchant_id = $request->user()->id;   
         $data = MerchantIndex::select('cover','content')
                             ->where(['merchant_id'=>$merchant_id])
                             ->first()

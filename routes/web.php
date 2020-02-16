@@ -20,10 +20,10 @@ Route::post('administer/management/logout', 'Auth\LoginController@logout')->name
 Route::group([
     'namespace' => 'Admin',
     'prefix' => 'administer/management',
-    'middleware' => ['auth']
+    'middleware' => ['auth:web']
 ], function () {
     Route::get('/', 'HomeController@index');
-    Route::get('home', 'HomeController@index')->name('admin.home');
+    Route::get('/home', 'HomeController@index')->name('admin.home');
     Route::get('password', 'UserController@showResetView')->name('admin.password.edit');
     Route::patch('password', 'UserController@updatePassword')->name('admin.password.update');
 });
@@ -88,9 +88,9 @@ Route::group([
     'middleware' => ['auth:merchant']
 ], function () {
     Route::get('/', 'HomeController@index');
-    Route::get('home', 'HomeController@index')->name('merchant.home');
-    Route::get('password', 'UserController@showResetView')->name('merchant.password.edit');
-    Route::patch('password', 'UserController@updatePassword')->name('merchant.password.update');
+    Route::get('/home', 'HomeController@index')->name('merchant.home');
+    Route::get('/password', 'UserController@showResetView')->name('merchant.password.edit');
+    Route::patch('/password', 'UserController@updatePassword')->name('merchant.password.update');
 
     Route::get('/index/edit', 'IndexController@edit')->name('merchant.index.edit');
     Route::put('/index', 'IndexController@update')->name('merchant.index.update');

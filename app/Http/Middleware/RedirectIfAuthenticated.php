@@ -19,7 +19,7 @@ class RedirectIfAuthenticated
     {
         if (Auth::guard($guard)->check()) {
             if($guard == 'merchant'){
-                return redirect('merchant/management/home');
+                return redirect('/merchant/management/home');
             }else{
                 return redirect('/administer/management/home');
             }

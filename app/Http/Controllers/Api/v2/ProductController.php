@@ -13,13 +13,7 @@ class ProductController extends Controller
 {
     public function list(Request $request, Product $product)
     {
-        $merchant_id = $request->input('merchant_id');
-        if(is_null($merchant_id) or !is_positive_integer($merchant_id)){
-            $error = 1;
-            $message = '参数错误';
-            return response()->json(compact('error', 'message'));
-        }
-
+        $merchant_id = $request->user()->id;
         $data = $product->select('id','name','cover')
                         ->where(['merchant_id' => $merchant_id])
                         ->orderBy('priority', 'asc')

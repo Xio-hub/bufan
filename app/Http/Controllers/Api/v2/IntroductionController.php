@@ -11,12 +11,7 @@ class IntroductionController extends Controller
     public function categories(Request $request,Introduction $instruduction)
     {
 
-        $merchant_id = $request->merchant_id;
-        if(is_null($merchant_id) or !is_positive_integer($merchant_id)){
-            $error = 1;
-            $message = '参数错误';
-            return response()->json(compact('error', 'message'));
-        }
+        $merchant_id = $request->user()->id;
 
         $data = $instruduction->select('id', 'title as name')
                             ->where(['merchant_id' => $merchant_id])
