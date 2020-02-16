@@ -23,7 +23,7 @@ Route::group([
     Route::post('users/login', 'PassportController@login');
 
     Route::get('init', 'InitController@init');
-    Route::get('background', 'InitController@getIndexBackground');
+    Route::get('index', 'InitController@index');
     Route::get('categories', 'CategoryController@list');
     Route::get('search', 'SearchController@search');
 
