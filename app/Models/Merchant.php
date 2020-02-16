@@ -86,6 +86,11 @@ class Merchant extends Model implements
         return $this->hasMany('App\Models\VerticalView', 'merchant_id');
     }
 
+    public function single_spaces()
+    {
+        return $this->hasMany('App\Models\PanoramaSingleSpace', 'merchant_id');
+    }
+
     public function course_orders()
     {
         return $this->hasMany('App\Models\VerticalView', 'user_id');

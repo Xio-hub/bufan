@@ -29,6 +29,15 @@ class PassportController extends Controller
         }
     }
 
+    public function logout()
+    {
+        $data = [
+            'status' => 200,
+            'message' => '登出成功',
+        ];
+        return response()->json($data);
+    }
+
     /**
      * Returns Authenticated User Details
      *

@@ -87,7 +87,6 @@ class PanoramaController extends Controller
     public function detail()
     {
         $data = [
-            'id' => '1',
             'url' => 'http://imageurl.com',
         ];
 
@@ -97,17 +96,15 @@ class PanoramaController extends Controller
     public function getVerticalView()
     {
         $data = [
-            'id' => '1',
             'url' => 'http://imageurl.com',
         ];
 
         return response()->json($data);
     }
 
-    public function getTargetView()
+    public function getSingleSpaceDetail()
     {
         $data = [
-            'id' => '1',
             'url' => 'http://imageurl.com',
         ];
 

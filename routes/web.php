@@ -126,37 +126,44 @@ Route::group([
     Route::get('/styles', 'StyleController@index')->name('merchant.style.index');
     Route::get('/styles/create', 'StyleController@create')->name('merchant.style.create');
     Route::post('/styles', 'StyleController@store')->name('merchant.style.store');
-    Route::get('/styles/{id}', 'StyleController@edit')->where('id','\d+')->name('merchant.style.edit');
+    Route::get('/styles/{id}/edit', 'StyleController@edit')->where('id','\d+')->name('merchant.style.edit');
     Route::put('/styles/{id}', 'StyleController@update')->where('id','\d+')->name('merchant.style.update');
     Route::delete('/styles/{id}', 'StyleController@destroy')->where('id','\d+')->name('merchant.style.destroy');
 
     Route::get('/materials', 'MaterialController@index')->name('merchant.material.index');
     Route::get('/materials/create', 'MaterialController@create')->name('merchant.material.create');
     Route::post('/materials', 'MaterialController@store')->name('merchant.material.store');
-    Route::get('/materials/{id}', 'MaterialController@edit')->where('id','\d+')->name('merchant.material.edit');
+    Route::get('/materials/{id}/edit', 'MaterialController@edit')->where('id','\d+')->name('merchant.material.edit');
     Route::put('/materials/{id}', 'MaterialController@update')->where('id','\d+')->name('merchant.material.update');
     Route::delete('/materials/{id}', 'MaterialController@destroy')->where('id','\d+')->name('merchant.material.destroy');
 
     Route::get('/panoramas', 'PanoramaController@index')->name('merchant.panorama.index');
     Route::get('/panoramas/create', 'PanoramaController@create')->name('merchant.panorama.create');
     Route::post('/panoramas', 'PanoramaController@store')->name('merchant.panorama.store');
-    Route::get('/panoramas/{id}', 'PanoramaController@edit')->where('id','\d+')->name('merchant.panorama.edit');
+    Route::get('/panoramas/{id}/edit', 'PanoramaController@edit')->where('id','\d+')->name('merchant.panorama.edit');
     Route::put('/panoramas/{id}', 'PanoramaController@update')->where('id','\d+')->name('merchant.panorama.update');
     Route::delete('/panoramas/{id}', 'PanoramaController@destroy')->where('id','\d+')->name('merchant.panorama.destroy');
 
     Route::get('/panoramas/styles', 'PanoramaStyleController@index')->name('merchant.panorama.style.index');
     Route::get('/panoramas/styles/create', 'PanoramaStyleController@create')->name('merchant.panorama.style.create');
     Route::post('/panoramas/styles', 'PanoramaStyleController@store')->name('merchant.panorama.style.store');
-    Route::get('/panoramas/styles/{id}', 'PanoramaStyleController@edit')->where('id','\d+')->name('merchant.panorama.style.edit');
+    Route::get('/panoramas/styles/{id}/edit', 'PanoramaStyleController@edit')->where('id','\d+')->name('merchant.panorama.style.edit');
     Route::put('/panoramas/styles/{id}', 'PanoramaStyleController@update')->where('id','\d+')->name('merchant.panorama.style.update');
     Route::delete('/panoramas/styles/{id}', 'PanoramaStyleController@destroy')->where('id','\d+')->name('merchant.panorama.style.destroy');
 
     Route::get('/vertical_views', 'VerticalViewController@index')->name('merchant.vertical_view.index');
     Route::get('/vertical_views/create', 'VerticalViewController@create')->name('merchant.vertical_view.create');
     Route::post('/vertical_views', 'VerticalViewController@store')->name('merchant.vertical_view.store');
-    Route::get('/vertical_views/{id}', 'VerticalViewController@edit')->where('id','\d+')->name('merchant.vertical_view.edit');
+    Route::get('/vertical_views/{id}/edit', 'VerticalViewController@edit')->where('id','\d+')->name('merchant.vertical_view.edit');
     Route::put('/vertical_views/{id}', 'VerticalViewController@update')->where('id','\d+')->name('merchant.vertical_view.update');
     Route::delete('/vertical_views/{id}', 'VerticalViewController@destroy')->where('id','\d+')->name('merchant.vertical_view.destroy');
+
+    Route::get('/panoramas/single_spaces', 'PanoramaSingleSpaceController@index')->name('merchant.panorama.single_space.index');
+    Route::get('/panoramas/single_spaces/create', 'PanoramaSingleSpaceController@create')->name('merchant.panorama.single_space.create');
+    Route::post('/panoramas/single_spaces', 'PanoramaSingleSpaceController@store')->name('merchant.panorama.single_space.store');
+    Route::get('/panoramas/single_spaces/{id}/edit', 'PanoramaSingleSpaceController@edit')->where('id','\d+')->name('merchant.panorama.single_space.edit');
+    Route::put('/panoramas/single_spaces/{id}', 'PanoramaSingleSpaceController@update')->where('id','\d+')->name('merchant.panorama.single_space.update');
+    Route::delete('/panoramas/single_spaces/{id}', 'PanoramaSingleSpaceController@destroy')->where('id','\d+')->name('merchant.panorama.single_space.destroy');
 
     Route::get('categories/{id}/edit' , 'CategoryController@edit')->where('id', '\d+')->name('merchant.category.edit');
     Route::patch('categories/{id}' , 'CategoryController@update')->where('id', '\d+')->name('merchant.category.update');

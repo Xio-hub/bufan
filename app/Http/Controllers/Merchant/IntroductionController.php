@@ -35,7 +35,7 @@ class IntroductionController extends Controller
             $priority = $request->input('priority');
             $status = $request->input('status');
 
-            $introduction = Introduction::where(['id'=>$id,'merchant_id'=>$merchant->id])->firstOrFail();
+            $introduction = Introduction::where(['id'=>$id])->firstOrFail();
             if(!$merchant->can('update',$introduction)){
                 $error = 1;
                 $message = 'UnAuthorized';

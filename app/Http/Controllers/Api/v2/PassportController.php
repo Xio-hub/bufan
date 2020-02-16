@@ -32,7 +32,7 @@ class PassportController extends Controller
     public function logout(Request $request)
     {
         $request->user()->token()->delete();
-        return response()->json(['message' => '登出成功', 'status_code' => 200]);
+        return response()->json(['status' => 200, 'message' => '登出成功']);
     }
 
     /**

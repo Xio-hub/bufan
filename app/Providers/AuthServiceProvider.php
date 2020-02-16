@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Models\Introduction;
 use App\Models\Material;
 use App\Models\Panorama;
+use App\Models\PanoramaSingleSpace;
 use App\Models\PanoramaStyle;
 use App\Models\Product;
 use App\Models\Space;
@@ -15,6 +16,7 @@ use App\Models\VerticalView;
 use App\Policies\IntroductionPolicy;
 use App\Policies\MaterialPolicy;
 use App\Policies\PanoramaPolicy;
+use App\Policies\PanoramaSingleSpacePolicy;
 use App\Policies\PanoramaStylePolicy;
 use App\Policies\ProductPolicy;
 use App\Policies\SpacePolicy;
@@ -44,6 +46,7 @@ class AuthServiceProvider extends ServiceProvider
         PanoramaStyle::class => PanoramaStylePolicy::class,
         VerticalView::class => VerticalViewPolicy::class,
         Introduction::class => IntroductionPolicy::class,
+        PanoramaSingleSpace::class => PanoramaSingleSpacePolicy::class
     ];
 
     /**

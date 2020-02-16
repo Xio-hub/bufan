@@ -79,7 +79,7 @@ class PanoramaController extends Controller
             return response()->json(compact('error', 'message'));
         }
 
-        $data = $panorama->select('id', 'source_url as url')->where(['style_id'=>$style_id,'material_id'=>$material_id])->first();
+        $data = $panorama->select('source_url as url')->where(['style_id'=>$style_id,'material_id'=>$material_id])->first();
 
         if(!is_null($data)){
             $data->url = $data->url ? Storage::url($data->url) : '';
@@ -98,7 +98,7 @@ class PanoramaController extends Controller
             return response()->json(compact('error', 'message'));
         }
 
-        $data = $vertical_view->select('id', 'source_url as url')->where(['style_id'=>$style_id])->first();
+        $data = $vertical_view->select('source_url as url')->where(['style_id'=>$style_id])->first();
 
         if(!is_null($data)){
             $data->url = $data->url ? Storage::url($data->url) : '';

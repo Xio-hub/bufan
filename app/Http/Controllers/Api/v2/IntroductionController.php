@@ -15,6 +15,7 @@ class IntroductionController extends Controller
 
         $data = $instruduction->select('id', 'title as name')
                             ->where(['merchant_id' => $merchant_id])
+                            ->orderBy('priority','asc')
                             ->get()
                             ->toArray();
 
