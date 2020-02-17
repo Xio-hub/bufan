@@ -175,6 +175,7 @@ Route::group([
     Route::post('products/images' ,'ProductController@storeImage')->name('product.image.upload');
     Route::post('products/cover' ,'ProductController@storeCover')->name('product.cover.upload');
     Route::post('products/videos' ,'ProductController@storeVideo')->name('product.video.upload');
+    Route::post('products/musics' ,'ProductController@storeAudio')->name('product.audio.upload');
 
     Route::post('spaces/categories/cover' ,'SpaceCategoryController@storeCover')->name('space.category.cover.upload');
     Route::post('spaces/images' ,'SpaceController@storeImage')->name('space.image.upload');
@@ -190,6 +191,7 @@ Route::group([
     Route::post('/panoramas/styles/cover' ,'PanoramaStyleController@storeCover')->name('panorama.style.cover.upload');
     Route::post('/panoramas/images' ,'PanoramaController@storeImage')->name('panorama.upload');
     Route::post('/vertical_views/images' ,'VerticalViewController@storeImage')->name('vertical_view.upload');
+    Route::post('/panoramas/single_space/images' ,'PanoramaSingleSpaceController@storeImage')->name('panorama.single_space.upload');
 });
 
 Route::get('test' ,'HomeController@test');

@@ -26,24 +26,8 @@ class CourseController extends Controller
 
     public function getCourseDetail(Course $course)
     {
-        $data = $course->select('id', 'title', 'info', 'teacher_info', 'price')->first();
+        $data = $course->select('title', 'info', 'teacher_info', 'price')->first();
         return response()->json($data);
-    }
-
-    public function getOutlines(Request $request, CourseOutline $course_outline)
-    {
-        $offset = $request->input('offset',0) ?? 0;
-        $limit = $request->input('limit', 8) ?? 50;
-        $data = $course_outline->select('id','title')
-                            ->offset($offset)
-                            ->limit($limit)
-                            ->get()
-                            ->toArray();
-
-        $total =  $course_outline->count();
-
-        $page = new Page($total, $limit);
-        return response()->json(['data' => $data, 'meta' => ['total_count' => $total, 'next' => $page->getNext(), 'previous' => $page->getPrev()]]);
     }
 
     public function getAllOutlines(CourseOutline $course_outline)

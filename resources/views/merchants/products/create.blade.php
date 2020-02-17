@@ -26,24 +26,12 @@
                             <div class="col-sm-5"><input type="text" class="form-control" name='name'></div>
                         </div>
                         <div class="hr-line-dashed"></div>
-
-                        <div class="form-group  row">
-                            <label class="col-sm-2 col-form-label">背景音乐</label>
-
-                            <div class="fileinput fileinput-new" data-provides="fileinput">
-                                <span class="btn btn-default btn-file"><span class="fileinput-new">Select file</span>
-                                <span class="fileinput-exists">Change</span><input type="file" class="form-control" name='music' accept="audio/*"></span>
-                                <span class="fileinput-filename"></span>
-                                <a href="#" class="close fileinput-exists" data-dismiss="fileinput" style="float: none">×</a>
-                            </div> 
-                        </div>
-                        <div class="hr-line-dashed"></div>
-
-                        <div class="form-group  row">
+                        
+                        {{-- <div class="form-group  row">
                             <label class="col-sm-2 col-form-label">热点连接</label>
                             <div class="col-sm-5"><input type="url" class="form-control" name='hotspot'></div>
                         </div>
-                        <div class="hr-line-dashed"></div>
+                        <div class="hr-line-dashed"></div> --}}
 
                         <div class="form-group  row">
                             <label class="col-sm-2 col-form-label">产品展示类型</label>
@@ -52,7 +40,6 @@
                                 <div class="i-checks"><label> <input type="radio" id="video_type" value="video" name="detail_type"> <i></i>视频</label></div>
                             </div>
                         </div>
-                        <div class="hr-line-dashed"></div>
 
                         <div class="form-group  row">
                             <label class="col-sm-2 col-form-label">产品详细</label>
@@ -91,6 +78,21 @@
                             </div>
                         </div>
                         <div class="hr-line-dashed"></div>
+
+                        {{-- <div class="form-group  row">
+                            <label class="col-sm-2 col-form-label">背景音乐</label>
+
+                            <div class="fileinput fileinput-new" data-provides="fileinput">
+                                <div class='col-sm-5'>
+                                    <div class="dropzone" id="music_upload_box">
+                                        <div class="fallback">
+                                            <input name="file"  accept="audio/*" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> 
+                        </div>
+                        <div class="hr-line-dashed"></div> --}}
 
                         <div class="form-group row">
                             <div class="col-sm-4 col-sm-offset-2">
@@ -168,6 +170,27 @@
             init: function() {
                 this.on("success", function(file, responseText) {
                     var html = Dropzone.createElement("<input type='hidden' name='cover' value='"+ responseText +"' />");
+                    file.previewElement.appendChild(html);
+                });
+                this.on("error", function (file, message) {
+                    alert(message);
+                    this.removeFile(file);
+                });
+            }
+        });
+
+        $("#music_upload_box").dropzone({
+            acceptedFiles: 'audio/*',
+            params:{'_token':$('meta[name="csrf-token"]').attr('content')},
+            url: "{{route('product.audio.upload')}}",
+            addRemoveLinks: true,
+            maxFiles: 1,
+            paramName: "file", // The name that will be used to transfer the file
+            maxFilesize: 8, // MB
+            dictDefaultMessage: "<strong>请选择封面图片进行上传</strong>",
+            init: function() {
+                this.on("success", function(file, responseText) {
+                    var html = Dropzone.createElement("<input type='hidden' name='music' value='"+ responseText +"' />");
                     file.previewElement.appendChild(html);
                 });
                 this.on("error", function (file, message) {

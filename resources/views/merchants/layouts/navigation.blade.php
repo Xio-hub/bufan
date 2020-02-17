@@ -108,6 +108,18 @@
                             </li>
                         </ul>
                     </li>
+
+                    <li>
+                        <a href="#" id="damian">单个空间<span class="fa arrow"></span></a>
+                        <ul class="nav nav-third-level">
+                            <li>
+                                <a href="{{route('merchant.panorama.single_space.index')}}">单个空间列表</a>
+                            </li>
+                            <li>
+                                <a href="{{route('merchant.panorama.single_space.create')}}">添加单个空间</a>
+                            </li>
+                        </ul>
+                    </li>
                 </ul>
             </li>
             @endcan

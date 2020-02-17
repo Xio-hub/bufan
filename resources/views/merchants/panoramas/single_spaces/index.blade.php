@@ -32,9 +32,9 @@
                                 @foreach($single_spaces as $i => $single_space)
                                 <tr>
                                     <td>{{$i+1}}</td>
-                                    <td>{{$single_space->material->name}}</td>
-                                    <td>{{$single_space->style->name}}</td>
-                                    <td>{{$single_space->space->name}}</td>
+                                    <td>{{$single_space->material}}</td>
+                                    <td>{{$single_space->style}}</td>
+                                    <td>{{$single_space->space}}</td>
                                     <td><a href="{{$single_space->source_url}}" target="blank">{{$single_space->source_url}}</a></td>
                                     <td>{{$single_space->created_at}}</td>
                                     <td><button onclick='deleteItem("{{$single_space->id}}")' class='down btn btn-default btn-xs btn-delete'>删除</button></td>
@@ -69,7 +69,7 @@
             if(confirm('该操作不可回撤，确认删除该数据吗？')){
                 $.ajax({
                     type : 'delete',
-                    url : "{{env('APP_URL')}}/merchant/management/panoramas/"+id,
+                    url : "{{env('APP_URL')}}/merchant/management/panoramas/single_spaces/"+id,
                     contentType : 'application/json;charset=UTF-8',
                     headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
                     dataType : 'json',

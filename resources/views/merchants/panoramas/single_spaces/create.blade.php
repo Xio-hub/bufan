@@ -1,6 +1,6 @@
 @extends('merchants.layouts.app')
 
-@section('title','添加全景图')
+@section('title','添加单个空间')
 
 @section('styles')
 <link href="{{asset('css/plugins/iCheck/custom.css')}}" rel="stylesheet">
@@ -46,6 +46,18 @@
                         </div>
                         <div class="hr-line-dashed"></div>
 
+                        <div class="form-group  row">
+                            <label class="col-sm-2 col-form-label">空间</label>
+                            <div class="col-sm-5">
+                                <select class="form-control m-b" name="space">
+                                    @foreach($spaces as $space)
+                                    <option value="{{$space->id}}">{{$space->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">上传图片</label>
                             <div class='col-sm-5'>
@@ -79,7 +91,7 @@
         $("#image_box").dropzone({
             acceptedFiles: 'image/*',
             params:{'_token':$('meta[name="csrf-token"]').attr('content')},
-            url: "{{route('panorama.upload')}}",
+            url: "{{route('panorama.single_space.upload')}}",
             addRemoveLinks: true,
             maxFiles: 1,
             paramName: "file", // The name that will be used to transfer the file
@@ -87,7 +99,7 @@
             dictDefaultMessage: "<strong>请选择封面图片进行上传</strong>",
             init: function() {
                 this.on("success", function(file, responseText) {
-                    var html = Dropzone.createElement("<input type='hidden' name='panorama' value='"+ responseText +"' />");
+                    var html = Dropzone.createElement("<input type='hidden' name='picture' value='"+ responseText +"' />");
                     file.previewElement.appendChild(html);
                 });
                 this.on("error", function (file, message) {
@@ -100,14 +112,14 @@
         $('#btn-commit').click(function(){
             $.ajax({
                 type : 'post',
-                url : "{{route('merchant.panorama.store')}}",
+                url : "{{route('merchant.panorama.single_space.store')}}",
                 headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                 dataType : 'json',
                 data: $('#dataForm').serialize(),
                 success : function(data,textStatus,jqXHR){
                     if(data.error == 0){
                         alert('添加成功');
-                        window.location.href = "{{route('merchant.panorama.index')}}";
+                        window.location.href = "{{route('merchant.panorama.single_space.index')}}";
                     }else{
                         alert(data.message);
                     }
@@ -116,7 +128,7 @@
         });
         
         $('#btn-cancel').click(function(){
-            window.location.href = "{{route('merchant.panorama.index')}}";
+            window.location.href = "{{route('merchant.panorama.single_space.index')}}";
         });
     </script>
 @endsection

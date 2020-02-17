@@ -46,11 +46,9 @@ Route::group([
     Route::get('panoramas/single_spaces', 'PanoramaController@getSingleSpaceDetail');
 
     Route::get('courses/background', 'CourseController@background');
-    Route::get('courses/outlines', 'CourseController@outlines');
-    Route::get('courses/detail', 'CourseController@getCourse');
-    Route::get('courses/outlines/{outline_id}', 'CourseController@getOutline');
-    Route::get('users/{merchant_id}/courses/orders', 'CourseController@getUserOrders');
-    Route::get('users/{merchant_id}/courses/{course_id}', 'CourseController@checkUserIsBought');
+    Route::get('courses/outlines', 'CourseController@getAllOutlines');
+    Route::get('courses/detail', 'CourseController@getCourseDetail');
+    Route::get('courses/outlines/{id}', 'CourseController@getOutlineDetail');
 
     Route::get('introductions/categories', 'IntroductionController@categories');
     Route::get('introductions/{id}', 'IntroductionController@detail')->where('id', '\d+');
@@ -61,9 +59,15 @@ Route::group([
 Route::group([
     'namespace' => 'Api\v2',
     'prefix'    => 'v2',
-    'middleware' => ['auth:api']
 ], function() {
     Route::post('users/login', 'PassportController@login');
+});
+
+Route::group([
+    'namespace' => 'Api\v2',
+    'prefix'    => 'v2',
+    'middleware' => ['auth:api']
+], function() {
     Route::post('users/logout', 'PassportController@logout');
 
     Route::get('init', 'InitController@init');
@@ -86,15 +90,15 @@ Route::group([
     Route::get('panoramas/styles', 'PanoramaController@getStyles');
     Route::get('panoramas/detail', 'PanoramaController@detail');
     Route::get('panoramas/vertical_views', 'PanoramaController@getVerticalView');
-    Route::get('panoramas/single_space', 'PanoramaController@getSingleSpaceDetail');
+    Route::get('panoramas/single_spaces', 'PanoramaController@getSingleSpaceDetail');
 
     Route::get('courses/background', 'CourseController@background');
     Route::get('courses/outlines', 'CourseController@getAllOutlines');
     Route::get('courses/detail', 'CourseController@getCourseDetail');
     Route::get('courses/outlines/{id}', 'CourseController@getOutlineDetail');
     
-    Route::get('users/{merchant_id}/courses/orders', 'CourseController@getUserOrders');
-    Route::get('users/{merchant_id}/courses/{course_id}', 'CourseController@checkUserIsBought');
+    Route::get('courses/orders', 'CourseController@getUserOrders');
+    Route::get('courses/{course_id}/status', 'CourseController@checkUserIsBought');
 
     Route::get('introductions/categories', 'IntroductionController@categories');
     Route::get('introductions/{id}', 'IntroductionController@detail')->where('id', '\d+');

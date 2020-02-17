@@ -6,19 +6,26 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use App\Models\Panorama;
 use App\Models\PanoramaSingleSpace;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class PanoramaSingleSpaceController extends Controller
 {
-    public function index()
+    public function index(PanoramaSingleSpace $panorama_single_space)
     {
         $merchant = Auth::guard('merchant')->user();
-        $merchant::with(['panorama_single_spaces' => function ($query) {
-            $query->orderBy('created_at', 'desc');
-        }])->get();
-        $single_spaces = $merchant->single_spaces;
+        $single_spaces = $panorama_single_space
+            ->select('panorama_single_spaces.id','panorama_single_spaces.source_url',
+                'panorama_styles.name as style','spaces.name as space','materials.name as material','panorama_single_spaces.created_at')
+            ->leftJoin('panorama_styles','panorama_single_spaces.style_id', '=', 'panorama_styles.id')
+            ->leftJoin('spaces','panorama_single_spaces.space_id', '=', 'spaces.id')
+            ->leftJoin('materials','panorama_single_spaces.material_id', '=', 'materials.id')
+            ->orderBy('panorama_single_spaces.created_at','desc')
+            ->where(['panorama_single_spaces.merchant_id'=>$merchant->id])
+            ->get();
+
         foreach($single_spaces as $k => $single_space){
             $single_space->source_url = Storage::url($single_space->source_url);
         }
@@ -28,7 +35,7 @@ class PanoramaSingleSpaceController extends Controller
     public function create()
     {
         $merchant = Auth::guard('merchant')->user();
-        $merchant->with(['panorama_styles', 'spaces', 'matreials'])->get();
+        $merchant->with(['panorama_styles', 'spaces', 'materials'])->get();
         $materials = $merchant->materials;
         $styles = $merchant->styles;
         $spaces = $merchant->spaces;
