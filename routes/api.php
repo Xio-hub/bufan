@@ -43,7 +43,7 @@ Route::group([
     Route::get('panoramas/detail', 'PanoramaController@detail');
     Route::get('panoramas/vertical_views', 'PanoramaController@getVerticalView');
 
-    Route::get('panoramas/single_spaces', 'PanoramaController@inedx');
+    Route::get('panoramas/single_spaces', 'PanoramaController@getSingleSpaceDetail');
 
     Route::get('courses/background', 'CourseController@background');
     Route::get('courses/outlines', 'CourseController@outlines');
