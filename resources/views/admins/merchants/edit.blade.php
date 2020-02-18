@@ -3,10 +3,11 @@
 @section('title','修改商家配置')
 
 @section('styles')
-<link href="{{asset('css/plugins/dropzone/basic.css')}}" rel="stylesheet">
-<link href="{{asset('css/plugins/dropzone/dropzone.css')}}" rel="stylesheet">
+{{-- <link href="{{asset('css/plugins/dropzone/basic.css')}}" rel="stylesheet">
+<link href="{{asset('css/plugins/dropzone/dropzone.css')}}" rel="stylesheet"> --}}
 <link href="{{asset('css/plugins/jasny/jasny-bootstrap.min.css')}}" rel="stylesheet">
-<link href="{{asset('css/plugins/codemirror/codemirror.css')}}" rel="stylesheet">
+<link href="{{asset('css/plugins/iCheck/custom.css')}}" rel="stylesheet">
+<link href="{{asset('css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css')}}" rel="stylesheet">
 @endsection
 
 @section('content')
@@ -19,9 +20,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="ibox-content">
-                    <form method="POST" action="{{route('merchants.update',$merchant->id)}}" enctype="multipart/form-data">
-                        <input type="hidden" name="_method" value="PUT">
-                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                    <form id="dataForm">
                         
                         <div class="form-group  row"><label class="col-sm-2 col-form-label">商家名</label>
                         <div class="col-sm-5"><input type="text" class="form-control" name='merchant_name' value='{{$merchant_base->name}}'></div>
@@ -56,7 +55,7 @@
                         <div class="form-group  row"><label class="col-sm-2 col-form-label">栏目显示</label>
                             <div class="col-sm-5">
                                 @foreach($categories as $category)
-                            <div class="i-checks"><label> <input type="checkbox" name='categories[]' value="{{$category->id}}" checked> <i></i>{{$category->name}}</label></div>
+                                    <div class="i-checks"><label> <input type="checkbox" name='categories[]' value="{{$category->id}}" checked> <i></i>{{$category->name}}</label></div>
                                 @endforeach
                             </div>
                         </div>
@@ -65,7 +64,7 @@
                         <div class="form-group  row"><label class="col-sm-2 col-form-label">商家权限</label>
                             <div class="col-sm-5">
                                 @foreach($permissions as $permission)
-                            <div class="i-checks"><label> <input type="checkbox" name='permissions[]' value="{{$permission->id}}" checked> <i></i>{{$permission->name}}</label></div>
+                                    <div class="i-checks"><label> <input type="checkbox" name='permissions[]' value="{{$permission->id}}" checked> <i></i>{{$permission->name}}</label></div>
                                 @endforeach
                             </div>
                         </div>
@@ -73,8 +72,8 @@
                         
                         <div class="form-group row">
                             <div class="col-sm-4 col-sm-offset-2">
-                                <button class="btn btn-white btn-lg" type="submit">Cancel</button>
-                                <button class="btn btn-primary btn-lg" type="submit">确认</button>
+                                <a class="btn btn-white btn-lg" id='btn-cancel'>取消</a>
+                                <a class="btn btn-primary btn-lg" id='btn-commit'>确认</a>
                             </div>
                         </div>
                     </form>
@@ -85,14 +84,39 @@
 @endsection
 
 @section('scripts')
-
-    <!-- Jasny -->
     <script src="{{asset('js/plugins/jasny/jasny-bootstrap.min.js')}}"></script>
 
-    <!-- DROPZONE -->
-    <script src="{{asset('js/plugins/dropzone/dropzone.js')}}"></script>
+    <script src="{{asset('js/plugins/iCheck/icheck.min.js')}}"></script>
 
-    <!-- CodeMirror -->
-    <script src="{{asset('js/plugins/codemirror/codemirror.js')}}"></script>
-    <script src="{{asset('js/plugins/codemirror/mode/xml/xml.js')}}"></script>
+    <script>
+        $(document).ready(function () {
+            $('.i-checks').iCheck({
+                checkboxClass: 'icheckbox_square-green',
+                radioClass: 'iradio_square-green',
+            });
+        });
+
+
+        $('#btn-commit').click(function(){
+            $.ajax({
+                type : 'post',
+                url : "{{route('merchants.update',$merchant->id)}}",
+                headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                dataType : 'json',
+                data: $('#dataForm').serialize(),
+                success : function(data,textStatus,jqXHR){
+                    if(data.error == 0){
+                        alert('修改成功');
+                        window.location.href = "{{route('merchants.index')}}";
+                    }else{
+                        alert(data.message);
+                    }
+                }
+            });
+        });
+        
+        $('#btn-cancel').click(function(){
+            window.location.href = "{{route('merchants.index')}}";
+        });
+    </script>
 @endsection

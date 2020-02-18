@@ -2,10 +2,6 @@
 
 @section('title','修改大纲')
 
-@section('styles')
-<link href="{{asset('css/plugins/summernote/summernote-bs4.css')}}" rel="stylesheet">
-@endsection
-
 @include('vendor.ueditor.assets')
 
 @section('content')

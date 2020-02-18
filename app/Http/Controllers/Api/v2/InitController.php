@@ -17,7 +17,9 @@ class InitController extends Controller
         $data = MerchantBase::select('top_logo','sitebar_logo','slogan')
                             ->where(['merchant_id'=>$merchant_id])
                             ->first();
-                            
+        $data->top_logo = Storage::url($data->top_logo);
+        $data->sitebar_logo = Storage::url($data->sitebar_logo);
+        $data->slogan = Storage::url($data->slogan);
         return response()->json($data);
     }
 

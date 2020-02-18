@@ -3,10 +3,9 @@
 @section('title','添加商家')
 
 @section('styles')
-<link href="{{asset('css/plugins/dropzone/basic.css')}}" rel="stylesheet">
-<link href="{{asset('css/plugins/dropzone/dropzone.css')}}" rel="stylesheet">
+{{-- <link href="{{asset('css/plugins/dropzone/basic.css')}}" rel="stylesheet">
+<link href="{{asset('css/plugins/dropzone/dropzone.css')}}" rel="stylesheet"> --}}
 <link href="{{asset('css/plugins/jasny/jasny-bootstrap.min.css')}}" rel="stylesheet">
-<link href="{{asset('css/plugins/codemirror/codemirror.css')}}" rel="stylesheet">
 
 <link href="{{asset('css/plugins/iCheck/custom.css')}}" rel="stylesheet">
 <link href="{{asset('css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css')}}" rel="stylesheet">
@@ -73,7 +72,7 @@
                         <div class="form-group  row"><label class="col-sm-2 col-form-label">栏目显示</label>
                             <div class="col-sm-5">
                                 @foreach($categories as $category)
-                            <div class="i-checks"><label> <input type="checkbox" name='categories[]' value="{{$category->id}}" checked> <i></i>{{$category->name}}</label></div>
+                                    <div class="i-checks"><label> <input type="checkbox" name='categories[]' value="{{$category->id}}" checked> <i></i>{{$category->name}}</label></div>
                                 @endforeach
                             </div>
                         </div>
@@ -106,11 +105,7 @@
     <script src="{{asset('js/plugins/jasny/jasny-bootstrap.min.js')}}"></script>
 
     <!-- DROPZONE -->
-    <script src="{{asset('js/plugins/dropzone/dropzone.js')}}"></script>
-
-    <!-- CodeMirror -->
-    <script src="{{asset('js/plugins/codemirror/codemirror.js')}}"></script>
-    <script src="{{asset('js/plugins/codemirror/mode/xml/xml.js')}}"></script>
+    {{-- <script src="{{asset('js/plugins/dropzone/dropzone.js')}}"></script> --}}
 
     <script src="{{asset('js/plugins/iCheck/icheck.min.js')}}"></script>
     <script>

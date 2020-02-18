@@ -57,13 +57,13 @@ class MerchantController extends Controller
 
             $top_logo = '';
             if ($request->hasFile('top_logo')) {
-                $this->validate($request, ['top_logo'=>'image',]);
+                $this->validate($request, ['top_logo'=>'image']);
                 $top_logo =  $request->top_logo->store("images/top_logo/{$merchant->id}");
             }
 
             $sitebar_logo = '';
             if ($request->hasFile('sitebar_logo')) {
-                $this->validate($request, ['sitebar_logo'=>'image',]);
+                $this->validate($request, ['sitebar_logo'=>'image']);
                 $sitebar_logo =  $request->sitebar_logo->store("images/sitebar_logo/{$merchant->id}");
             }
             
@@ -151,11 +151,11 @@ class MerchantController extends Controller
     public function edit(Request $request)
     {
         $id = $request->id;
-        $merchant = Merchant::where('id', $id)->whereNull('deleted_at')->firstOrFail();
+        $merchant = Merchant::FindOrFail($id);
         
         $merchant_base = $merchant->base;
-        $category_ids = $merchant_base->category_ids;
-        $categories = Category::whereIn('id', explode(',',$category_ids))->get();
+        $category_ids = json_decode($merchant_base->category_ids, true);
+        $categories = Category::whereIn('id', $category_ids)->get();
         $permissions = $merchant->getAllPermissions();
 
         return view('admins.merchants.edit')->with([
@@ -167,11 +167,6 @@ class MerchantController extends Controller
     
     public function update(Request $request)
     {
-        $this->validate($request, [
-            'categories'=>'required',
-            'permissions'=>'required',
-        ]);
-
         $id = $request->id;
         $merchant = Merchant::where('id', $id)->whereNull('deleted_at')->firstOrFail();
 
@@ -180,31 +175,49 @@ class MerchantController extends Controller
         $categories = $request->input('categories');
         $permissions = $request->input('permissions');
 
-        $top_logo = '';
-        if ($request->hasFile('top_logo')) {
-            $this->validate($request, ['top_logo'=>'image',]);
-            $top_logo =  $request->top_logo->store('top_logo');
+        if(empty($categories)){
+            $message = '请选择栏目';
+            return ['error'=>1,'message'=>$message];
+        }
+        if(empty($permissions)){
+            $message = '请选择权限';
+            return ['error'=>1,'message'=>$message];
         }
 
-        $sitebar_logo = '';
-        if ($request->hasFile('sitebar_logo')) {
-            $this->validate($request, ['sitebar_logo'=>'image',]);
-            $sitebar_logo =  $request->sitebar_logo->store('sitebar_logo');
+        try{
+            DB::beginTransaction();
+            $top_logo = '';
+            if ($request->hasFile('top_logo')) {
+                $this->validate($request, ['top_logo'=>'image',]);
+                $top_logo =  $request->top_logo->store('top_logo');
+            }
+
+            $sitebar_logo = '';
+            if ($request->hasFile('sitebar_logo')) {
+                $this->validate($request, ['sitebar_logo'=>'image',]);
+                $sitebar_logo =  $request->sitebar_logo->store('sitebar_logo');
+            }
+
+            $merchant_base = $merchant->base;
+            $merchant_base->fill([
+                'name' => $merchant_name,
+                'slogan' => $slogan,
+                'top_logo' => $top_logo,
+                'sitebar_logo' => $sitebar_logo,
+                'category_ids' => json_encode($categories)
+            ])->save();
+            $merchant->syncPermissions($permissions);
+            DB::commit();
+            $error = 0;
+            $message = 'success';
+        }catch(Exception $e){
+            DB::rollBack();
+            $error = 1;
+            Log::error($e);
+            $message = '修改失败，请稍后重试或联系管理员';
+        }finally{
+            return response()->json(compact('error','message'));
         }
-
-        $merchant_base = $merchant->base;
-        $merchant_base->fill([
-            'name' => $merchant_name,
-            'slogan' => $slogan,
-            'top_logo' => $top_logo,
-            'sitebar_logo' => $sitebar_logo,
-            'category_ids' => implode(',', $categories)
-        ])->save();
-        $merchant->syncPermissions($permissions);
-
-        return redirect()->route('merchants.index')
-        ->with('flash_message',
-         'Merchant successfully updated.');
     }
 
 

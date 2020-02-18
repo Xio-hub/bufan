@@ -31,13 +31,13 @@ class IndexController extends Controller
             $cover_type = '';
             if ($request->hasFile('cover')) {
                 $this->validate($request, ['cover'=>'image']);
-                $cover =  $request->cover->store('index_cover');
+                $cover =  $request->cover->store('images/index');
                 $cover_type = 'image';
             }
 
             $merchant_index->cover = $cover;
             $merchant_index->cover_type = $cover_type;
-            $merchant_index->content = $request->input('editordata');
+            $merchant_index->content = $request->content;
             $merchant_index->save();
             DB::commit();
 

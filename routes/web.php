@@ -55,7 +55,7 @@ Route::group([
     Route::get('merchants/create', 'MerchantController@create')->name('merchants.create');
     Route::post('merchants', 'MerchantController@store')->name('merchants.store');
     Route::get('merchants/{id}/edit', 'MerchantController@edit')->where('id','\d+')->name('merchants.edit');
-    Route::put('merchants/{id}', 'MerchantController@update')->name('merchants.update');
+    Route::post('merchants/{id}', 'MerchantController@update')->name('merchants.update');
     Route::delete('merchants/{id}', 'MerchantController@destroy');
 
     Route::get('courses/background/edit', 'CourseConfigController@editBackground')->name('courses.background.edit');
@@ -93,7 +93,7 @@ Route::group([
     Route::patch('/password', 'UserController@updatePassword')->name('merchant.password.update');
 
     Route::get('/index/edit', 'IndexController@edit')->name('merchant.index.edit');
-    Route::put('/index', 'IndexController@update')->name('merchant.index.update');
+    Route::post('/index', 'IndexController@update')->name('merchant.index.update');
 
     Route::get('/products', 'ProductController@index')->name('merchant.product.index');
     Route::get('/products/create', 'ProductController@create')->name('merchant.product.create');
