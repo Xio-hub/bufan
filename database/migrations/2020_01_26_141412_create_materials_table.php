@@ -18,7 +18,7 @@ class CreateMaterialsTable extends Migration
             $table->unsignedInteger('merchant_id');
             $table->string('name');
             $table->string('cover');
-            $table->smallInteger('priority');
+            $table->smallInteger('priority')->default(0);
             $table->timestamps();
         });
     }

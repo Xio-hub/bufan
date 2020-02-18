@@ -81,7 +81,7 @@ class VerticalViewController extends Controller
         }
         catch(Exception $e){
             Log::error($e);
-            $error = 0;
+            $error = 1;
             $message = '添加失败，请稍后再试或者联系管理员';
         }finally{
             return response()->json(compact('error','message'));
