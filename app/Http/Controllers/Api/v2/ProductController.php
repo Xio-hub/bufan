@@ -31,7 +31,7 @@ class ProductController extends Controller
     {
         $id = $request->id;
 
-        $data = $product->select('id','name')
+        $data = $product->select('id','name','background_music','hotspot')
                         ->where(['id' => $id])
                         ->first();
 
