@@ -58,9 +58,9 @@ Route::group([
     Route::post('merchants/{id}', 'MerchantController@update')->name('merchants.update');
     Route::delete('merchants/{id}', 'MerchantController@destroy');
 
-    Route::get('courses/background/edit', 'CourseConfigController@editBackground')->name('courses.background.edit');
-    Route::patch('courses/background', 'CourseConfigController@updateBackground')->name('courses.background.update');
-    Route::post('/courses/background' ,'CourseConfigController@storeBackground')->name('courses.background.upload');
+    Route::get('courses/background/edit', 'CourseController@editBackground')->name('courses.background.edit');
+    // Route::post('courses/background', 'CourseController@updateBackground')->name('courses.background.update');
+    Route::post('/courses/background_image' ,'CourseController@storeBackground')->name('courses.background.upload');
 
     Route::get('courses/info/edit', 'CourseController@editInfo')->name('courses.info.edit');
     Route::get('courses/teacher/edit', 'CourseController@editTeacherInfo')->name('courses.teacher.edit');

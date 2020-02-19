@@ -80,7 +80,7 @@
         $('#btn-commit').click(function(){
             $.ajax({
                 type : 'patch',
-                url : "{{route('courses.background.update')}}",
+                url: "{{route('courses.update')}}",
                 headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                 dataType : 'json',
                 data: $('#dataForm').serialize(),

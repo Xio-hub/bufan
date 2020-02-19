@@ -155,7 +155,7 @@ class MerchantController extends Controller
         
         $merchant_base = $merchant->base;
         $category_ids = json_decode($merchant_base->category_ids, true);
-        $categories = Category::whereIn('id', $category_ids)->get();
+        $categories = Category::get();
         $permissions = $merchant->getAllPermissions();
 
         return view('admins.merchants.edit')->with([
