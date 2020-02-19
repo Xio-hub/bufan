@@ -15,9 +15,9 @@ class ProductPolicy
         return $merchant->id === $product->merchant_id;
     }
 
-    public function create(Merchant $merchant)
+    public function edit(Merchant $merchant, Product $product)
     {
-        //
+        return $merchant->id === $product->merchant_id;
     }
 
     public function update(Merchant $merchant, Product $product)

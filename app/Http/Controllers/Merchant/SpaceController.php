@@ -83,7 +83,7 @@ class SpaceController extends Controller
         $detail = '';
         if($detail_type == 'image'){
             $detail = $image_datail;
-        }else if($detail_type == 'videp'){
+        }else if($detail_type == 'video'){
             $detail = $video_datail;
         }
 

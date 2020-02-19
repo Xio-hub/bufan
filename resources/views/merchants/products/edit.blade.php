@@ -1,6 +1,6 @@
 @extends('merchants.layouts.app')
 
-@section('title','添加新品')
+@section('title','修改新品')
 
 @section('styles')
 <link href="{{asset('css/plugins/iCheck/custom.css')}}" rel="stylesheet">
@@ -8,7 +8,7 @@
 <link href="{{asset('css/plugins/jasny/jasny-bootstrap.min.css')}}" rel="stylesheet">
 <link href="{{asset('css/plugins/dropzone/basic.css')}}" rel="stylesheet">
 <link href="{{asset('css/plugins/dropzone/dropzone.css')}}" rel="stylesheet">
-
+<link href="{{asset('vendor/webuploader/webuploader.css')}}" rel="stylesheet">
 @endsection
 
 @section('content')
@@ -17,455 +17,148 @@
             <div class="col-lg-12">
                 <div class="tabs-container">
                         <ul class="nav nav-tabs">
-                            <li><a class="nav-link active" data-toggle="tab" href="#tab-1"> Product info</a></li>
-                            <li><a class="nav-link" data-toggle="tab" href="#tab-2"> Data</a></li>
-                            <li><a class="nav-link" data-toggle="tab" href="#tab-3"> Discount</a></li>
-                            <li><a class="nav-link" data-toggle="tab" href="#tab-4"> Images</a></li>
+                            <li><a class="nav-link active" data-toggle="tab" href="#tab-1">商品信息</a></li>
+                            <li><a class="nav-link" data-toggle="tab" href="#tab-2">商品详细(图片)</a></li>
+                            <li><a class="nav-link" data-toggle="tab" href="#tab-3">商品详细(视频)</a></li>
                         </ul>
                         <div class="tab-content">
                             <div id="tab-1" class="tab-pane active">
                                 <div class="panel-body">
 
                                     <fieldset>
-                                        <div class="form-group row"><label class="col-sm-2 col-form-label">Name:</label>
-                                            <div class="col-sm-10"><input type="text" class="form-control" placeholder="Product name"></div>
-                                        </div>
-                                        <div class="form-group row"><label class="col-sm-2 col-form-label">Price:</label>
-                                            <div class="col-sm-10"><input type="text" class="form-control" placeholder="$160.00"></div>
-                                        </div>
-                                        <div class="form-group row"><label class="col-sm-2 col-form-label">Description:</label>
-                                            <div class="col-sm-10">
-                                                <div class="summernote">
-                                                    <h3>Lorem Ipsum is simply</h3>
-                                                    dummy text of the printing and typesetting industry. <strong>Lorem Ipsum has been the industry's</strong> standard dummy text ever since the 1500s,
-                                                    when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic
-                                                    when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic
-                                                    typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with
-                                                    <br/>
+                                        <form id='dataForm'>
+                                            <div class="form-group  row">
+                                                <label class="col-sm-2 col-form-label">新品名称</label>
+                                                <div class="col-sm-5"><input type="text" class="form-control" name='name' value="{{$product->name}}"></div>
+                                            </div>
+                                            <div class="hr-line-dashed"></div>
 
+                                            <div class="form-group  row"><label class="col-sm-2 col-form-label">产品封面</label>
+                                                <div class="fileinput fileinput-new" data-provides="fileinput">
+                                                    <span class="btn btn-default btn-file"><span class="fileinput-new">Select file</span>
+                                                    <span class="fileinput-exists">Change</span><input type="file" name="music" accept="audio/*"/></span>
+                                                    <span class="fileinput-filename"></span>
+                                                    <a href="#" class="close fileinput-exists" data-dismiss="fileinput" style="float: none">×</a>
+                                                </div> 
+                                            </div>
+                                            <div class="hr-line-dashed"></div>
+
+                                            <div class="form-group  row">
+                                                <label class="col-sm-2 col-form-label">热点连接</label>
+                                                <div class="col-sm-5"><input type="url" class="form-control" name='hotspot' value="{{$product->hotspot}}"></div>
+                                            </div>
+                                            <div class="hr-line-dashed"></div>
+                    
+                                            <div class="form-group  row"><label class="col-sm-2 col-form-label">背景音乐</label>
+                                                <div class="fileinput fileinput-new" data-provides="fileinput">
+                                                    <span class="btn btn-default btn-file"><span class="fileinput-new">Select file</span>
+                                                    <span class="fileinput-exists">Change</span><input type="file" name="music" accept="audio/*"/></span>
+                                                    <span class="fileinput-filename"></span>
+                                                    <a href="#" class="close fileinput-exists" data-dismiss="fileinput" style="float: none">×</a>
+                                                </div> 
+                                            </div>
+
+                                            <div class="form-group  row">
+                                                <label class="col-sm-2 col-form-label">产品展示类型</label>
+                                                <div class="col-sm-5">
+                                                    <div class="i-checks"><label> <input type="radio" id="image_type" value="image" name="detail_type" @if($product->type == 'image') checked @endif> <i></i>图片</label></div>
+                                                    <div class="i-checks"><label> <input type="radio" id="video_type" value="video" name="detail_type" @if($product->type == 'video') checked @endif> <i></i>视频</label></div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="form-group row"><label class="col-sm-2 col-form-label">Meta Tag Title:</label>
-                                            <div class="col-sm-10"><input type="text" class="form-control" placeholder="..."></div>
-                                        </div>
-                                        <div class="form-group row"><label class="col-sm-2 col-form-label">Meta Tag Description:</label>
-                                            <div class="col-sm-10"><input type="text" class="form-control" placeholder="Sheets containing Lorem"></div>
-                                        </div>
-                                        <div class="form-group row"><label class="col-sm-2 col-form-label">Meta Tag Keywords:</label>
-                                            <div class="col-sm-10"><input type="text" class="form-control" placeholder="Lorem, Ipsum, has, been"></div>
-                                        </div>
+
+                                            <div class="hr-line-dashed"></div>
+                                            <div class="form-group row">
+                                                <div class="col-sm-4 col-sm-offset-2">
+                                                    <a class="btn btn-white btn-lg" id='btn-cancel'>取消</a>
+                                                    <a class="btn btn-primary btn-lg" id="btn-commit">确认</a>
+                                                </div>
+                                            </div>
+                                        </form>               
                                     </fieldset>
 
                                 </div>
                             </div>
+                           
                             <div id="tab-2" class="tab-pane">
                                 <div class="panel-body">
 
-                                    <fieldset>
-                                        <div class="form-group row"><label class="col-sm-2 col-form-label">ID:</label>
-                                            <div class="col-sm-10"><input type="text" class="form-control" placeholder="543"></div>
-                                        </div>
-                                        <div class="form-group row"><label class="col-sm-2 col-form-label">Model:</label>
-                                            <div class="col-sm-10"><input type="text" class="form-control" placeholder="..."></div>
-                                        </div>
-                                        <div class="form-group row"><label class="col-sm-2 col-form-label">Location:</label>
-                                            <div class="col-sm-10"><input type="text" class="form-control" placeholder="location"></div>
-                                        </div>
-                                        <div class="form-group row"><label class="col-sm-2 col-form-label">Tax Class:</label>
-                                            <div class="col-sm-10">
-                                                <select class="form-control" >
-                                                    <option>option 1</option>
-                                                    <option>option 2</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row"><label class="col-sm-2 col-form-label">Quantity:</label>
-                                            <div class="col-sm-10"><input type="text" class="form-control" placeholder="Quantity"></div>
-                                        </div>
-                                        <div class="form-group row"><label class="col-sm-2 col-form-label">Minimum quantity:</label>
-                                            <div class="col-sm-10"><input type="text" class="form-control" placeholder="2"></div>
-                                        </div>
-                                        <div class="form-group row"><label class="col-sm-2 col-form-label">Sort order:</label>
-                                            <div class="col-sm-10"><input type="text" class="form-control" placeholder="0"></div>
-                                        </div>
-                                        <div class="form-group row"><label class="col-sm-2 col-form-label">Status:</label>
-                                            <div class="col-sm-10">
-                                                <select class="form-control" >
-                                                    <option>option 1</option>
-                                                    <option>option 2</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </fieldset>
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered table-stripped" id='image_panel'>
+                                            <thead>
+                                            <tr>
+                                                <th>图片预览</th>
+                                                <th>图片地址</th>
+                                                <th>展示优先级</th>
+                                                <th>操作</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            @foreach ($image_resources as $i => $item)
 
+                                            <tr id='img_resource_{{$item->id}}'>
+                                                <td>
+                                                    <img src="{{Storage::url($item->source_url)}}" width='50' height='50'>
+                                                </td>
+                                                <td>
+                                                    <a>{{Storage::url($item->source_url)}}</a>
+                                                </td>    
+                                                <td>
+                                                    {{$item->priority}}
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-white" onclick="deleteItem({{$item->id}})"><i class="fa fa-trash"></i> </button>
+                                                </td>
+                                            </tr>
+                                                
+                                            @endforeach
+                                            
+                                            </tbody>
+                                        </table>
+                                        <div id='image_upload_progress_box' class="progress" style='display:none'>
+                                            <div class="progress-bar progress-bar-striped progress-bar-animated progress-bar-success" role="progressbar" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
+                                        </div>
+                                    </div>
+                                    <div style='margin-top:2rem'>
+                                        <div id='btn-add-image'>添加图片</div>
+                                    </div>
 
                                 </div>
                             </div>
+
                             <div id="tab-3" class="tab-pane">
                                 <div class="panel-body">
 
                                     <div class="table-responsive">
-                                        <table class="table table-stripped table-bordered">
-
+                                        <table class="table table-bordered table-stripped" id='video_panel'>
                                             <thead>
                                             <tr>
-                                                <th>
-                                                    Group
-                                                </th>
-                                                <th>
-                                                    Quantity
-                                                </th>
-                                                <th>
-                                                    Discount
-                                                </th>
-                                                <th style="width: 20%">
-                                                    Date start
-                                                </th>
-                                                <th style="width: 20%">
-                                                    Date end
-                                                </th>
-                                                <th>
-                                                    Actions
-                                                </th>
+                                                <th>视频地址</th>
+                                                <th>操作</th>
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            <tr>
-                                                <td>
-                                                    <select class="form-control" >
-                                                        <option selected>Group 1</option>
-                                                        <option>Group 2</option>
-                                                        <option>Group 3</option>
-                                                        <option>Group 4</option>
-                                                    </select>
-                                                </td>
-                                                <td>
-                                                    <input type="text" class="form-control" placeholder="10">
-                                                </td>
-                                                <td>
-                                                    <input type="text" class="form-control" placeholder="$10.00">
-                                                </td>
-                                                <td>
-                                                    <div class="input-group date">
-                                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control" value="07/01/2014">
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="input-group date">
-                                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control" value="07/01/2014">
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                        <button class="btn btn-white"><i class="fa fa-trash"></i> </button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <select class="form-control" >
-                                                        <option selected>Group 1</option>
-                                                        <option>Group 2</option>
-                                                        <option>Group 3</option>
-                                                        <option>Group 4</option>
-                                                    </select>
-                                                </td>
-                                                <td>
-                                                    <input type="text" class="form-control" placeholder="10">
-                                                </td>
-                                                <td>
-                                                    <input type="text" class="form-control" placeholder="$10.00">
-                                                </td>
-                                                <td>
-                                                    <div class="input-group date">
-                                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control" value="07/01/2014">
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="input-group date">
-                                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control" value="07/01/2014">
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <button class="btn btn-white"><i class="fa fa-trash"></i> </button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <select class="form-control" >
-                                                        <option selected>Group 1</option>
-                                                        <option>Group 2</option>
-                                                        <option>Group 3</option>
-                                                        <option>Group 4</option>
-                                                    </select>
-                                                </td>
-                                                <td>
-                                                    <input type="text" class="form-control" placeholder="10">
-                                                </td>
-                                                <td>
-                                                    <input type="text" class="form-control" placeholder="$10.00">
-                                                </td>
-                                                <td>
-                                                    <div class="input-group date">
-                                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control" value="07/01/2014">
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="input-group date">
-                                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control" value="07/01/2014">
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <button class="btn btn-white"><i class="fa fa-trash"></i> </button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <select class="form-control" >
-                                                        <option selected>Group 1</option>
-                                                        <option>Group 2</option>
-                                                        <option>Group 3</option>
-                                                        <option>Group 4</option>
-                                                    </select>
-                                                </td>
-                                                <td>
-                                                    <input type="text" class="form-control" placeholder="10">
-                                                </td>
-                                                <td>
-                                                    <input type="text" class="form-control" placeholder="$10.00">
-                                                </td>
-                                                <td>
-                                                    <div class="input-group date">
-                                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control" value="07/01/2014">
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="input-group date">
-                                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control" value="07/01/2014">
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <button class="btn btn-white"><i class="fa fa-trash"></i> </button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <select class="form-control" >
-                                                        <option selected>Group 1</option>
-                                                        <option>Group 2</option>
-                                                        <option>Group 3</option>
-                                                        <option>Group 4</option>
-                                                    </select>
-                                                </td>
-                                                <td>
-                                                    <input type="text" class="form-control" placeholder="10">
-                                                </td>
-                                                <td>
-                                                    <input type="text" class="form-control" placeholder="$10.00">
-                                                </td>
-                                                <td>
-                                                    <div class="input-group date">
-                                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control" value="07/01/2014">
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="input-group date">
-                                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control" value="07/01/2014">
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <button class="btn btn-white"><i class="fa fa-trash"></i> </button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <select class="form-control" >
-                                                        <option selected>Group 1</option>
-                                                        <option>Group 2</option>
-                                                        <option>Group 3</option>
-                                                        <option>Group 4</option>
-                                                    </select>
-                                                </td>
-                                                <td>
-                                                    <input type="text" class="form-control" placeholder="10">
-                                                </td>
-                                                <td>
-                                                    <input type="text" class="form-control" placeholder="$10.00">
-                                                </td>
-                                                <td>
-                                                    <div class="input-group date">
-                                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control" value="07/01/2014">
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="input-group date">
-                                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control" value="07/01/2014">
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <button class="btn btn-white"><i class="fa fa-trash"></i> </button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <select class="form-control" >
-                                                        <option selected>Group 1</option>
-                                                        <option>Group 2</option>
-                                                        <option>Group 3</option>
-                                                        <option>Group 4</option>
-                                                    </select>
-                                                </td>
-                                                <td>
-                                                    <input type="text" class="form-control" placeholder="10">
-                                                </td>
-                                                <td>
-                                                    <input type="text" class="form-control" placeholder="$10.00">
-                                                </td>
-                                                <td>
-                                                    <div class="input-group date">
-                                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control" value="07/01/2014">
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="input-group date">
-                                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control" value="07/01/2014">
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <button class="btn btn-white"><i class="fa fa-trash"></i> </button>
-                                                </td>
-                                            </tr>
+                                                @foreach ($video_resources as $i => $item)
 
-                                            </tbody>
-
-                                        </table>
-                                    </div>
-
-                                </div>
-                            </div>
-                            <div id="tab-4" class="tab-pane">
-                                <div class="panel-body">
-
-                                    <div class="table-responsive">
-                                        <table class="table table-bordered table-stripped">
-                                            <thead>
-                                            <tr>
-                                                <th>
-                                                    Image preview
-                                                </th>
-                                                <th>
-                                                    Image url
-                                                </th>
-                                                <th>
-                                                    Sort order
-                                                </th>
-                                                <th>
-                                                    Actions
-                                                </th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <tr>
-                                                <td>
-                                                    <img src="img/gallery/2s.jpg">
-                                                </td>
-                                                <td>
-                                                    <input type="text" class="form-control" disabled value="http://mydomain.com/images/image1.png">
-                                                </td>
-                                                <td>
-                                                    <input type="text" class="form-control" value="1">
-                                                </td>
-                                                <td>
-                                                    <button class="btn btn-white"><i class="fa fa-trash"></i> </button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <img src="img/gallery/1s.jpg">
-                                                </td>
-                                                <td>
-                                                    <input type="text" class="form-control" disabled value="http://mydomain.com/images/image2.png">
-                                                </td>
-                                                <td>
-                                                    <input type="text" class="form-control" value="2">
-                                                </td>
-                                                <td>
-                                                    <button class="btn btn-white"><i class="fa fa-trash"></i> </button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <img src="img/gallery/3s.jpg">
-                                                </td>
-                                                <td>
-                                                    <input type="text" class="form-control" disabled value="http://mydomain.com/images/image3.png">
-                                                </td>
-                                                <td>
-                                                    <input type="text" class="form-control" value="3">
-                                                </td>
-                                                <td>
-                                                    <button class="btn btn-white"><i class="fa fa-trash"></i> </button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <img src="img/gallery/4s.jpg">
-                                                </td>
-                                                <td>
-                                                    <input type="text" class="form-control" disabled value="http://mydomain.com/images/image4.png">
-                                                </td>
-                                                <td>
-                                                    <input type="text" class="form-control" value="4">
-                                                </td>
-                                                <td>
-                                                    <button class="btn btn-white"><i class="fa fa-trash"></i> </button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <img src="img/gallery/5s.jpg">
-                                                </td>
-                                                <td>
-                                                    <input type="text" class="form-control" disabled value="http://mydomain.com/images/image5.png">
-                                                </td>
-                                                <td>
-                                                    <input type="text" class="form-control" value="5">
-                                                </td>
-                                                <td>
-                                                    <button class="btn btn-white"><i class="fa fa-trash"></i> </button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <img src="img/gallery/6s.jpg">
-                                                </td>
-                                                <td>
-                                                    <input type="text" class="form-control" disabled value="http://mydomain.com/images/image6.png">
-                                                </td>
-                                                <td>
-                                                    <input type="text" class="form-control" value="6">
-                                                </td>
-                                                <td>
-                                                    <button class="btn btn-white"><i class="fa fa-trash"></i> </button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <img src="img/gallery/7s.jpg">
-                                                </td>
-                                                <td>
-                                                    <input type="text" class="form-control" disabled value="http://mydomain.com/images/image7.png">
-                                                </td>
-                                                <td>
-                                                    <input type="text" class="form-control" value="7">
-                                                </td>
-                                                <td>
-                                                    <button class="btn btn-white"><i class="fa fa-trash"></i> </button>
-                                                </td>
-                                            </tr>
+                                                <tr id='img_resource_{{$item->id}}'>
+                                                    <td>
+                                                        <input type="text" class="form-control" disabled value="{{Storage::url($item->source_url)}}">
+                                                    </td>
+                                                    <td>
+                                                        <button class="btn btn-white" onclick="deleteItem({{$item->id}})"><i class="fa fa-trash"></i> </button>
+                                                    </td>
+                                                </tr>
+                                                    
+                                                @endforeach
+                                            
                                             </tbody>
                                         </table>
+                                        <div id='video_upload_progress_box' class="progress" style='display:none'>
+                                            <div class="progress-bar progress-bar-striped progress-bar-animated progress-bar-success" role="progressbar" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
+                                        </div>
                                     </div>
-
+                                    <div style='margin-top:2rem'>
+                                        <div id='btn-add-video'>添加视频</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -476,85 +169,144 @@
 @endsection
 
 @section('scripts')
-    <script src="{{asset('js/plugins/dropzone/dropzone.js')}}"></script>
     <script src="{{asset('js/plugins/iCheck/icheck.min.js')}}"></script>
+    <script src="{{asset('vendor/webuploader/webuploader.js')}}"></script>
     <script>
+        $(document).ready(function () {
 
-        $("#image_detail_box").dropzone({
-            acceptedFiles: 'image/*',
-            params:{'_token':$('meta[name="csrf-token"]').attr('content')},
-            url: "{{route('product.image.upload')}}",
-            addRemoveLinks: true,
-            maxFiles: 9,
-            paramName: "file", // The name that will be used to transfer the file
-            maxFilesize: 8, // MB
-            dictDefaultMessage: "<strong>请选择图片文件进行上传</strong>",
-            init: function() {
-                this.on("success", function(file, responseText) {
-                    var html = Dropzone.createElement("<input type='hidden' name='image_detail[]' value='"+ responseText +"' />");
-                    file.previewElement.appendChild(html);
-                });
-                this.on("error", function (file, message) {
-                    alert(message);
-                    this.removeFile(file);
-                });
-            }
-        });
+            $('.i-checks').iCheck({
+                checkboxClass: 'icheckbox_square-green',
+                radioClass: 'iradio_square-green',
+            });
+
+            var image_uploader = WebUploader.create({
+
+                // 选完文件后，是否自动上传。
+                auto: true,
+                swf: "{{asset('vendor/webuploader/Uploader.swf')}}",
+                server: "{{route('merchant.product.resource.store')}}",
+                pick: '#btn-add-image',
+                // 只允许选择图片文件。
+                accept: {
+                    title: 'Images',
+                    extensions: 'gif,jpg,jpeg,bmp,png',
+                    mimeTypes: 'image/*'
+                },
+                formData:{
+                    _token:'{{csrf_token()}}',
+                    product_id: '{{$product->id}}',
+                    resource_type: 'image'
+                }
+            });
+
+            image_uploader.on( 'uploadProgress', function( file, percentage ) {
+                $('#image_upload_progress_box').show();
+                $percent = $('#image_upload_progress_box').find('.progress-bar');
+                $percent.css( 'width', percentage * 100 + '%' );
+            });
+
+            image_uploader.on( 'uploadSuccess', function(file, response) {
+                if(response.error == 0){
+                    data = response.data;
+                    id = data.id;
+                    source_url = data.source_url
+                    priority = data.priority;
+                    list = $('#image_panel tbody');
+                    list.append( 
+                        "<tr id='img_resource_"+ id +"'>" +
+                            "<td><img src='"+ source_url +"' width='50' height='50'></td>" + 
+                            "<td><a>" + source_url + "</a></td>" +    
+                            "<td>"+ priority +"</td>" +
+                            "<td><button class='btn btn-white' onclick='deleteItem(" + id + ")'><i class='fa fa-trash'></i> </button></td>"+
+                        "</tr>"
+                    );
+
+                    alert('添加成功');
+                }else{
+                    $('#image_upload_progress_box').hide();
+                    alert(response.message);
+                }
+            });
+
+            image_uploader.on( 'uploadError', function( file ) {
+                $('#image_upload_progress_box').hide();
+                alert('上传出错');
+            });
+
+            image_uploader.on( 'uploadComplete', function( file ) {
+                $('#image_upload_progress_box').fadeOut();
+                $percent = $('#image_upload_progress_box').find('.progress-bar');
+                $percent.css( 'width', '0%' );
+            });
 
 
-        $("#video_detail_box").dropzone({
-            acceptedFiles: 'video/*',
-            params:{'_token':$('meta[name="csrf-token"]').attr('content')},
-            url: "{{route('product.video.upload')}}",
-            addRemoveLinks: true,
-            maxFiles: 1,
-            paramName: "file", // The name that will be used to transfer the file
-            maxFilesize: 20, // MB
-            dictDefaultMessage: "<strong>请选择视频文件进行上传</strong>",
-            init: function() {
-                this.on("success", function(file, responseText) {
-                    var html = Dropzone.createElement("<input type='hidden' name='video_detail[]' value='"+ responseText +"' />");
-                    file.previewElement.appendChild(html);
-                });
-                this.on("error", function (file, message) {
-                    alert(message);
-                    this.removeFile(file);
-                });
-            }
-        });
+            var video_uploader = WebUploader.create({
 
+                // 选完文件后，是否自动上传。
+                auto: true,
+                swf: "{{asset('vendor/webuploader/Uploader.swf')}}",
+                server: "{{route('merchant.product.resource.store')}}",
+                pick: '#btn-add-video',
+                accept: {
+                    title: 'Video',
+                    mimeTypes: 'video/*'
+                },
+                formData:{
+                    _token:'{{csrf_token()}}',
+                    product_id: '{{$product->id}}',
+                    resource_type: 'video'
+                }
+            });
 
-        $("#cover_box").dropzone({
-            acceptedFiles: 'image/*',
-            params:{'_token':$('meta[name="csrf-token"]').attr('content')},
-            url: "{{route('product.cover.upload')}}",
-            addRemoveLinks: true,
-            maxFiles: 1,
-            paramName: "file", // The name that will be used to transfer the file
-            maxFilesize: 8, // MB
-            dictDefaultMessage: "<strong>请选择封面图片进行上传</strong>",
-            init: function() {
-                this.on("success", function(file, responseText) {
-                    var html = Dropzone.createElement("<input type='hidden' name='cover' value='"+ responseText +"' />");
-                    file.previewElement.appendChild(html);
-                });
-                this.on("error", function (file, message) {
-                    alert(message);
-                    this.removeFile(file);
-                });
-            }
+            video_uploader.on( 'uploadProgress', function( file, percentage ) {
+                $('#video_upload_progress_box').show();
+                $percent = $('#video_upload_progress_box').find('.progress-bar');
+                $percent.css( 'width', percentage * 100 + '%' );
+            });
+
+            video_uploader.on( 'uploadSuccess', function(file, response) {
+                if(response.error == 0){
+                    data = response.data;
+                    id = data.id;
+                    source_url = data.source_url
+                    priority = data.priority;
+                    list = $('#video_panel tbody');
+                    list.append( 
+                        "<tr id='img_resource_"+ id +"'>" +
+                            "<td><a>" + source_url + "</a></td>" +    
+                            "<td><button class='btn btn-white' onclick='deleteItem(" + id + ")'><i class='fa fa-trash'></i> </button></td>"+
+                        "</tr>"
+                    );
+                    alert('添加成功');
+                }else{
+                    $('#video_upload_progress_box').hide();
+                    alert(response.message);
+                }
+            });
+
+            video_uploader.on( 'uploadError', function( file ) {
+                $('#video_upload_progress_box').hide();
+                alert('上传出错');
+            });
+
+            video_uploader.on( 'uploadComplete', function( file ) {
+                $('#video_upload_progress_box').fadeOut();
+                $percent = $('#video_upload_progress_box').find('.progress-bar');
+                $percent.css( 'width', '0%' );
+            });
+
         });
 
         $('#btn-commit').click(function(){
             $.ajax({
-                type : 'post',
-                url : "{{route('merchant.product.store')}}",
+                type : 'patch',
+                url : "{{route('merchant.product.update',$product->id)}}",
                 headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                 dataType : 'json',
                 data: $('#dataForm').serialize(),
                 success : function(data,textStatus,jqXHR){
                     if(data.error == 0){
-                        alert('添加成功');
+                        alert('修改成功');
                         window.location.href = "{{route('merchant.product.index')}}";
                     }else{
                         alert(data.message);
@@ -567,28 +319,25 @@
             window.location.href = "{{route('merchant.product.index')}}";
         });
 
-
-        $(document).ready(function () {
-
-            $('.i-checks').iCheck({
-                checkboxClass: 'icheckbox_square-green',
-                radioClass: 'iradio_square-green',
-            });
-
-            $('.custom-file-input').on('change', function() {
-                let fileName = $(this).val().split('\\').pop();
-                $(this).next('.custom-file-label').addClass("selected").html(fileName);
-            }); 
-
-            $('#image_type').on('ifChecked', function(event){ //ifCreated 事件应该在插件初始化之前绑定 
-                $('#video_fileinput_box').css('display','none');
-                $('#image_fileinput_box').css('display','block'); 
-            }); 
-
-            $('#video_type').on('ifChecked', function(event){ //ifCreated 事件应该在插件初始化之前绑定 
-                $('#image_fileinput_box').css('display','none'); 
-                $('#video_fileinput_box').css('display','block'); 
-            }); 
-        });
+        function deleteItem(id)
+        {
+            if(confirm('确认删除?')){
+                $.ajax({
+                    type : 'delete',
+                    url : "{{env('APP_URL')}}/merchant/management/products/resources/"+id,
+                    contentType : 'application/json;charset=UTF-8',
+                    headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+                    dataType : 'json',
+                    success : function(data,textStatus,jqXHR){
+                        if(data.error == 0){
+                            alert('删除成功');
+                            $('#img_resource_'+id).remove();
+                        }else{
+                            alert(data.message);
+                        }
+                    }
+                });
+            }
+        }
     </script>
 @endsection

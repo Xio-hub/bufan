@@ -99,8 +99,14 @@ Route::group([
     Route::get('/products/create', 'ProductController@create')->name('merchant.product.create');
     Route::post('/products', 'ProductController@store')->name('merchant.product.store');
     Route::get('/products/{id}/edit', 'ProductController@edit')->where('id','\d+')->name('merchant.product.edit');
-    Route::put('/products/{id}', 'ProductController@update')->where('id','\d+')->name('merchant.product.update');
+    Route::patch('/products/{id}', 'ProductController@update')->where('id','\d+')->name('merchant.product.update');
     Route::delete('/products/{id}', 'ProductController@destroy')->where('id','\d+')->name('merchant.product.destroy');
+    Route::post('products/images' ,'ProductController@storeImage')->name('product.image.upload');
+    Route::post('products/videos' ,'ProductController@storeVideo')->name('product.video.upload');
+
+    Route::post('/products/resources', 'ProductResourceController@store')->name('merchant.product.resource.store');
+    Route::patch('/products/resources/{id}', 'ProductResourceController@store')->name('merchant.product.resource.update');
+    Route::delete('/products/resources/{id}', 'ProductResourceController@destroy')->where('id','\d+')->name('merchant.product.resource.destroy');
 
     Route::get('/spaces/categories', 'SpaceCategoryController@index')->name('merchant.space.category.index');
     Route::get('/spaces/categories/create', 'SpaceCategoryController@create')->name('merchant.space.category.create');
@@ -171,11 +177,6 @@ Route::group([
     Route::get('introductions' , 'IntroductionController@index')->where('id', '\d+')->name('merchant.introduction.index');
     Route::get('introductions/{id}/edit' , 'IntroductionController@edit')->where('id', '\d+')->name('merchant.introduction.edit');
     Route::patch('introductions/{id}' , 'IntroductionController@update')->where('id', '\d+')->name('merchant.introduction.update');
-
-    Route::post('products/images' ,'ProductController@storeImage')->name('product.image.upload');
-    Route::post('products/cover' ,'ProductController@storeCover')->name('product.cover.upload');
-    Route::post('products/videos' ,'ProductController@storeVideo')->name('product.video.upload');
-    Route::post('products/musics' ,'ProductController@storeAudio')->name('product.audio.upload');
 
     Route::post('spaces/categories/cover' ,'SpaceCategoryController@storeCover')->name('space.category.cover.upload');
     Route::post('spaces/images' ,'SpaceController@storeImage')->name('space.image.upload');

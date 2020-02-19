@@ -38,7 +38,7 @@
                                     <td>{{$product->priority}}</td>
                                     <td>{{$product->created_at}}</td>
                                     <td>
-                                        {{-- <a href="{{route('merchant.product.edit',$product->id)}}" class='down btn btn-default btn-xs btn-delete'>修改</a> --}}
+                                        <a href="{{route('merchant.product.edit',$product->id)}}" class='down btn btn-default btn-xs btn-delete'>修改</a>
                                         <button onclick='deleteItem("{{$product->id}}")' class='down btn btn-default btn-xs btn-delete'>删除</button>
                                     </td>
                                 </tr>
