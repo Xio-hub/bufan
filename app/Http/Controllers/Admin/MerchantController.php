@@ -154,7 +154,6 @@ class MerchantController extends Controller
         $merchant = Merchant::FindOrFail($id);
         
         $merchant_base = $merchant->base;
-        $category_ids = json_decode($merchant_base->category_ids, true);
         $categories = Category::get();
         $permissions = $merchant->getAllPermissions();
 

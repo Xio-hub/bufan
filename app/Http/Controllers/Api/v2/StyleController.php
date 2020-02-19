@@ -77,7 +77,7 @@ class StyleController extends Controller
     {
         $id = $request->id;
 
-        $data = $style->select('id','name')
+        $data = $style->select('id','name','background_music','hotspot')
                         ->where(['id' => $id])
                         ->first();
 

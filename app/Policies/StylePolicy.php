@@ -15,9 +15,9 @@ class StylePolicy
         return $merchant->id === $style->merchant_id;
     }
 
-    public function create(Merchant $merchant)
+    public function edit(Merchant $merchant, Style $style)
     {
-        //
+        return $merchant->id === $style->merchant_id;
     }
 
     public function update(Merchant $merchant, Style $style)

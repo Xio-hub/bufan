@@ -20,15 +20,17 @@ class SpaceController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Space $space)
     {
         $merchant = Auth::guard('merchant')->user();
+        $spaces = $space
+            ->select('spaces.id','spaces.name','spaces.cover','spaces.priority','spaces.created_at','space_categories.name as category_name')
+            ->leftJoin('space_categories','spaces.category_id','=','space_categories.id')
+            ->orderBy('spaces.created_at','desc')
+            ->where(['spaces.merchant_id'=>$merchant->id])
+            ->get();
 
-        $merchant::with(['spaces' => function ($query) {
-            $query->orderBy('created_at', 'desc');
-        }])->get();
 
-        $spaces = $merchant->spaces;
         foreach($spaces as $k => $space){
             $space->cover = Storage::url($space->cover);
         }
@@ -58,9 +60,9 @@ class SpaceController extends Controller
         $category_id = $request->input('category','0');
         $name = $request->input('name','');
         $detail_type = $request->input('detail_type','');
-        $cover = $request->input('cover','');
         $image_datail = $request->input('image_detail','');
         $video_datail = $request->input('video_detail','');
+        $hotspot = $request->input('hotspot','');
 
         if($name == ''){
             $error = 1;
@@ -74,10 +76,18 @@ class SpaceController extends Controller
             return response()->json(compact('error','message'));
         }
 
-        if($cover == ''){
+        $cover = '';
+        if ($request->hasFile('cover')) {
+            $cover =  $request->cover->store('images/spaces/cover');
+        }else{
             $error = 1;
             $message = '请上传封面图片';
             return response()->json(compact('error','message'));
+        }
+
+        $background_music = '';
+        if ($request->hasFile('background_music')) {
+            $background_music =  $request->background_music->store('audios/products/backgrounds');
         }
 
         $detail = '';
@@ -89,7 +99,7 @@ class SpaceController extends Controller
 
         if(empty($detail)){
             $error = 1;
-            $message = '请上传产品资料';
+            $message = '请上传空间资料';
             return response()->json(compact('error','message'));
         }
 
@@ -103,6 +113,8 @@ class SpaceController extends Controller
                 'name' => $name,
                 'cover' => $cover,
                 'type' => $detail_type,
+                'background_music' => $background_music,
+                'hotspot' => $hotspot,
             ]);
 
             $detail_data = [];
@@ -130,25 +142,30 @@ class SpaceController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request)
     {
-        //
+        $id = $request->id;
+
+        $merchant = Auth::guard('merchant')->user();
+        $categories = $merchant->spaceCategories;
+        $space = Space::findOrFail($id);
+        $image_resources = SpaceResource::where(['merchant_id'=> $merchant->id,'source_type' => 'image'])->orderBy('priority','asc')->get();
+        $video_resources = SpaceResource::where(['merchant_id'=> $merchant->id,'source_type' => 'video'])->orderBy('priority','asc')->get();
+        if($merchant->can('edit', $space)){
+            return view('merchants.spaces.edit')->with([
+                'categories' => $categories,
+                'space' => $space,
+                'image_resources' => $image_resources,
+                'video_resources' => $video_resources,
+            ]);
+        }else{
+            abort(404);
+        }
     }
 
     /**
@@ -195,12 +212,6 @@ class SpaceController extends Controller
         }finally{
             return response()->json(compact('error','message'));
         }
-    }
-
-    public function storeCover(Request $request)
-    {
-        $path = $request->file('file')->store("images/spaces/covers");
-        return $path;
     }
 
     public function storeImage(Request $request)

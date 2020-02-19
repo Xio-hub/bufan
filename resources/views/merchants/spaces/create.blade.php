@@ -40,6 +40,32 @@
                         </div>
                         <div class="hr-line-dashed"></div>
 
+                        <div class="form-group  row"><label class="col-sm-2 col-form-label">封面</label>
+                            <div class="fileinput fileinput-new" data-provides="fileinput">
+                                <span class="btn btn-default btn-file"><span class="fileinput-new">Select file</span>
+                                <span class="fileinput-exists">Change</span><input type="file" name="cover" accept="image/*"/></span>
+                                <span class="fileinput-filename"></span>
+                                <a href="#" class="close fileinput-exists" data-dismiss="fileinput" style="float: none">×</a>
+                            </div> 
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        
+                        <div class="form-group  row">
+                            <label class="col-sm-2 col-form-label">热点连接</label>
+                            <div class="col-sm-5"><input type="url" class="form-control" name='hotspot'></div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+
+                        <div class="form-group  row"><label class="col-sm-2 col-form-label">背景音乐</label>
+                            <div class="fileinput fileinput-new" data-provides="fileinput">
+                                <span class="btn btn-default btn-file"><span class="fileinput-new">Select file</span>
+                                <span class="fileinput-exists">Change</span><input type="file" name="background_music" accept="audio/*"/></span>
+                                <span class="fileinput-filename"></span>
+                                <a href="#" class="close fileinput-exists" data-dismiss="fileinput" style="float: none">×</a>
+                            </div> 
+                        </div>
+                        <div class="hr-line-dashed"></div>
+
                         <div class="form-group  row">
                             <label class="col-sm-2 col-form-label">产品展示类型</label>
                             <div class="col-sm-5">
@@ -74,19 +100,6 @@
                         <div class="hr-line-dashed"></div>
 
                         <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">封面设置</label>
-                            <div class='col-sm-5'>
-       
-                                    <div class="dropzone" id="cover_box">
-                                        <div class="fallback">
-                                            <input name="file" type="file" />
-                                        </div>
-                                    </div>
-                            </div>
-                        </div>
-                        <div class="hr-line-dashed"></div>
-
-                        <div class="form-group row">
                             <div class="col-sm-4 col-sm-offset-2">
                                 <a class="btn btn-white btn-lg" id='btn-cancel'>取消</a>
                                 <a class="btn btn-primary btn-lg" id="btn-commit">确认</a>
@@ -100,6 +113,7 @@
 @endsection
 
 @section('scripts')
+    <script src="{{asset('js/plugins/jasny/jasny-bootstrap.min.js')}}"></script>
     <script src="{{asset('js/plugins/dropzone/dropzone.js')}}"></script>
     <script src="{{asset('js/plugins/iCheck/icheck.min.js')}}"></script>
     <script>
@@ -109,7 +123,7 @@
             params:{'_token':$('meta[name="csrf-token"]').attr('content')},
             url: "{{route('space.image.upload')}}",
             addRemoveLinks: true,
-            maxFiles: 9,
+            maxFiles: 30,
             paramName: "file", // The name that will be used to transfer the file
             maxFilesize: 8, // MB
             dictDefaultMessage: "<strong>请选择图片文件进行上传</strong>",
@@ -147,35 +161,16 @@
             }
         });
 
-
-        $("#cover_box").dropzone({
-            acceptedFiles: 'image/*',
-            params:{'_token':$('meta[name="csrf-token"]').attr('content')},
-            url: "{{route('space.cover.upload')}}",
-            addRemoveLinks: true,
-            maxFiles: 1,
-            paramName: "file", // The name that will be used to transfer the file
-            maxFilesize: 8, // MB
-            dictDefaultMessage: "<strong>请选择封面图片进行上传</strong>",
-            init: function() {
-                this.on("success", function(file, responseText) {
-                    var html = Dropzone.createElement("<input type='hidden' name='cover' value='"+ responseText +"' />");
-                    file.previewElement.appendChild(html);
-                });
-                this.on("error", function (file, message) {
-                    alert(message);
-                    this.removeFile(file);
-                });
-            }
-        });
-
         $('#btn-commit').click(function(){
+            var formData = new FormData($('#dataForm')[0]);
             $.ajax({
                 type : 'post',
                 url : "{{route('merchant.space.store')}}",
                 headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                 dataType : 'json',
-                data: $('#dataForm').serialize(),
+                processData: false,
+               	contentType: false, 
+                data: formData,
                 success : function(data,textStatus,jqXHR){
                     if(data.error == 0){
                         alert('添加成功');

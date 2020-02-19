@@ -35,11 +35,14 @@
                                     <td>{{$i+1}}</td>
                                     <td>{{$space->id}}</td>
                                     <td>{{$space->name}}</td>
-                                    <td>{{$space->category->name}}</td>
+                                    <td>{{$space->category_name}}</td>
                                     <td><a href="{{$space->cover}}" target="blank">{{$space->cover}}</a></td>
                                     <td>{{$space->priority}}</td>
                                     <td>{{$space->created_at}}</td>
-                                    <td><button onclick='deleteItem("{{$space->id}}")' class='down btn btn-default btn-xs btn-delete'>删除</button></td>
+                                    <td>
+                                        <a href="{{route('merchant.space.edit',$space->id)}}" class='down btn btn-default btn-xs btn-delete'>修改</a>
+                                        <button onclick='deleteItem("{{$space->id}}")' class='down btn btn-default btn-xs btn-delete'>删除</button>
+                                    </td>
                                 </tr>
                                 @endforeach
                             </tbody>

@@ -13,9 +13,9 @@ class SpacePolicy
         return $merchant->id === $space->merchant_id;
     }
 
-    public function create(Merchant $merchant)
+    public function edit(Merchant $merchant, Space $space)
     {
-        //
+        return $merchant->id === $space->merchant_id;
     }
 
     public function update(Merchant $merchant, Space $space)

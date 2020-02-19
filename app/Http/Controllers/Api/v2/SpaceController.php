@@ -77,7 +77,7 @@ class SpaceController extends Controller
     {
         $id = $request->id;
 
-        $data = $space->select('id','name')
+        $data = $space->select('id','name','background_music','hotspot')
                         ->where(['id' => $id])
                         ->first();
 

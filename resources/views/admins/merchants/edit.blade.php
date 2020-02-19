@@ -98,12 +98,15 @@
 
 
         $('#btn-commit').click(function(){
+            var formData = new FormData($('#dataForm')[0]);
             $.ajax({
                 type : 'post',
                 url : "{{route('merchants.update',$merchant->id)}}",
                 headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                 dataType : 'json',
-                data: $('#dataForm').serialize(),
+                processData: false,		//用于对data参数进行序列化处理 这里必须false
+               	contentType: false, 
+                data: formData,
                 success : function(data,textStatus,jqXHR){
                     if(data.error == 0){
                         alert('修改成功');

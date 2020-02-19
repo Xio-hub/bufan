@@ -54,13 +54,6 @@ class ProductController extends Controller
             return response()->json(compact('error','message'));
         }
 
-        $detail = '';
-        if($detail_type == 'image'){
-            $detail = $image_datail;
-        }else if($detail_type == 'video'){
-            $detail = $video_datail;
-        }
-
         $cover = '';
         if ($request->hasFile('cover')) {
             $cover =  $request->cover->store('images/products/cover');
@@ -73,6 +66,13 @@ class ProductController extends Controller
         $background_music = '';
         if ($request->hasFile('background_music')) {
             $background_music =  $request->background_music->store('audios/products/backgrounds');
+        }
+
+        $detail = '';
+        if($detail_type == 'image'){
+            $detail = $image_datail;
+        }else if($detail_type == 'video'){
+            $detail = $video_datail;
         }
 
         if(empty($detail)){

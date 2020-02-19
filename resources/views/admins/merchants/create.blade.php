@@ -124,8 +124,7 @@
                 headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                 dataType : 'json',
                 processData: false,		//用于对data参数进行序列化处理 这里必须false
-               	contentType: false, 	//必
-                // data: $('#dataForm').serialize(),
+               	contentType: false, 
                 data: formData,
                 success : function(data,textStatus,jqXHR){
                     if(data.error == 0){
