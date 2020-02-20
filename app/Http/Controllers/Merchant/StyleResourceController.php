@@ -2,31 +2,16 @@
 
 namespace App\Http\Controllers\Merchant;
 
+use Exception;
 use Illuminate\Http\Request;
+use App\Models\StyleResource;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class StyleResourceController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -35,29 +20,59 @@ class StyleResourceController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+        $resource_type = $request->input('resource_type', '') ?? '';
+        $style_id = $request->input('style_id', '') ?? '';
+        $upload_path = '';
+        if(!in_array($resource_type,['image','video']) or $style_id == ''){
+            $error = 1;
+            $message = '参数错误';
+            return response()->json(compact('error','message'));
+        }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
+        if($resource_type == 'image'){
+            $upload_path = 'images/styles/resources';
+            $count = StyleResource::where(['style_id' => $style_id, 'source_type' => 'image'])->count();
+            if($count == 30){
+                $error = 1;
+                $message = '最多只能上传30张图片';
+                return response()->json(compact('error','message'));
+            }
+        }else{
+            $upload_path = 'videos/styles/resources';
+            $count = StyleResource::where(['style_id' => $style_id, 'source_type' => 'video'])->count();
+            if($count == 1){
+                $error = 1;
+                $message = '只能上传一个视频';
+                return response()->json(compact('error','message'));
+            }
+        }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        try{
+            $merchant = Auth::guard('merchant')->user();
+            $priority = 0;
+            $path = $request->file('file')->store($upload_path);
+            $resource = StyleResource::create([
+                'merchant_id' => $merchant->id,
+                'style_id' => $style_id,
+                'source_url' => $path,
+                'source_type' => $resource_type,
+            ]);
+            $id = $resource->id;
+
+            $error = 0;
+            $message = 'success';
+            $data = [
+                'id' => $id,
+                'source_url' => Storage::url($path),
+                'priority' => $priority
+            ];
+        }catch(Exception $e){
+            Log::error($e);
+            $error = 1;
+            $message = '添加失败';
+            $data = [];
+        }
+        return response()->json(compact('error','message','data'));
     }
 
     /**
@@ -69,7 +84,26 @@ class StyleResourceController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try{
+            $path = $request->file('file')->store("images/styles/resources");
+            $resource = StyleResource::find($id);
+            Storage::delete($resource->source_url);
+            $resource->source_url = $path;
+            $resource->save();
+            
+            $error = 0;
+        }catch(Exception $e)
+        {
+            Log::error($e);
+            $error = 1;
+        }
+        
+        $result = [
+            'error' => $error,
+            'path' => Storage::url($path)
+        ];
+
+        return response()->json($resource);
     }
 
     /**
@@ -80,6 +114,26 @@ class StyleResourceController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try{
+            $merchant = Auth::guard('merchant')->user();
+            $resource = StyleResource::find($id);
+            if($merchant->can('delete',$resource)){
+                $source_url = $resource->source_url;
+                $result = $resource->delete();
+                Storage::delete($source_url);
+    
+                $error = 0;
+                $message = 'success';
+            }else{
+                $error = 1;
+                $message = 'UnAuthorized';
+            }
+        }catch(Exception $e){
+            Log::error($e);
+            $error = 1;
+            $message = '删除失败';
+        }finally{
+            return response()->json(compact('error','message'));
+        }
     }
 }

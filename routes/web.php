@@ -99,7 +99,7 @@ Route::group([
     Route::get('/products/create', 'ProductController@create')->name('merchant.product.create');
     Route::post('/products', 'ProductController@store')->name('merchant.product.store');
     Route::get('/products/{id}/edit', 'ProductController@edit')->where('id','\d+')->name('merchant.product.edit');
-    Route::patch('/products/{id}', 'ProductController@update')->where('id','\d+')->name('merchant.product.update');
+    Route::post('/products/{id}', 'ProductController@update')->where('id','\d+')->name('merchant.product.update');
     Route::delete('/products/{id}', 'ProductController@destroy')->where('id','\d+')->name('merchant.product.destroy');
     Route::post('products/images' ,'ProductController@storeImage')->name('product.image.upload');
     Route::post('products/videos' ,'ProductController@storeVideo')->name('product.video.upload');
@@ -111,7 +111,7 @@ Route::group([
     Route::get('/spaces/categories/create', 'SpaceCategoryController@create')->name('merchant.space.category.create');
     Route::post('/spaces/categories', 'SpaceCategoryController@store')->name('merchant.space.category.store');
     Route::get('/spaces/categories/{id}/edit', 'SpaceCategoryController@edit')->name('merchant.space.category.edit');
-    Route::patch('/spaces/categories/{id}', 'SpaceCategoryController@update')->name('merchant.space.category.update');
+    Route::post('/spaces/categories/{id}', 'SpaceCategoryController@update')->name('merchant.space.category.update');
     Route::delete('/spaces/categories/{id}', 'SpaceCategoryController@destroy')->name('merchant.space.category.destroy');
     Route::post('spaces/categories/cover' ,'SpaceCategoryController@storeCover')->name('space.category.cover.upload');
 
@@ -138,8 +138,11 @@ Route::group([
     Route::get('/styles/create', 'StyleController@create')->name('merchant.style.create');
     Route::post('/styles', 'StyleController@store')->name('merchant.style.store');
     Route::get('/styles/{id}/edit', 'StyleController@edit')->where('id','\d+')->name('merchant.style.edit');
-    Route::put('/styles/{id}', 'StyleController@update')->where('id','\d+')->name('merchant.style.update');
+    Route::post('/styles/{id}', 'StyleController@update')->where('id','\d+')->name('merchant.style.update');
     Route::delete('/styles/{id}', 'StyleController@destroy')->where('id','\d+')->name('merchant.style.destroy');
+    Route::post('/styles/resources', 'StyleResourceController@store')->name('merchant.style.resource.store');
+    Route::patch('/styles/resources/{id}', 'StyleResourceController@store')->name('merchant.style.resource.update');
+    Route::delete('/styles/resources/{id}', 'StyleResourceController@destroy')->where('id','\d+')->name('merchant.style.resource.destroy');
 
     Route::get('/materials', 'MaterialController@index')->name('merchant.material.index');
     Route::get('/materials/create', 'MaterialController@create')->name('merchant.material.create');
@@ -185,7 +188,6 @@ Route::group([
 
     Route::post('styles/categories/cover' ,'StyleCategoryController@storeCover')->name('style.category.cover.upload');
     Route::post('styles/images' ,'StyleController@storeImage')->name('style.image.upload');
-    Route::post('styles/cover' ,'StyleController@storeCover')->name('style.cover.upload');
     Route::post('styles/videos' ,'StyleController@storeVideo')->name('style.video.upload');
 
     Route::post('/materials/cover' ,'MaterialController@storeCover')->name('material.cover.upload');

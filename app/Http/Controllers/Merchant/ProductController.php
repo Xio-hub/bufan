@@ -123,8 +123,8 @@ class ProductController extends Controller
 
         $merchant = Auth::guard('merchant')->user();
         $product = Product::findOrFail($id);
-        $image_resources = ProductResource::where(['merchant_id'=> $merchant->id,'source_type' => 'image'])->orderBy('priority','asc')->get();
-        $video_resources = ProductResource::where(['merchant_id'=> $merchant->id,'source_type' => 'video'])->orderBy('priority','asc')->get();
+        $image_resources = ProductResource::where(['product_id'=> $id,'source_type' => 'image'])->orderBy('priority','asc')->get();
+        $video_resources = ProductResource::where(['product_id'=> $id,'source_type' => 'video'])->orderBy('priority','asc')->get();
         if($merchant->can('edit', $product)){
             return view('merchants.products.edit')->with([
                 'product' => $product,

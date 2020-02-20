@@ -45,7 +45,7 @@
                                             </div>
                                             <div class="hr-line-dashed"></div>
 
-                                            <div class="form-group  row"><label class="col-sm-2 col-form-label">产品封面</label>
+                                            <div class="form-group  row"><label class="col-sm-2 col-form-label">封面</label>
                                                 <div class="fileinput fileinput-new" data-provides="fileinput">
                                                     <span class="btn btn-default btn-file"><span class="fileinput-new">Select file</span>
                                                     <span class="fileinput-exists">Change</span><input type="file" name="cover" accept="image/*"/></span>
@@ -192,6 +192,16 @@
             });
         })
 
+        $('a[data-toggle="tab"]').on('shown.bs.tab',function(e){
+            var target = e.target.toString();
+            if(target.indexOf('tab-2')>0){
+                image_uploader.refresh();
+            }else if(target.indexOf('tab-3')>0){
+                video_uploader.refresh();
+            }
+        });
+
+
         var image_uploader = WebUploader.create({
 
             // 选完文件后，是否自动上传。
@@ -310,12 +320,15 @@
 
         
         $('#btn-commit').click(function(){
+            var formData = new FormData($('#dataForm')[0]);
             $.ajax({
-                type : 'patch',
+                type : 'post',
                 url : "{{route('merchant.space.update',$space->id)}}",
                 headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                 dataType : 'json',
-                data: $('#dataForm').serialize(),
+                processData: false,
+               	contentType: false, 
+                data: formData,
                 success : function(data,textStatus,jqXHR){
                     if(data.error == 0){
                         alert('修改成功');

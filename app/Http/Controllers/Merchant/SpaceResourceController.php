@@ -30,7 +30,7 @@ class SpaceResourceController extends Controller
         }
 
         if($resource_type == 'image'){
-            $upload_path = 'images/products/resources';
+            $upload_path = 'images/spaces/resources';
             $count = SpaceResource::where(['space_id' => $space_id, 'source_type' => 'image'])->count();
             if($count == 30){
                 $error = 1;
@@ -38,7 +38,7 @@ class SpaceResourceController extends Controller
                 return response()->json(compact('error','message'));
             }
         }else{
-            $upload_path = 'videos/products/resources';
+            $upload_path = 'videos/spaces/resources';
             $count = SpaceResource::where(['space_id' => $space_id, 'source_type' => 'video'])->count();
             if($count == 1){
                 $error = 1;
@@ -85,7 +85,7 @@ class SpaceResourceController extends Controller
     public function update(Request $request, $id)
     {
         try{
-            $path = $request->file('file')->store("images/products/resources");
+            $path = $request->file('file')->store("images/spaces/resources");
             $resource = SpaceResource::find($id);
             Storage::delete($resource->source_url);
             $resource->source_url = $path;

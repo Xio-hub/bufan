@@ -20,15 +20,16 @@ class StyleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Style $style)
     {
         $merchant = Auth::guard('merchant')->user();
 
-        $merchant::with(['styles' => function ($query) {
-            $query->orderBy('created_at', 'desc');
-        }])->get();
-
-        $styles = $merchant->styles;
+        $styles = $style
+            ->select('styles.id','styles.name','styles.cover','styles.priority','styles.created_at','style_categories.name as category_name')
+            ->leftJoin('style_categories','styles.category_id','=','style_categories.id')
+            ->orderBy('styles.created_at','desc')
+            ->where(['styles.merchant_id'=>$merchant->id])
+            ->get();
         foreach($styles as $k => $style){
             $style->cover = Storage::url($style->cover);
         }
@@ -58,9 +59,9 @@ class StyleController extends Controller
         $category_id = $request->input('category','0');
         $name = $request->input('name','');
         $detail_type = $request->input('detail_type','');
-        $cover = $request->input('cover','');
         $image_datail = $request->input('image_detail','');
         $video_datail = $request->input('video_detail','');
+        $hotspot = $request->input('hotspot','');
 
         if($name == ''){
             $error = 1;
@@ -74,10 +75,18 @@ class StyleController extends Controller
             return response()->json(compact('error','message'));
         }
 
-        if($cover == ''){
+        $cover = '';
+        if ($request->hasFile('cover')) {
+            $cover =  $request->cover->store('images/spaces/cover');
+        }else{
             $error = 1;
             $message = '请上传封面图片';
             return response()->json(compact('error','message'));
+        }
+
+        $background_music = '';
+        if ($request->hasFile('background_music')) {
+            $background_music =  $request->background_music->store('audios/products/backgrounds');
         }
 
         $detail = '';
@@ -89,7 +98,7 @@ class StyleController extends Controller
 
         if(empty($detail)){
             $error = 1;
-            $message = '请上传产品资料';
+            $message = '请上传空间资料';
             return response()->json(compact('error','message'));
         }
 
@@ -97,19 +106,21 @@ class StyleController extends Controller
             DB::beginTransaction();
             $merchant = Auth::guard('merchant')->user();
 
-            $space = Style::create([
+            $style = Style::create([
                 'merchant_id' => $merchant->id,
                 'category_id' => $category_id,
                 'name' => $name,
                 'cover' => $cover,
                 'type' => $detail_type,
+                'background_music' => $background_music,
+                'hotspot' => $hotspot,
             ]);
 
             $detail_data = [];
             foreach($detail as $i => $v){
                 $now = Carbon::now()->toDateTimeString();
                 $detail_data[$i]['merchant_id'] = $merchant->id;
-                $detail_data[$i]['style_id'] = $space->id;
+                $detail_data[$i]['style_id'] = $style->id;
                 $detail_data[$i]['source_type'] = $detail_type;
                 $detail_data[$i]['source_url'] = $v;
                 $detail_data[$i]['created_at'] = $now;
@@ -146,9 +157,25 @@ class StyleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request)
     {
-        //
+        $id = $request->id;
+
+        $merchant = Auth::guard('merchant')->user();
+        $categories = $merchant->spaceCategories;
+        $style = Style::findOrFail($id);
+        $image_resources = StyleResource::where(['style_id'=> $id,'source_type' => 'image'])->orderBy('priority','asc')->get();
+        $video_resources = StyleResource::where(['style_id'=> $id,'source_type' => 'video'])->orderBy('priority','asc')->get();
+        if($merchant->can('edit', $style)){
+            return view('merchants.styles.edit')->with([
+                'categories' => $categories,
+                'style' => $style,
+                'image_resources' => $image_resources,
+                'video_resources' => $video_resources,
+            ]);
+        }else{
+            abort(404);
+        }
     }
 
     /**
@@ -158,9 +185,60 @@ class StyleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $id = $request->id;
+        $name = $request->input('name','');
+        $detail_type = $request->input('detail_type','');
+        $hotspot = $request->input('hotspot','');
+
+        if($name == ''){
+            $error = 1;
+            $message = '请输入风格名称';
+            return response()->json(compact('error','message'));
+        }
+
+        $cover = '';
+        if ($request->hasFile('cover')) {
+            $cover =  $request->cover->store('images/styles/cover');
+        }
+
+        $background_music = '';
+        if ($request->hasFile('background_music')) {
+            $background_music =  $request->background_music->store('audios/background_musics');
+        }
+
+        try{
+            $style = Style::findOrFail($id);
+
+            DB::beginTransaction();
+            $merchant = Auth::guard('merchant')->user();
+
+            $style->name = $name;
+            $style->hotspot = $hotspot;
+            $style->type = $detail_type;
+            
+            if($cover != ''){
+                $style->cover = $cover;
+            }
+
+            if($background_music != ''){
+                $style->background_music = $background_music;
+            }
+
+            $style->save();
+
+            DB::commit();
+            $error = 0;
+            $message = 'success';
+        }catch(Exception $e){
+            DB::rollBack();
+            $error = 1;
+            $message = '修改失败，请稍后再试或联系管理员';
+            Log::error($e);
+        }finally{
+            return response()->json(compact('error','message'));
+        }
     }
 
     /**

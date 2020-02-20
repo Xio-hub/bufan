@@ -12,7 +12,10 @@
         <div class="col-lg-12">
             <div class="ibox ">
                 <div class="ibox-title">
-                    <h5>新品列表</h5>
+                    <div class = 'row'>
+                        <span class='col-md-1'><h5>风格列表</h5></span>
+                        <a class='btn btn-w-m btn-success' href="{{route('merchant.style.create')}}">添加风格</a>
+                    </div>
                 </div>
                 <div class="ibox-content">
                         <table class="table table-striped table-bordered table-hover" id='dataTables-products' >
@@ -35,11 +38,14 @@
                                     <td>{{$i+1}}</td>
                                     <td>{{$style->id}}</td>
                                     <td>{{$style->name}}</td>
-                                    <td>{{$style->category->name}}</td>
+                                    <td>{{$style->category_name}}</td>
                                     <td><a href="{{$style->cover}}" target="blank">{{$style->cover}}</a></td>
                                     <td>{{$style->priority}}</td>
                                     <td>{{$style->created_at}}</td>
-                                    <td><button onclick='deleteItem("{{$style->id}}")' class='down btn btn-default btn-xs btn-delete'>删除</button></td>
+                                    <td>
+                                        <a href="{{route('merchant.style.edit',$style->id)}}" class='down btn btn-default btn-xs btn-delete'>修改</a>
+                                        <button onclick='deleteItem("{{$style->id}}")' class='down btn btn-default btn-xs btn-delete'>删除</button>
+                                    </td>
                                 </tr>
                                 @endforeach
                             </tbody>

@@ -12,7 +12,10 @@
         <div class="col-lg-12">
             <div class="ibox ">
                 <div class="ibox-title">
-                    <h5>新品列表</h5>
+                    <div class = 'row'>
+                        <span class='col-md-1'><h5>风格分类列表</h5></span>
+                        <a class='btn btn-w-m btn-success' href="{{route('merchant.style.category.create')}}">添加风格分类</a>
+                    </div>
                 </div>
                 <div class="ibox-content">
                         <table class="table table-striped table-bordered table-hover" id='dataTables-products' >

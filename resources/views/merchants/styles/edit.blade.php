@@ -1,6 +1,6 @@
 @extends('merchants.layouts.app')
 
-@section('title','修改新品')
+@section('title','修改风格')
 
 @section('styles')
 <link href="{{asset('css/plugins/iCheck/custom.css')}}" rel="stylesheet">
@@ -17,9 +17,9 @@
             <div class="col-lg-12">
                 <div class="tabs-container">
                         <ul class="nav nav-tabs">
-                            <li><a class="nav-link active" data-toggle="tab" href="#tab-1">商品信息</a></li>
-                            <li><a class="nav-link" data-toggle="tab" href="#tab-2">商品详细(图片)</a></li>
-                            <li><a class="nav-link" data-toggle="tab" href="#tab-3">商品详细(视频)</a></li>
+                            <li><a class="nav-link active" data-toggle="tab" href="#tab-1">风格信息</a></li>
+                            <li><a class="nav-link" data-toggle="tab" href="#tab-2">风格详细(图片)</a></li>
+                            <li><a class="nav-link" data-toggle="tab" href="#tab-3">风格详细(视频)</a></li>
                         </ul>
                         <div class="tab-content">
                             <div id="tab-1" class="tab-pane active">
@@ -28,12 +28,24 @@
                                     <fieldset>
                                         <form id='dataForm'>
                                             <div class="form-group  row">
-                                                <label class="col-sm-2 col-form-label">新品名称</label>
-                                                <div class="col-sm-5"><input type="text" class="form-control" name='name' value="{{$product->name}}"></div>
+                                                <label class="col-sm-2 col-form-label">所属分类</label>
+                                                <div class="col-sm-5">
+                                                    <select class="form-control m-b" name="category">
+                                                        @foreach($categories as $category)
+                                                        <option value="{{$category->id}}">{{$category->name}}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
                                             </div>
                                             <div class="hr-line-dashed"></div>
 
-                                            <div class="form-group  row"><label class="col-sm-2 col-form-label">产品封面</label>
+                                            <div class="form-group  row">
+                                                <label class="col-sm-2 col-form-label">风格名称</label>
+                                                <div class="col-sm-5"><input type="text" class="form-control" name='name' value="{{$style->name}}"></div>
+                                            </div>
+                                            <div class="hr-line-dashed"></div>
+
+                                            <div class="form-group  row"><label class="col-sm-2 col-form-label">封面</label>
                                                 <div class="fileinput fileinput-new" data-provides="fileinput">
                                                     <span class="btn btn-default btn-file"><span class="fileinput-new">Select file</span>
                                                     <span class="fileinput-exists">Change</span><input type="file" name="cover" accept="image/*"/></span>
@@ -45,7 +57,7 @@
 
                                             <div class="form-group  row">
                                                 <label class="col-sm-2 col-form-label">热点连接</label>
-                                                <div class="col-sm-5"><input type="url" class="form-control" name='hotspot' value="{{$product->hotspot}}"></div>
+                                                <div class="col-sm-5"><input type="url" class="form-control" name='hotspot' value="{{$style->hotspot}}"></div>
                                             </div>
                                             <div class="hr-line-dashed"></div>
                     
@@ -59,10 +71,10 @@
                                             </div>
 
                                             <div class="form-group  row">
-                                                <label class="col-sm-2 col-form-label">产品展示类型</label>
+                                                <label class="col-sm-2 col-form-label">展示类型</label>
                                                 <div class="col-sm-5">
-                                                    <div class="i-checks"><label> <input type="radio" id="image_type" value="image" name="detail_type" @if($product->type == 'image') checked @endif> <i></i>图片</label></div>
-                                                    <div class="i-checks"><label> <input type="radio" id="video_type" value="video" name="detail_type" @if($product->type == 'video') checked @endif> <i></i>视频</label></div>
+                                                    <div class="i-checks"><label> <input type="radio" id="image_type" value="image" name="detail_type" @if($style->type == 'image') checked @endif> <i></i>图片</label></div>
+                                                    <div class="i-checks"><label> <input type="radio" id="video_type" value="video" name="detail_type" @if($style->type == 'video') checked @endif> <i></i>视频</label></div>
                                                 </div>
                                             </div>
 
@@ -179,143 +191,139 @@
                 checkboxClass: 'icheckbox_square-green',
                 radioClass: 'iradio_square-green',
             });
+        })
 
-            
-
-            $('a[data-toggle="tab"]').on('shown.bs.tab',function(e){
-                var target = e.target.toString();
-                if(target.indexOf('tab-2')>0){
-                    image_uploader.refresh();
-                }else if(target.indexOf('tab-3')>0){
-                    video_uploader.refresh();
-                }
-            });
-
-
-
-            var image_uploader = WebUploader.create({
-
-                // 选完文件后，是否自动上传。
-                auto: true,
-                swf: "{{asset('vendor/webuploader/Uploader.swf')}}",
-                server: "{{route('merchant.product.resource.store')}}",
-                pick: '#btn-add-image',
-                // 只允许选择图片文件。
-                accept: {
-                    title: 'Images',
-                    extensions: 'gif,jpg,jpeg,bmp,png',
-                    mimeTypes: 'image/*'
-                },
-                formData:{
-                    _token:'{{csrf_token()}}',
-                    product_id: '{{$product->id}}',
-                    resource_type: 'image'
-                }
-            });
-
-            image_uploader.on( 'uploadProgress', function( file, percentage ) {
-                $('#image_upload_progress_box').show();
-                $percent = $('#image_upload_progress_box').find('.progress-bar');
-                $percent.css( 'width', percentage * 100 + '%' );
-            });
-
-            image_uploader.on( 'uploadSuccess', function(file, response) {
-                if(response.error == 0){
-                    data = response.data;
-                    id = data.id;
-                    source_url = data.source_url
-                    priority = data.priority;
-                    list = $('#image_panel tbody');
-                    list.append( 
-                        "<tr id='img_resource_"+ id +"'>" +
-                            "<td><img src='"+ source_url +"' width='50' height='50'></td>" + 
-                            "<td><a>" + source_url + "</a></td>" +    
-                            "<td>"+ priority +"</td>" +
-                            "<td><button class='btn btn-white' onclick='deleteItem(" + id + ")'><i class='fa fa-trash'></i> </button></td>"+
-                        "</tr>"
-                    );
-
-                    alert('添加成功');
-                }else{
-                    $('#image_upload_progress_box').hide();
-                    alert(response.message);
-                }
-            });
-
-            image_uploader.on( 'uploadError', function( file ) {
-                $('#image_upload_progress_box').hide();
-                alert('上传出错');
-            });
-
-            image_uploader.on( 'uploadComplete', function( file ) {
-                $('#image_upload_progress_box').fadeOut();
-                $percent = $('#image_upload_progress_box').find('.progress-bar');
-                $percent.css( 'width', '0%' );
-            });
-
-
-            var video_uploader = WebUploader.create({
-
-                // 选完文件后，是否自动上传。
-                auto: true,
-                swf: "{{asset('vendor/webuploader/Uploader.swf')}}",
-                server: "{{route('merchant.product.resource.store')}}",
-                pick: '#btn-add-video',
-                accept: {
-                    title: 'Video',
-                    mimeTypes: 'video/*'
-                },
-                formData:{
-                    _token:'{{csrf_token()}}',
-                    product_id: '{{$product->id}}',
-                    resource_type: 'video'
-                }
-            });
-
-            video_uploader.on( 'uploadProgress', function( file, percentage ) {
-                $('#video_upload_progress_box').show();
-                $percent = $('#video_upload_progress_box').find('.progress-bar');
-                $percent.css( 'width', percentage * 100 + '%' );
-            });
-
-            video_uploader.on( 'uploadSuccess', function(file, response) {
-                if(response.error == 0){
-                    data = response.data;
-                    id = data.id;
-                    source_url = data.source_url
-                    priority = data.priority;
-                    list = $('#video_panel tbody');
-                    list.append( 
-                        "<tr id='img_resource_"+ id +"'>" +
-                            "<td><a>" + source_url + "</a></td>" +    
-                            "<td><button class='btn btn-white' onclick='deleteItem(" + id + ")'><i class='fa fa-trash'></i> </button></td>"+
-                        "</tr>"
-                    );
-                    alert('添加成功');
-                }else{
-                    $('#video_upload_progress_box').hide();
-                    alert(response.message);
-                }
-            });
-
-            video_uploader.on( 'uploadError', function( file ) {
-                $('#video_upload_progress_box').hide();
-                alert('上传出错');
-            });
-
-            video_uploader.on( 'uploadComplete', function( file ) {
-                $('#video_upload_progress_box').fadeOut();
-                $percent = $('#video_upload_progress_box').find('.progress-bar');
-                $percent.css( 'width', '0%' );
-            });
-
+        $('a[data-toggle="tab"]').on('shown.bs.tab',function(e){
+            var target = e.target.toString();
+            if(target.indexOf('tab-2')>0){
+                image_uploader.refresh();
+            }else if(target.indexOf('tab-3')>0){
+                video_uploader.refresh();
+            }
         });
 
+
+        var image_uploader = WebUploader.create({
+
+            // 选完文件后，是否自动上传。
+            auto: true,
+            swf: "{{asset('vendor/webuploader/Uploader.swf')}}",
+            server: "{{route('merchant.style.resource.store')}}",
+            pick: '#btn-add-image',
+            // 只允许选择图片文件。
+            accept: {
+                title: 'Images',
+                extensions: 'gif,jpg,jpeg,bmp,png',
+                mimeTypes: 'image/*'
+            },
+            formData:{
+                _token:'{{csrf_token()}}',
+                style_id: '{{$style->id}}',
+                resource_type: 'image'
+            }
+        });
+
+        image_uploader.on( 'uploadProgress', function( file, percentage ) {
+            $('#image_upload_progress_box').show();
+            $percent = $('#image_upload_progress_box').find('.progress-bar');
+            $percent.css( 'width', percentage * 100 + '%' );
+        });
+
+        image_uploader.on( 'uploadSuccess', function(file, response) {
+            if(response.error == 0){
+                data = response.data;
+                id = data.id;
+                source_url = data.source_url
+                priority = data.priority;
+                list = $('#image_panel tbody');
+                list.append( 
+                    "<tr id='img_resource_"+ id +"'>" +
+                        "<td><img src='"+ source_url +"' width='50' height='50'></td>" + 
+                        "<td><a>" + source_url + "</a></td>" +    
+                        "<td>"+ priority +"</td>" +
+                        "<td><button class='btn btn-white' onclick='deleteItem(" + id + ")'><i class='fa fa-trash'></i> </button></td>"+
+                    "</tr>"
+                );
+                alert('添加成功');
+            }else{
+                $('#image_upload_progress_box').hide();
+                alert(response.message);
+            }
+        });
+
+        image_uploader.on( 'uploadError', function( file ) {
+            $('#image_upload_progress_box').hide();
+            alert('上传出错');
+        });
+
+        image_uploader.on( 'uploadComplete', function( file ) {
+            $('#image_upload_progress_box').fadeOut();
+            $percent = $('#image_upload_progress_box').find('.progress-bar');
+            $percent.css( 'width', '0%' );
+        });
+
+
+        var video_uploader = WebUploader.create({
+
+            // 选完文件后，是否自动上传。
+            auto: true,
+            swf: "{{asset('vendor/webuploader/Uploader.swf')}}",
+            server: "{{route('merchant.style.resource.store')}}",
+            pick: '#btn-add-video',
+            accept: {
+                title: 'Video',
+                mimeTypes: 'video/*'
+            },
+            formData:{
+                _token:'{{csrf_token()}}',
+                style_id: '{{$style->id}}',
+                resource_type: 'video'
+            }
+        });
+
+        video_uploader.on( 'uploadProgress', function( file, percentage ) {
+            $('#video_upload_progress_box').show();
+            $percent = $('#video_upload_progress_box').find('.progress-bar');
+            $percent.css( 'width', percentage * 100 + '%' );
+        });
+
+        video_uploader.on( 'uploadSuccess', function(file, response) {
+            if(response.error == 0){
+                data = response.data;
+                id = data.id;
+                source_url = data.source_url
+                priority = data.priority;
+                list = $('#video_panel tbody');
+                list.append( 
+                    "<tr id='img_resource_"+ id +"'>" +
+                        "<td><a>" + source_url + "</a></td>" +    
+                        "<td><button class='btn btn-white' onclick='deleteItem(" + id + ")'><i class='fa fa-trash'></i> </button></td>"+
+                    "</tr>"
+                );
+                alert('添加成功');
+            }else{
+                $('#video_upload_progress_box').hide();
+                alert(response.message);
+            }
+        });
+
+        video_uploader.on( 'uploadError', function( file ) {
+            $('#video_upload_progress_box').hide();
+            alert('上传出错');
+        });
+
+        video_uploader.on( 'uploadComplete', function( file ) {
+            $('#video_upload_progress_box').fadeOut();
+            $percent = $('#video_upload_progress_box').find('.progress-bar');
+            $percent.css( 'width', '0%' );
+        });
+
+        
         $('#btn-commit').click(function(){
             var formData = new FormData($('#dataForm')[0]);
             $.ajax({
-                type : 'patch',
-                url : "{{route('merchant.product.update',$product->id)}}",
+                type : 'post',
+                url : "{{route('merchant.style.update',$style->id)}}",
                 headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                 dataType : 'json',
                 processData: false,
@@ -324,7 +332,7 @@
                 success : function(data,textStatus,jqXHR){
                     if(data.error == 0){
                         alert('修改成功');
-                        window.location.href = "{{route('merchant.product.index')}}";
+                        window.location.href = "{{route('merchant.style.index')}}";
                     }else{
                         alert(data.message);
                     }
@@ -333,7 +341,7 @@
         });
         
         $('#btn-cancel').click(function(){
-            window.location.href = "{{route('merchant.product.index')}}";
+            window.location.href = "{{route('merchant.style.index')}}";
         });
 
         function deleteItem(id)
@@ -341,7 +349,7 @@
             if(confirm('确认删除?')){
                 $.ajax({
                     type : 'delete',
-                    url : "{{env('APP_URL')}}/merchant/management/products/resources/"+id,
+                    url : "{{env('APP_URL')}}/merchant/management/styles/resources/"+id,
                     contentType : 'application/json;charset=UTF-8',
                     headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
                     dataType : 'json',

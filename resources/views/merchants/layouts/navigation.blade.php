@@ -25,11 +25,7 @@
    
             @can('新品管理')
             <li>
-                <a href="#"><i class="fa fa-th-large"></i> <span class="nav-label">新品管理</span> <span class="fa arrow"></span></a>
-                <ul class="nav nav-second-level">
-                    <li><a href="{{route('merchant.product.index')}}">新品列表</a></li>
-                    <li><a href="{{route('merchant.product.create')}}">添加新品</a></li>
-                </ul>
+                <a href="{{route('merchant.product.index')}}"><i class="fa fa-th-large"></i> <span class="nav-label">新品管理</span></a>
             </li>
             @endcan
 
@@ -38,9 +34,7 @@
                 <a href="#"><i class="fa fa-th-large"></i> <span class="nav-label">空间管理</span> <span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
                     <li><a href="{{route('merchant.space.category.index')}}">空间分类</a></li>
-                    <li><a href="{{route('merchant.space.category.create')}}">添加分类</a></li>
                     <li><a href="{{route('merchant.space.index')}}">空间列表</a></li>
-                    <li><a href="{{route('merchant.space.create')}}">添加空间</a></li>
                 </ul>
             </li>
             @endcan
@@ -51,9 +45,7 @@
                 <a href="#"><i class="fa fa-th-large"></i> <span class="nav-label">风格管理</span> <span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
                     <li><a href="{{route('merchant.style.category.index')}}">风格分类</a></li>
-                    <li><a href="{{route('merchant.style.category.create')}}">添加分类</a></li>
                     <li><a href="{{route('merchant.style.index')}}">风格列表</a></li>
-                    <li><a href="{{route('merchant.style.create')}}">添加风格</a></li>
                 </ul>
             </li>
             @endcan

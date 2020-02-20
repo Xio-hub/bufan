@@ -154,8 +154,8 @@ class SpaceController extends Controller
         $merchant = Auth::guard('merchant')->user();
         $categories = $merchant->spaceCategories;
         $space = Space::findOrFail($id);
-        $image_resources = SpaceResource::where(['merchant_id'=> $merchant->id,'source_type' => 'image'])->orderBy('priority','asc')->get();
-        $video_resources = SpaceResource::where(['merchant_id'=> $merchant->id,'source_type' => 'video'])->orderBy('priority','asc')->get();
+        $image_resources = SpaceResource::where(['space_id'=> $id,'source_type' => 'image'])->orderBy('priority','asc')->get();
+        $video_resources = SpaceResource::where(['space_id'=> $id,'source_type' => 'video'])->orderBy('priority','asc')->get();
         if($merchant->can('edit', $space)){
             return view('merchants.spaces.edit')->with([
                 'categories' => $categories,
@@ -177,7 +177,58 @@ class SpaceController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $id = $request->id;
+        $name = $request->input('name','');
+        $detail_type = $request->input('detail_type','');
+        $hotspot = $request->input('hotspot','');
+
+        if($name == ''){
+            $error = 1;
+            $message = '请输入风格名称';
+            return response()->json(compact('error','message'));
+        }
+
+        $cover = '';
+        if ($request->hasFile('cover')) {
+            $cover =  $request->cover->store('images/styles/cover');
+        }
+
+        $background_music = '';
+        if ($request->hasFile('background_music')) {
+            $background_music =  $request->background_music->store('audios/background_musics');
+        }
+
+        try{
+            $space = Space::findOrFail($id);
+
+            DB::beginTransaction();
+            $merchant = Auth::guard('merchant')->user();
+
+            $space->name = $name;
+            $space->hotspot = $hotspot;
+            $space->type = $detail_type;
+            
+            if($cover != ''){
+                $space->cover = $cover;
+            }
+
+            if($background_music != ''){
+                $space->background_music = $background_music;
+            }
+
+            $space->save();
+
+            DB::commit();
+            $error = 0;
+            $message = 'success';
+        }catch(Exception $e){
+            DB::rollBack();
+            $error = 1;
+            $message = '修改失败，请稍后再试或联系管理员';
+            Log::error($e);
+        }finally{
+            return response()->json(compact('error','message'));
+        }
     }
 
     /**
