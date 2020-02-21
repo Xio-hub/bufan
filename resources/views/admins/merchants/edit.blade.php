@@ -29,21 +29,27 @@
 
                         <div class="form-group  row">
                             <label class="col-sm-2 col-form-label">顶部logo</label>
-                            <div class="fileinput fileinput-new" data-provides="fileinput">
+                            <div class="fileinput fileinput-new col-md-2" data-provides="fileinput">
                                 <span class="btn btn-default btn-file"><span class="fileinput-new">Select file</span>
                                 <span class="fileinput-exists">Change</span><input type="file" name="top_logo"/></span>
                                 <span class="fileinput-filename"></span>
                                 <a href="#" class="close fileinput-exists" data-dismiss="fileinput" style="float: none">×</a>
-                            </div> 
+                            </div>
+                            @if($merchant_base->top_logo != '')
+                                <div><img src="{{Storage::url($merchant_base->top_logo)}}" width='50' height='50'></div> 
+                            @endif
                         </div>
                         <div class="hr-line-dashed"></div>
                         <div class="form-group  row"><label class="col-sm-2 col-form-label">侧边logo</label>
-                            <div class="fileinput fileinput-new" data-provides="fileinput">
+                            <div class="fileinput fileinput-new col-md-2" data-provides="fileinput">
                                 <span class="btn btn-default btn-file"><span class="fileinput-new">Select file</span>
                                 <span class="fileinput-exists">Change</span><input type="file" name="sitebar_logo"/></span>
                                 <span class="fileinput-filename"></span>
                                 <a href="#" class="close fileinput-exists" data-dismiss="fileinput" style="float: none">×</a>
-                            </div> 
+                            </div>
+                            @if($merchant_base->sitebar_logo != '')
+                            <div><img src="{{Storage::url($merchant_base->sitebar_logo)}}" width='50' height='50'></div> 
+                            @endif
                         </div>
                         <div class="hr-line-dashed"></div>
 

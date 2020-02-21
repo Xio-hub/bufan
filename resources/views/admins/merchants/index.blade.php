@@ -12,14 +12,16 @@
         <div class="col-lg-12">
             <div class="ibox ">
                 <div class="ibox-title">
-                    <h5>商家列表</h5>
+                    <div class = 'row'>
+                        <span class='col-md-1'><h5>商家列表</h5></span>
+                        <a class='btn btn-w-m btn-success' href="{{route('merchants.create')}}">添加商家</a>
+                    </div>
                 </div>
                 <div class="ibox-content">
                         <table class="table table-striped table-bordered table-hover dataTables-example" >
                             <thead>
                             <tr>
                                 <th>id</th>
-                                <th>merchant_id</th>
                                 <th>name</th>
                                 <th>optoions</th>
                             </tr>
@@ -63,10 +65,6 @@
                         "render" : function (data, type, row, meta) {
                             return meta.row + 1 + meta.settings._iDisplayStart; //切换分页序号 也自动叠加
                         }
-                    },
-                    { 
-                        "data": "merchant_id",
-                        "title" : "商家ID"
                     },
                     {
                         "data": "name" ,

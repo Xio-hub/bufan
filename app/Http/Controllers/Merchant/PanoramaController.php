@@ -55,9 +55,11 @@ class PanoramaController extends Controller
      */
     public function store(Request $request)
     {
-        $style = $request->input('style', '');
-        $material = $request->input('material', '');
-        $panorama = $request->input('panorama', '');
+        $style = $request->input('style', '') ?? '';
+        $material = $request->input('material', '') ?? '';
+        $panorama = $request->input('panorama', '') ?? '';
+        $source_type = $request->input('source_type','') ?? '';
+        $panorama_link = $request->input('panorama_link','') ?? '';
 
         if($style == ''){
             $error = 1;
@@ -71,9 +73,20 @@ class PanoramaController extends Controller
             return response()->json(compact('error','message'));
         }
 
-        if($panorama == ''){
+        if($panorama == '' && $panorama_link == ''){
             $error = 1;
-            $message = '请上传全景图';
+            $message = '请上传全景图 或输入全景链接';
+            return response()->json(compact('error','message'));
+        }
+
+        $source_url = '';
+        if($source_type == 'image'){
+            $source_url = $panorama;
+        }else if($source_type == 'link'){
+            $source_url = $panorama_link;
+        }else{
+            $error = 1;
+            $message = '请选择类型';
             return response()->json(compact('error','message'));
         }
 
@@ -83,7 +96,8 @@ class PanoramaController extends Controller
                 'merchant_id' => $merchant->id,
                 'style_id' => $style,
                 'material_id' => $material,
-                'source_url' => $panorama,
+                'source_url' => $source_url,
+                'source_type' => $source_type
             ]);
             $error = 0;
             $message = 'success';

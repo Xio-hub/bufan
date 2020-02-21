@@ -46,22 +46,34 @@
                         </div>
                         <div class="hr-line-dashed"></div>
 
+                        <div class="form-group  row">
+                            <label class="col-sm-2 col-form-label">产品展示类型</label>
+                            <div class="col-sm-5">
+                                <div class="i-checks"><label> <input type="radio" id="image_type" value="image" name="source_type" checked> <i></i>全景图</label></div>
+                                <div class="i-checks"><label> <input type="radio" id="link_type" value="link" name="source_type"> <i></i>全景连接</label></div>
+                            </div>
+                        </div>
+
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">全景图</label>
                             <div class='col-sm-5'>
-       
-                                    <div class="dropzone" id="image_box">
-                                        <div class="fallback">
-                                            <input name="file" type="file" />
-                                        </div>
+                                <div class="dropzone" id="image_box">
+                                    <div class="fallback">
+                                        <input name="file" type="file" />
                                     </div>
+                                </div>
+
+                                <div id="link_box" style="display: none">
+                                    <div class="col-sm-12"><input type="text" class="form-control" name='panorama_link'></div>
+                                </div>
                             </div>
+
                         </div>
                         <div class="hr-line-dashed"></div>
 
                         <div class="form-group row">
                             <div class="col-sm-4 col-sm-offset-2">
-                                <a class="btn btn-white btn-lg" id='btn-cancel'>Cancel</a>
+                                <a class="btn btn-white btn-lg" id='btn-cancel'>取消</a>
                                 <a class="btn btn-primary btn-lg" id="btn-commit">确认</a>
                             </div>
                         </div>
@@ -73,9 +85,27 @@
 @endsection
 
 @section('scripts')
+    <script src="{{asset('js/plugins/jasny/jasny-bootstrap.min.js')}}"></script>
     <script src="{{asset('js/plugins/dropzone/dropzone.js')}}"></script>
     <script src="{{asset('js/plugins/iCheck/icheck.min.js')}}"></script>
     <script>
+        $(document).ready(function () {
+            $('.i-checks').iCheck({
+                checkboxClass: 'icheckbox_square-green',
+                radioClass: 'iradio_square-green',
+            });
+
+            $('#image_type').on('ifChecked', function(event){ //ifCreated 事件应该在插件初始化之前绑定 
+                $('#link_box').css('display','none');
+                $('#image_box').css('display','block'); 
+            }); 
+
+            $('#link_type').on('ifChecked', function(event){ //ifCreated 事件应该在插件初始化之前绑定 
+                $('#image_box').css('display','none'); 
+                $('#link_box').css('display','block'); 
+            }); 
+        });
+
         $("#image_box").dropzone({
             acceptedFiles: 'image/*',
             params:{'_token':$('meta[name="csrf-token"]').attr('content')},

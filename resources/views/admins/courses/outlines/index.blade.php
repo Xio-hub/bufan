@@ -12,7 +12,10 @@
         <div class="col-lg-12">
             <div class="ibox ">
                 <div class="ibox-title">
-                    <h5>课程大纲</h5>
+                    <div class = 'row'>
+                        <span class='col-md-1'><h5>课程大纲</h5></span>
+                        <a class='btn btn-w-m btn-success' href="{{route('courses.outline.create')}}">添加大纲</a>
+                    </div>
                 </div>
                 <div class="ibox-content">
                         <table class="table table-striped table-bordered table-hover" id='dataTables-products' >

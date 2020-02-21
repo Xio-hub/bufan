@@ -31,14 +31,14 @@ class ProductController extends Controller
     {
         $id = $request->id;
 
-        $data = $product->select('id','name','background_music','hotspot')
+        $data = $product->select('id','name','type','background_music','hotspot')
                         ->where(['id' => $id])
                         ->first();
 
         if($data){
             $data = $data->toArray();
             $resources = $product_resource->select('source_type as type','source_url')
-                            ->where(['product_id' => $id])    
+                            ->where(['product_id' => $id,'source_type' => $data['type']])    
                             ->orderBy('priority', 'asc')
                             ->get()
                             ->toArray();

@@ -21,7 +21,7 @@
 
                         <div class="form-group  row">     
                             <label class="col-sm-2 col-form-label">价格</label>
-                            <div class="col-sm-5"><input type="text" class="form-control" min='0' value="{{$course->price}}"></div>
+                            <div class="col-sm-5"><input type="text" class="form-control" min='0' name='price' value="{{$course->price}}"></div>
                         </div>
                         <div class="hr-line-dashed"></div>
 

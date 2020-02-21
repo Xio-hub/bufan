@@ -12,7 +12,10 @@
         <div class="col-lg-12">
             <div class="ibox ">
                 <div class="ibox-title">
-                    <h5>俯视图列表</h5>
+                    <div class = 'row'>
+                        <span class='col-md-1'><h5>俯视图列表</h5></span>
+                        <a class='btn btn-w-m btn-success' href="{{route('merchant.panorama.single_space.create')}}">添加俯视图</a>
+                    </div>
                 </div>
                 <div class="ibox-content">
                         <table class="table table-striped table-bordered table-hover" id='dataTables-products' >

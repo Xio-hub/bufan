@@ -77,14 +77,14 @@ class StyleController extends Controller
     {
         $id = $request->id;
 
-        $data = $style->select('id','name','background_music','hotspot')
+        $data = $style->select('id','name','type','background_music','hotspot')
                         ->where(['id' => $id])
                         ->first();
 
         if($data){
             $data = $data->toArray();
             $resources = $style_resource->select('source_type as type','source_url')
-                            ->where(['style_id' => $id])    
+                            ->where(['style_id' => $id, 'source_type' => $data['type']])    
                             ->orderBy('priority', 'asc')
                             ->get()
                             ->toArray();

@@ -16,94 +16,132 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="tabs-container">
-                        <ul class="nav nav-tabs">
-                            <li><a class="nav-link active" data-toggle="tab" href="#tab-1">商品信息</a></li>
-                            <li><a class="nav-link" data-toggle="tab" href="#tab-2">商品详细(图片)</a></li>
-                            <li><a class="nav-link" data-toggle="tab" href="#tab-3">商品详细(视频)</a></li>
-                        </ul>
-                        <div class="tab-content">
-                            <div id="tab-1" class="tab-pane active">
-                                <div class="panel-body">
+                    <ul class="nav nav-tabs">
+                        <li><a class="nav-link active" data-toggle="tab" href="#tab-1">商品信息</a></li>
+                        <li><a class="nav-link" data-toggle="tab" href="#tab-2">商品详细(图片)</a></li>
+                        <li><a class="nav-link" data-toggle="tab" href="#tab-3">商品详细(视频)</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div id="tab-1" class="tab-pane active">
+                            <div class="panel-body">
 
-                                    <fieldset>
-                                        <form id='dataForm'>
-                                            <div class="form-group  row">
-                                                <label class="col-sm-2 col-form-label">新品名称</label>
-                                                <div class="col-sm-5"><input type="text" class="form-control" name='name' value="{{$product->name}}"></div>
-                                            </div>
-                                            <div class="hr-line-dashed"></div>
+                                <fieldset>
+                                    <form id='dataForm'>
+                                        <div class="form-group  row">
+                                            <label class="col-sm-2 col-form-label">新品名称</label>
+                                            <div class="col-sm-5"><input type="text" class="form-control" name='name' value="{{$product->name}}"></div>
+                                        </div>
+                                        <div class="hr-line-dashed"></div>
 
-                                            <div class="form-group  row"><label class="col-sm-2 col-form-label">产品封面</label>
-                                                <div class="fileinput fileinput-new" data-provides="fileinput">
-                                                    <span class="btn btn-default btn-file"><span class="fileinput-new">Select file</span>
-                                                    <span class="fileinput-exists">Change</span><input type="file" name="cover" accept="image/*"/></span>
-                                                    <span class="fileinput-filename"></span>
-                                                    <a href="#" class="close fileinput-exists" data-dismiss="fileinput" style="float: none">×</a>
-                                                </div> 
-                                            </div>
-                                            <div class="hr-line-dashed"></div>
+                                        <div class="form-group  row"><label class="col-sm-2 col-form-label">产品封面</label>
+                                            <div class="fileinput fileinput-new" data-provides="fileinput">
+                                                <span class="btn btn-default btn-file"><span class="fileinput-new">Select file</span>
+                                                <span class="fileinput-exists">Change</span><input type="file" name="cover" accept="image/*"/></span>
+                                                <span class="fileinput-filename"></span>
+                                                <a href="#" class="close fileinput-exists" data-dismiss="fileinput" style="float: none">×</a>
+                                            </div> 
+                                        </div>
+                                        <div class="hr-line-dashed"></div>
 
-                                            <div class="form-group  row">
-                                                <label class="col-sm-2 col-form-label">热点连接</label>
-                                                <div class="col-sm-5"><input type="url" class="form-control" name='hotspot' value="{{$product->hotspot}}"></div>
-                                            </div>
-                                            <div class="hr-line-dashed"></div>
-                    
-                                            <div class="form-group  row"><label class="col-sm-2 col-form-label">背景音乐</label>
-                                                <div class="fileinput fileinput-new" data-provides="fileinput">
-                                                    <span class="btn btn-default btn-file"><span class="fileinput-new">Select file</span>
-                                                    <span class="fileinput-exists">Change</span><input type="file" name="background_music" accept="audio/*"/></span>
-                                                    <span class="fileinput-filename"></span>
-                                                    <a href="#" class="close fileinput-exists" data-dismiss="fileinput" style="float: none">×</a>
-                                                </div> 
-                                            </div>
+                                        <div class="form-group  row">
+                                            <label class="col-sm-2 col-form-label">热点连接</label>
+                                            <div class="col-sm-5"><input type="url" class="form-control" name='hotspot' value="{{$product->hotspot}}"></div>
+                                        </div>
+                                        <div class="hr-line-dashed"></div>
+                
+                                        <div class="form-group  row"><label class="col-sm-2 col-form-label">背景音乐</label>
+                                            <div class="fileinput fileinput-new" data-provides="fileinput">
+                                                <span class="btn btn-default btn-file"><span class="fileinput-new">Select file</span>
+                                                <span class="fileinput-exists">Change</span><input type="file" name="background_music" accept="audio/*"/></span>
+                                                <span class="fileinput-filename"></span>
+                                                <a href="#" class="close fileinput-exists" data-dismiss="fileinput" style="float: none">×</a>
+                                            </div> 
+                                        </div>
 
-                                            <div class="form-group  row">
-                                                <label class="col-sm-2 col-form-label">产品展示类型</label>
-                                                <div class="col-sm-5">
-                                                    <div class="i-checks"><label> <input type="radio" id="image_type" value="image" name="detail_type" @if($product->type == 'image') checked @endif> <i></i>图片</label></div>
-                                                    <div class="i-checks"><label> <input type="radio" id="video_type" value="video" name="detail_type" @if($product->type == 'video') checked @endif> <i></i>视频</label></div>
-                                                </div>
+                                        <div class="form-group  row">
+                                            <label class="col-sm-2 col-form-label">产品展示类型</label>
+                                            <div class="col-sm-5">
+                                                <div class="i-checks"><label> <input type="radio" id="image_type" value="image" name="detail_type" @if($product->type == 'image') checked @endif> <i></i>图片</label></div>
+                                                <div class="i-checks"><label> <input type="radio" id="video_type" value="video" name="detail_type" @if($product->type == 'video') checked @endif> <i></i>视频</label></div>
                                             </div>
+                                        </div>
 
-                                            <div class="hr-line-dashed"></div>
-                                            <div class="form-group row">
-                                                <div class="col-sm-4 col-sm-offset-2">
-                                                    <a class="btn btn-white btn-lg" id='btn-cancel'>取消</a>
-                                                    <a class="btn btn-primary btn-lg" id="btn-commit">确认</a>
-                                                </div>
+                                        <div class="hr-line-dashed"></div>
+                                        <div class="form-group row">
+                                            <div class="col-sm-4 col-sm-offset-2">
+                                                <a class="btn btn-white btn-lg" id='btn-cancel'>取消</a>
+                                                <a class="btn btn-primary btn-lg" id="btn-commit">确认</a>
                                             </div>
-                                        </form>               
-                                    </fieldset>
+                                        </div>
+                                    </form>               
+                                </fieldset>
 
-                                </div>
                             </div>
-                           
-                            <div id="tab-2" class="tab-pane">
-                                <div class="panel-body">
+                        </div>
+                        
+                        <div id="tab-2" class="tab-pane">
+                            <div class="panel-body">
 
-                                    <div class="table-responsive">
-                                        <table class="table table-bordered table-stripped" id='image_panel'>
-                                            <thead>
-                                            <tr>
-                                                <th>图片预览</th>
-                                                <th>图片地址</th>
-                                                <th>展示优先级</th>
-                                                <th>操作</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            @foreach ($image_resources as $i => $item)
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-stripped" id='image_panel'>
+                                        <thead>
+                                        <tr>
+                                            <th>图片预览</th>
+                                            <th>图片地址</th>
+                                            <th>展示优先级</th>
+                                            <th>操作</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        @foreach ($image_resources as $i => $item)
+
+                                        <tr id='img_resource_{{$item->id}}'>
+                                            <td>
+                                                <img src="{{Storage::url($item->source_url)}}" width='50' height='50'>
+                                            </td>
+                                            <td>
+                                                <a>{{Storage::url($item->source_url)}}</a>
+                                            </td>    
+                                            <td>
+                                                {{$item->priority}}
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-white" onclick="deleteItem({{$item->id}})"><i class="fa fa-trash"></i> </button>
+                                            </td>
+                                        </tr>
+                                            
+                                        @endforeach
+                                        
+                                        </tbody>
+                                    </table>
+                                    <div id='image_upload_progress_box' class="progress" style='display:none'>
+                                        <div class="progress-bar progress-bar-striped progress-bar-animated progress-bar-success" role="progressbar" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                                <div style='margin-top:2rem'>
+                                    <div id='btn-add-image'>添加图片</div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div id="tab-3" class="tab-pane">
+                            <div class="panel-body">
+
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-stripped" id='video_panel'>
+                                        <thead>
+                                        <tr>
+                                            <th>视频地址</th>
+                                            <th>操作</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($video_resources as $i => $item)
 
                                             <tr id='img_resource_{{$item->id}}'>
                                                 <td>
-                                                    <img src="{{Storage::url($item->source_url)}}" width='50' height='50'>
-                                                </td>
-                                                <td>
-                                                    <a>{{Storage::url($item->source_url)}}</a>
-                                                </td>    
-                                                <td>
-                                                    {{$item->priority}}
+                                                    <input type="text" class="form-control" disabled value="{{Storage::url($item->source_url)}}">
                                                 </td>
                                                 <td>
                                                     <button class="btn btn-white" onclick="deleteItem({{$item->id}})"><i class="fa fa-trash"></i> </button>
@@ -111,57 +149,19 @@
                                             </tr>
                                                 
                                             @endforeach
-                                            
-                                            </tbody>
-                                        </table>
-                                        <div id='image_upload_progress_box' class="progress" style='display:none'>
-                                            <div class="progress-bar progress-bar-striped progress-bar-animated progress-bar-success" role="progressbar" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
-                                        </div>
+                                        
+                                        </tbody>
+                                    </table>
+                                    <div id='video_upload_progress_box' class="progress" style='display:none'>
+                                        <div class="progress-bar progress-bar-striped progress-bar-animated progress-bar-success" role="progressbar" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
                                     </div>
-                                    <div style='margin-top:2rem'>
-                                        <div id='btn-add-image'>添加图片</div>
-                                    </div>
-
                                 </div>
-                            </div>
-
-                            <div id="tab-3" class="tab-pane">
-                                <div class="panel-body">
-
-                                    <div class="table-responsive">
-                                        <table class="table table-bordered table-stripped" id='video_panel'>
-                                            <thead>
-                                            <tr>
-                                                <th>视频地址</th>
-                                                <th>操作</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach ($video_resources as $i => $item)
-
-                                                <tr id='img_resource_{{$item->id}}'>
-                                                    <td>
-                                                        <input type="text" class="form-control" disabled value="{{Storage::url($item->source_url)}}">
-                                                    </td>
-                                                    <td>
-                                                        <button class="btn btn-white" onclick="deleteItem({{$item->id}})"><i class="fa fa-trash"></i> </button>
-                                                    </td>
-                                                </tr>
-                                                    
-                                                @endforeach
-                                            
-                                            </tbody>
-                                        </table>
-                                        <div id='video_upload_progress_box' class="progress" style='display:none'>
-                                            <div class="progress-bar progress-bar-striped progress-bar-animated progress-bar-success" role="progressbar" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
-                                        </div>
-                                    </div>
-                                    <div style='margin-top:2rem'>
-                                        <div id='btn-add-video'>添加视频</div>
-                                    </div>
+                                <div style='margin-top:2rem'>
+                                    <div id='btn-add-video'>添加视频</div>
                                 </div>
                             </div>
                         </div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -32,16 +32,10 @@
             </li>
             @endhasrole
 
-            <!-- admin -->
-            {{-- @can('1') --}}
+
             <li>
-                <a href="#"><i class="fa fa-th-large"></i> <span class="nav-label">商家管理</span> <span class="fa arrow"></span></a>
-                <ul class="nav nav-second-level">
-                    <li><a href="{{route('merchants.index')}}">商家列表</a></li>
-                    <li><a href="{{route('merchants.create')}}">添加商家</a></li>
-                </ul>
+                <a href="{{route('merchants.index')}}"><i class="fa fa-th-large"></i>商家管理</a>
             </li>
-            {{-- @endcan --}}
 
             <li>
                 <a href="#"><i class="fa fa-th-large"></i> <span class="nav-label">课程管理</span> <span class="fa arrow"></span></a>
@@ -51,7 +45,6 @@
                     <li><a href="{{route('courses.teacher.edit')}}">讲师介绍</a></li>
                     <li><a href="{{route('courses.price.edit')}}">课程价格</a></li>
                     <li><a href="{{route('courses.outline.index')}}">大纲列表</a></li>
-                    <li><a href="{{route('courses.outline.create')}}">添加大纲</a></li>
                 </ul>
             </li>
 

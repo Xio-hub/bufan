@@ -46,7 +46,7 @@ class CourseController extends Controller
 
         if(!$info && !$teacher_info && !$price && !$background){
             $error = 1;
-            $message = '参数不能为空';
+            $message = '参数错误';
             return response()->json(compact('error', 'message'));
         }
 

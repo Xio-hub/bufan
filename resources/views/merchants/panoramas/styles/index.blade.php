@@ -12,7 +12,10 @@
         <div class="col-lg-12">
             <div class="ibox ">
                 <div class="ibox-title">
-                    <h5>风格列表</h5>
+                    <div class = 'row'>
+                        <span class='col-md-1'><h5>全景风格列表</h5></span>
+                        <a class='btn btn-w-m btn-success' href="{{route('merchant.panorama.style.create')}}">添加风格</a>
+                    </div>
                 </div>
                 <div class="ibox-content">
                         <table class="table table-striped table-bordered table-hover" id='dataTables-products' >
