@@ -83,6 +83,7 @@ class SpaceController extends Controller
 
         if($data){
             $data = $data->toArray();
+            $data['background_music'] = $data['background_music'] ? Storage::url($data['background_music']) : '';
             $resources = $space_resource->select('source_type as type','source_url')
                             ->where(['space_id' => $id,'source_type' => $data['type']])    
                             ->orderBy('priority', 'asc')
