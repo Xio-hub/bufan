@@ -125,11 +125,13 @@ class ProductController extends Controller
         $product = Product::findOrFail($id);
         $image_resources = ProductResource::where(['product_id'=> $id,'source_type' => 'image'])->orderBy('priority','asc')->get();
         $video_resources = ProductResource::where(['product_id'=> $id,'source_type' => 'video'])->orderBy('priority','asc')->get();
+        $pdf_resources = ProductResource::where(['product_id'=> $id,'source_type' => 'pdf'])->orderBy('priority','asc')->get();
         if($merchant->can('edit', $product)){
             return view('merchants.products.edit')->with([
                 'product' => $product,
                 'image_resources' => $image_resources,
                 'video_resources' => $video_resources,
+                'pdf_resources' => $pdf_resources
             ]);
         }else{
             abort(404);

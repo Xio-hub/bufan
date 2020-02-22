@@ -23,11 +23,6 @@ class ProductResourceController extends Controller
         $resource_type = $request->input('resource_type', '') ?? '';
         $product_id = $request->input('product_id', '') ?? '';
         $upload_path = '';
-        if(!in_array($resource_type,['image','video']) or $product_id == ''){
-            $error = 1;
-            $message = '参数错误';
-            return response()->json(compact('error','message'));
-        }
 
         if($resource_type == 'image'){
             $upload_path = 'images/products/resources';
@@ -37,7 +32,7 @@ class ProductResourceController extends Controller
                 $message = '最多只能上传30张图片';
                 return response()->json(compact('error','message'));
             }
-        }else{
+        }elseif($resource_type == 'video'){
             $upload_path = 'videos/products/resources';
             $count = ProductResource::where(['product_id' => $product_id, 'source_type' => 'video'])->count();
             if($count == 1){
@@ -45,6 +40,18 @@ class ProductResourceController extends Controller
                 $message = '只能上传一个视频';
                 return response()->json(compact('error','message'));
             }
+        }elseif($resource_type == 'pdf'){
+            $upload_path = 'pdfs/products/resources';
+            $count = ProductResource::where(['product_id' => $product_id, 'source_type' => 'pdf'])->count();
+            if($count == 1){
+                $error = 1;
+                $message = '只能上传一个pdf';
+                return response()->json(compact('error','message'));
+            }
+        }else{
+            $error = 1;
+            $message = '参数错误';
+            return response()->json(compact('error','message'));
         }
 
         try{

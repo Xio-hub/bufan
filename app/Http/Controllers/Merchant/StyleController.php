@@ -162,16 +162,18 @@ class StyleController extends Controller
         $id = $request->id;
 
         $merchant = Auth::guard('merchant')->user();
-        $categories = $merchant->spaceCategories;
+        $categories = $merchant->styleCategories;
         $style = Style::findOrFail($id);
         $image_resources = StyleResource::where(['style_id'=> $id,'source_type' => 'image'])->orderBy('priority','asc')->get();
         $video_resources = StyleResource::where(['style_id'=> $id,'source_type' => 'video'])->orderBy('priority','asc')->get();
+        $pdf_resources = StyleResource::where(['style_id'=> $id,'source_type' => 'pdf'])->orderBy('priority','asc')->get();
         if($merchant->can('edit', $style)){
             return view('merchants.styles.edit')->with([
                 'categories' => $categories,
                 'style' => $style,
                 'image_resources' => $image_resources,
                 'video_resources' => $video_resources,
+                'pdf_resources' => $pdf_resources
             ]);
         }else{
             abort(404);

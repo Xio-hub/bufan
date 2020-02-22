@@ -41,14 +41,36 @@
                                                 <span class="fileinput-filename"></span>
                                                 <a href="#" class="close fileinput-exists" data-dismiss="fileinput" style="float: none">×</a>
                                             </div> 
+                                            @if($data->cover != '')
+                                            <div><img src="{{Storage::url($data->cover)}}" width='120' height='90'></div> 
+                                            @endif
+                                        </div>
+                                        <div class="hr-line-dashed"></div>
+
+                                        <div class="form-group  row">
+                                            <label class="col-sm-2 col-form-label">菜单别名</label>
+                                            <div class="col-sm-5">
+                                                @foreach($categories as $i => $category)
+                                                @if(!empty($category->alias))
+                                                <input type='text' class="form-control" date-cat-id='{{$category->id}}' name='alias[]' value='{{$category->alias}}' placeholder="{{$category->name}}">
+                                                @else
+                                                <input type='text' class="form-control" date-cat-id='{{$category->id}}' name='alias[]' value='{{$category->name}}' placeholder="{{$category->name}}">
+                                                @endif    
+                                                @endforeach
+                                            </div>
                                         </div>
                                         <div class="hr-line-dashed"></div>
                 
                                         <div class="form-group  row">
                                             <label class="col-sm-2 col-form-label">类型</label>
                                             <div class="col-sm-5">
-                                                <div class="i-checks"><label> <input type="radio" id="image_type" value="image" name="detail_type"> <i></i>图片</label></div>
-                                                <div class="i-checks"><label> <input type="radio" id="video_type" value="video" name="detail_type"> <i></i>视频</label></div>
+                                                @if($data->content_type == 'text')
+                                                <div class="i-checks"><label> <input type="radio" id="image_type" value="text" name="show_type" checked> <i></i>图文</label></div>
+                                                <div class="i-checks"><label> <input type="radio" id="video_type" value="video" name="show_type"> <i></i>视频</label></div>
+                                                @else
+                                                <div class="i-checks"><label> <input type="radio" id="image_type" value="text" name="show_type"> <i></i>图片</label></div>
+                                                <div class="i-checks"><label> <input type="radio" id="video_type" value="video" name="show_type" checked> <i></i>视频</label></div>
+                                                @endif
                                             </div>
                                         </div>
                                         <div class="hr-line-dashed"></div>
@@ -66,8 +88,15 @@
                         
                         <div id="tab-2" class="tab-pane">
                             <div class="panel-body">
-                                <div class="ibox-content no-padding">            
-                                    <textarea id="editor" type="text/plain" style="height:500px;" name='content'>{{$data->content}}</textarea>
+                                <div class="ibox-content">
+                                    <form id = 'textForm'> 
+                                        <input type='hidden' name='resource_type' value='text'>
+                                        <input type='hidden' name='index_id' value='{{$data->id}}'>
+                                        <textarea id="editor" type="text/plain" style="height:500px;" name='text_content'>{{$text_resource->content}}</textarea>
+                                    <div class="col-sm-4 col-sm-offset-2" style="margin-top:2rem">
+                                        <button class="btn btn-primary btn-lg" id="btn-save" type="button" onclick="saveText()">保存</button>
+                                    </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -84,9 +113,9 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                            {{-- @foreach ($video_resources as $i => $item)
+                                            @if($video_resource)
 
-                                            <tr id='img_resource_{{$item->id}}'>
+                                            <tr id='resource_{{$item->id}}'>
                                                 <td>
                                                     <input type="text" class="form-control" disabled value="{{Storage::url($item->source_url)}}">
                                                 </td>
@@ -95,8 +124,8 @@
                                                 </td>
                                             </tr>
                                                 
-                                            @endforeach
-                                         --}}
+                                            @endif
+                                        
                                         </tbody>
                                     </table>
                                     <div id='video_upload_progress_box' class="progress" style='display:none'>
@@ -128,7 +157,71 @@
             });
             
             var ue = UE.getEditor('editor');
+
+            
+            $('a[data-toggle="tab"]').on('shown.bs.tab',function(e){
+                var target = e.target.toString();
+                if(target.indexOf('tab-3')>0){
+                    video_uploader.refresh();
+                }
+            });
         });
+
+        var video_uploader = WebUploader.create({
+
+            // 选完文件后，是否自动上传。
+            auto: true,
+            swf: "{{asset('vendor/webuploader/Uploader.swf')}}",
+            server: "{{route('merchant.index.resource.store')}}",
+            pick: '#btn-add-video',
+            accept: {
+                title: 'Video',
+                mimeTypes: 'video/*'
+            },
+            formData:{
+                _token:'{{csrf_token()}}',
+                index_id: '{{$data->id}}',
+                resource_type: 'video'
+            }
+        });
+
+        video_uploader.on( 'uploadProgress', function( file, percentage ) {
+            $('#video_upload_progress_box').show();
+            $percent = $('#video_upload_progress_box').find('.progress-bar');
+            $percent.css( 'width', percentage * 100 + '%' );
+        });
+
+        video_uploader.on( 'uploadSuccess', function(file, response) {
+            if(response.error == 0){
+                data = response.data;
+                id = data.id;
+                source_url = data.source_url
+                priority = data.priority;
+                list = $('#video_panel tbody');
+                list.append( 
+                    "<tr id='resource_"+ id +"'>" +
+                        "<td><a>" + source_url + "</a></td>" +    
+                        "<td><button class='btn btn-white' onclick='deleteItem(" + id + ")'><i class='fa fa-trash'></i> </button></td>"+
+                    "</tr>"
+                );
+                alert('添加成功');
+            }else{
+                $('#video_upload_progress_box').hide();
+                alert(response.message);
+            }
+        });
+
+        video_uploader.on( 'uploadError', function( file ) {
+            $('#video_upload_progress_box').hide();
+            alert('上传出错');
+        });
+
+        video_uploader.on( 'uploadComplete', function( file ) {
+            $('#video_upload_progress_box').fadeOut();
+            $percent = $('#video_upload_progress_box').find('.progress-bar');
+            $percent.css( 'width', '0%' );
+        });
+
 
         function saveData()
         {
@@ -145,6 +238,7 @@
                     console.log(result);//打印服务端返回的数据(调试用)
                     if (result.error == 0) {
                         alert("修改成功");
+                        window.location.reload();
                     }else{
                         alert(result.message);
                     }
@@ -153,6 +247,52 @@
                     alert("异常！");
                 }
             });
+        }
+
+        function saveText()
+        {
+            var formData = new FormData($('#textForm')[0]);
+            $.ajax({
+                type: "post",
+                dataType: "json",
+                url: "{{route('merchant.index.resource.update',$text_resource->id)}}",
+                headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                processData: false,		//用于对data参数进行序列化处理 这里必须false
+                contentType: false,
+                data: formData,
+                success: function (result) {
+                    console.log(result);//打印服务端返回的数据(调试用)
+                    if (result.error == 0) {
+                        alert("修改成功");
+                    }else{
+                        alert(result.message);
+                    }
+                },
+                error : function() {
+                    alert("异常！");
+                }
+            });
+        }
+
+        function deleteItem(id)
+        {
+            if(confirm('确认删除?')){
+                $.ajax({
+                    type : 'delete',
+                    url : "{{env('APP_URL')}}/merchant/management/index/resources/"+id,
+                    contentType : 'application/json;charset=UTF-8',
+                    headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+                    dataType : 'json',
+                    success : function(data,textStatus,jqXHR){
+                        if(data.error == 0){
+                            alert('删除成功');
+                            $('#resource_'+id).remove();
+                        }else{
+                            alert(data.message);
+                        }
+                    }
+                });
+            }
         }
     </script>
 @endsection

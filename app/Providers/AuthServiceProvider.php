@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\IndexResource;
 use App\Models\Introduction;
 use App\Models\Material;
 use App\Models\Panorama;
@@ -16,6 +17,7 @@ use App\Models\Style;
 use App\Models\StyleCategory;
 use App\Models\StyleResource;
 use App\Models\VerticalView;
+use App\Policies\IndexResourcePolicy;
 use App\Policies\IntroductionPolicy;
 use App\Policies\MaterialPolicy;
 use App\Policies\PanoramaPolicy;
@@ -56,6 +58,7 @@ class AuthServiceProvider extends ServiceProvider
         ProductResource::class => ProductResourcePolicy::class,
         SpaceResource::class => SpaceResourcePolicy::class,
         StyleResource::class => StyleResourcePolicy::class,
+        IndexResource::class => IndexResourcePolicy::class,
     ];
 
     /**

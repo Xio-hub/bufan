@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use App\Models\IndexResource;
 use App\Models\Introduction;
 use App\Models\MerchantIndex;
 use App\Services\MerchantService;
@@ -76,12 +77,24 @@ class MerchantController extends Controller
                 'category_ids' => json_encode($categories)
             ]);
 
-            MerchantIndex::create([
+            $index = MerchantIndex::create([
                 'merchant_id' => $merchant->id,
-                'content' => '',
+                'content' => '商家首页内容',
+                'content_type' => 'text'
             ]);
 
             $now = Carbon::now()->toDateTimeString();
+            IndexResource::insert([
+                [
+                    'merchant_id' => $merchant->id,
+                    'index_id' => $index->id,
+                    'content' => '',
+                    'type' => 'text',
+                    'created_at' => $now,
+                    'updated_at' => $now
+                ]
+            ]);
+
             Introduction::insert(
                 [
                     [

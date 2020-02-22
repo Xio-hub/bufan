@@ -23,12 +23,6 @@ class StyleResourceController extends Controller
         $resource_type = $request->input('resource_type', '') ?? '';
         $style_id = $request->input('style_id', '') ?? '';
         $upload_path = '';
-        if(!in_array($resource_type,['image','video']) or $style_id == ''){
-            $error = 1;
-            $message = '参数错误';
-            return response()->json(compact('error','message'));
-        }
-
         if($resource_type == 'image'){
             $upload_path = 'images/styles/resources';
             $count = StyleResource::where(['style_id' => $style_id, 'source_type' => 'image'])->count();
@@ -37,7 +31,7 @@ class StyleResourceController extends Controller
                 $message = '最多只能上传30张图片';
                 return response()->json(compact('error','message'));
             }
-        }else{
+        }else if($resource_type == 'video'){
             $upload_path = 'videos/styles/resources';
             $count = StyleResource::where(['style_id' => $style_id, 'source_type' => 'video'])->count();
             if($count == 1){
@@ -45,6 +39,18 @@ class StyleResourceController extends Controller
                 $message = '只能上传一个视频';
                 return response()->json(compact('error','message'));
             }
+        }else if($resource_type == 'pdf'){
+            $upload_path = 'pdfs/styles/resources';
+            $count = StyleResource::where(['style_id' => $style_id, 'source_type' => 'pdf'])->count();
+            if($count == 1){
+                $error = 1;
+                $message = '只能上传一个pdf';
+                return response()->json(compact('error','message'));
+            }
+        }else{
+            $error = 1;
+            $message = '参数错误';
+            return response()->json(compact('error','message'));
         }
 
         try{

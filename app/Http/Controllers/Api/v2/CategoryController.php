@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\Merchant;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 
 class CategoryController extends Controller
 {
@@ -14,8 +15,9 @@ class CategoryController extends Controller
         $merchant_id = $request->user()->id;
         
         $merchant = Merchant::find($merchant_id);
-        $category_ids = $merchant->base->category_ids;
-        $data = $category->select('id','name')->whereIn('id',json_decode($category_ids, true))->get()->toArray();
+        $category_ids = json_decode($merchant->base->category_ids,true);
+
+        $data = $category->getUserCategories($category_ids,$merchant->id);
 
         return response()->json($data);
     }

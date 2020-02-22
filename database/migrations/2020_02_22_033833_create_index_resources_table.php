@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCategoryAliasTable extends Migration
+class CreateIndexResourcesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,14 @@ class CreateCategoryAliasTable extends Migration
      */
     public function up()
     {
-        Schema::create('category_alias', function (Blueprint $table) {
+        Schema::create('index_resources', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('merchant_id');
-            $table->unsignedSmallInteger('category_id');
-            $table->string('alias')->default('');
+            $table->unsignedInteger('index_id');
+            $table->text('content');
+            $table->string('source_type');
+            $table->smallInteger('priority')->default(0);
             $table->timestamps();
-
-            $table->unique(['merchant_id','category_id']);
         });
     }
 
@@ -31,6 +31,6 @@ class CreateCategoryAliasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('category_alias');
+        Schema::dropIfExists('index_resources');
     }
 }

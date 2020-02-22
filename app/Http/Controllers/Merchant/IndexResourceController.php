@@ -4,13 +4,13 @@ namespace App\Http\Controllers\Merchant;
 
 use Exception;
 use Illuminate\Http\Request;
-use App\Models\SpaceResource;
+use App\Models\IndexResource;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
-class SpaceResourceController extends Controller
+class IndexResourceController extends Controller
 {
     /**
      * Store a newly created resource in storage.
@@ -21,47 +21,33 @@ class SpaceResourceController extends Controller
     public function store(Request $request)
     {
         $resource_type = $request->input('resource_type', '') ?? '';
-        $space_id = $request->input('space_id', '') ?? '';
+        $index_id = $request->input('index_id', '') ?? '';
         $upload_path = '';
 
-        if($resource_type == 'image'){
-            $upload_path = 'images/spaces/resources';
-            $count = SpaceResource::where(['space_id' => $space_id, 'source_type' => 'image'])->count();
-            if($count == 30){
-                $error = 1;
-                $message = '最多只能上传30张图片';
-                return response()->json(compact('error','message'));
-            }
-        }elseif($resource_type == 'video'){
-            $upload_path = 'videos/spaces/resources';
-            $count = SpaceResource::where(['space_id' => $space_id, 'source_type' => 'video'])->count();
+        if($resource_type == 'video'){
+            $count = IndexResource::where(['index_id' => $index_id, 'source_type' => 'video'])->count();
             if($count == 1){
                 $error = 1;
                 $message = '只能上传一个视频';
                 return response()->json(compact('error','message'));
             }
-        }elseif($resource_type == 'pdf'){
-            $upload_path = 'pdfs/spaces/resources';
-            $count = SpaceResource::where(['space_id' => $space_id, 'source_type' => 'pdf'])->count();
-            if($count == 1){
-                $error = 1;
-                $message = '只能上传一个pdf';
-                return response()->json(compact('error','message'));
-            }
-        }else{
+        }else
+        {
             $error = 1;
             $message = '参数错误';
-            return response()->json(compact('error','message'));
+            return response()->json(compact('error','message'));     
         }
 
         try{
             $merchant = Auth::guard('merchant')->user();
             $priority = 0;
+
+            $upload_path = 'videos/index/resources';
             $path = $request->file('file')->store($upload_path);
-            $resource = SpaceResource::create([
+            $resource = IndexResource::create([
                 'merchant_id' => $merchant->id,
-                'space_id' => $space_id,
-                'source_url' => $path,
+                'index_id' => $index_id,
+                'content' => $path,
                 'source_type' => $resource_type,
             ]);
             $id = $resource->id;
@@ -91,12 +77,25 @@ class SpaceResourceController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $resource_type = $request->input('resource_type', '') ?? '';
+        $text_content = $request->input('text_content', '') ?? '';
         try{
-            $path = $request->file('file')->store("images/spaces/resources");
-            $resource = SpaceResource::find($id);
-            Storage::delete($resource->source_url);
-            $resource->source_url = $path;
-            $resource->save();
+            $path = '';
+            if($resource_type == 'video'){
+                $path = $request->file('file')->store("images/products/resources");
+                $resource = IndexResource::find($id);
+                Storage::delete($resource->content);
+                $resource->content = $path;
+                $resource->save();
+            }elseif($resource_type == 'text'){
+                $resource = IndexResource::find($id);
+                $resource->content = $text_content;
+                $resource->save();
+            }else{
+                $error = 1;
+                $message = '参数错误';
+                return response()->json(compact('error','message'));     
+            }
             
             $error = 0;
         }catch(Exception $e)
@@ -107,10 +106,10 @@ class SpaceResourceController extends Controller
         
         $result = [
             'error' => $error,
-            'path' => Storage::url($path)
+            'path' => $path ? Storage::url($path) : ''
         ];
 
-        return response()->json($resource);
+        return response()->json($result);
     }
 
     /**
@@ -123,11 +122,10 @@ class SpaceResourceController extends Controller
     {
         try{
             $merchant = Auth::guard('merchant')->user();
-            $resource = SpaceResource::find($id);
+            $resource = IndexResource::find($id);
             if($merchant->can('delete',$resource)){
                 $source_url = $resource->source_url;
                 $result = $resource->delete();
-                Storage::delete($source_url);
     
                 $error = 0;
                 $message = 'success';

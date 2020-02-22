@@ -156,12 +156,14 @@ class SpaceController extends Controller
         $space = Space::findOrFail($id);
         $image_resources = SpaceResource::where(['space_id'=> $id,'source_type' => 'image'])->orderBy('priority','asc')->get();
         $video_resources = SpaceResource::where(['space_id'=> $id,'source_type' => 'video'])->orderBy('priority','asc')->get();
+        $pdf_resources = SpaceResource::where(['space_id'=> $id,'source_type' => 'pdf'])->orderBy('priority','asc')->get();
         if($merchant->can('edit', $space)){
             return view('merchants.spaces.edit')->with([
                 'categories' => $categories,
                 'space' => $space,
                 'image_resources' => $image_resources,
                 'video_resources' => $video_resources,
+                'pdf_resources' => $pdf_resources
             ]);
         }else{
             abort(404);

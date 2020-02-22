@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Merchant;
 use Auth;
 use Exception;
 use Illuminate\Http\Request;
+use App\Models\IndexResource;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use App\Models\CategoryAlias;
 
 class IndexController extends Controller
 {
@@ -16,29 +18,56 @@ class IndexController extends Controller
         $merchant = Auth::guard('merchant')->user();
 
         $index_data = $merchant->index;
+        $category_ids = json_decode($merchant->base->category_ids,true);
+        $category_ids = implode(',',$category_ids);
 
-        return view('merchants.index.edit')->with('data',$index_data);
+        $categories = DB::select('select * from categories left join 
+        (select * from category_alias where merchant_id=?)category_alias ON `categories`.`id` = `category_alias`.`category_id` 
+        WHERE `categories`.`id` IN ('.$category_ids.')', [$merchant->id]);
+
+        $text_resource = IndexResource::where(['merchant_id'=> $merchant->id,'source_type' => 'text'])->first();
+        $video_resources = IndexResource::where(['merchant_id'=> $merchant->id,'source_type' => 'video'])->first();
+
+        return view('merchants.index.edit')->with([
+            'data' => $index_data,
+            'categories' => $categories,
+            'text_resource' => $text_resource,
+            'video_resource' => $video_resources
+        ]);
     }
 
     public function update(Request $request)
     {
+        $alias = $request->input('alias', []) ?? [];
+        $show_type = $request->input('show_type', []) ?? [];
+        if(empty($alias)){
+            $error = 1;
+            $message = '参数错误';
+            return response()->json(compact('error','message')); 
+        }
+
         try{
             DB::beginTransaction();
             $merchant = Auth::guard('merchant')->user();
             $merchant_index = $merchant->index;
 
-            $cover = '';
-            $cover_type = '';
+            //cover
             if ($request->hasFile('cover')) {
                 $this->validate($request, ['cover'=>'image']);
                 $cover =  $request->cover->store('images/index');
                 $cover_type = 'image';
+                $merchant_index->cover = $cover;
+                $merchant_index->cover_type = $cover_type;
+            }
+            $merchant_index->type = $show_type;
+            $merchant_index->save();
+
+            //category
+            $category_ids = json_decode($merchant->base->category_ids,true);
+            foreach($category_ids as $i => $v){
+                CategoryAlias::updateOrCreate(['merchant_id'=> $merchant->id,'category_id'=> $v],['alias'=> $alias[$i]]);
             }
 
-            $merchant_index->cover = $cover;
-            $merchant_index->cover_type = $cover_type;
-            $merchant_index->content = $request->content;
-            $merchant_index->save();
             DB::commit();
 
             $error = 0;

@@ -20,6 +20,7 @@
                             <li><a class="nav-link active" data-toggle="tab" href="#tab-1">风格信息</a></li>
                             <li><a class="nav-link" data-toggle="tab" href="#tab-2">风格详细(图片)</a></li>
                             <li><a class="nav-link" data-toggle="tab" href="#tab-3">风格详细(视频)</a></li>
+                            <li><a class="nav-link" data-toggle="tab" href="#tab-4">风格详细(PDF)</a></li>
                         </ul>
                         <div class="tab-content">
                             <div id="tab-1" class="tab-pane active">
@@ -32,7 +33,11 @@
                                                 <div class="col-sm-5">
                                                     <select class="form-control m-b" name="category">
                                                         @foreach($categories as $category)
+                                                        @if($category->id == $style->category_id)
+                                                        <option value="{{$category->id}}" selected>{{$category->name}}</option>
+                                                        @else
                                                         <option value="{{$category->id}}">{{$category->name}}</option>
+                                                        @endif
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -52,6 +57,9 @@
                                                     <span class="fileinput-filename"></span>
                                                     <a href="#" class="close fileinput-exists" data-dismiss="fileinput" style="float: none">×</a>
                                                 </div> 
+                                                @if($style->cover != '')
+                                                <div><img src="{{Storage::url($style->cover)}}" width='120' height='90'></div> 
+                                                @endif
                                             </div>
                                             <div class="hr-line-dashed"></div>
 
@@ -68,6 +76,9 @@
                                                     <span class="fileinput-filename"></span>
                                                     <a href="#" class="close fileinput-exists" data-dismiss="fileinput" style="float: none">×</a>
                                                 </div> 
+                                                @if($style->background_music != '')
+                                                <div class='form-control col-md-8'>{{Storage::url($style->background_music)}}</div> 
+                                                @endif
                                             </div>
 
                                             <div class="form-group  row">
@@ -75,6 +86,7 @@
                                                 <div class="col-sm-5">
                                                     <div class="i-checks"><label> <input type="radio" id="image_type" value="image" name="detail_type" @if($style->type == 'image') checked @endif> <i></i>图片</label></div>
                                                     <div class="i-checks"><label> <input type="radio" id="video_type" value="video" name="detail_type" @if($style->type == 'video') checked @endif> <i></i>视频</label></div>
+                                                    <div class="i-checks"><label> <input type="radio" id="video_type" value="pdf" name="detail_type" @if($style->type == 'pdf') checked @endif> <i></i>视频</label></div>
                                                 </div>
                                             </div>
 
@@ -107,7 +119,7 @@
                                             <tbody>
                                             @foreach ($image_resources as $i => $item)
 
-                                            <tr id='img_resource_{{$item->id}}'>
+                                            <tr id='resource_{{$item->id}}'>
                                                 <td>
                                                     <img src="{{Storage::url($item->source_url)}}" width='50' height='50'>
                                                 </td>
@@ -151,9 +163,9 @@
                                             <tbody>
                                                 @foreach ($video_resources as $i => $item)
 
-                                                <tr id='img_resource_{{$item->id}}'>
+                                                <tr id='resource_{{$item->id}}'>
                                                     <td>
-                                                        <input type="text" class="form-control" disabled value="{{Storage::url($item->source_url)}}">
+                                                        <div class="form-control">{{Storage::url($item->source_url)}}</div>
                                                     </td>
                                                     <td>
                                                         <button class="btn btn-white" onclick="deleteItem({{$item->id}})"><i class="fa fa-trash"></i> </button>
@@ -173,6 +185,46 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <div id="tab-4" class="tab-pane">
+                                <div class="panel-body">
+    
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered table-stripped" id='pdf_panel'>
+                                            <thead>
+                                            <tr>
+                                                <th>pdf链接地址</th>
+                                                <th>操作</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($pdf_resources as $i => $item)
+    
+                                                <tr id='resource_{{$item->id}}'>
+                                                    <td>
+                                                       <div class="form-control">{{Storage::url($item->source_url)}}</div>
+                                                    </td>
+                                                    <td>
+                                                        <button class="btn btn-white" onclick="deleteItem({{$item->id}})"><i class="fa fa-trash"></i> </button>
+                                                    </td>
+                                                </tr>
+                                                    
+                                                @endforeach
+                                            
+                                            </tbody>
+                                        </table>
+    
+                                        <div id='pdf_upload_progress_box' class="progress" style='display:none'>
+                                            <div class="progress-bar progress-bar-striped progress-bar-animated progress-bar-success" role="progressbar" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
+                                        </div>
+    
+                                    </div>
+                                    <div style='margin-top:2rem'>
+                                        <div id='btn-add-pdf'>添加PDF</div>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                 </div>
             </div>
@@ -199,6 +251,8 @@
                 image_uploader.refresh();
             }else if(target.indexOf('tab-3')>0){
                 video_uploader.refresh();
+            }else if(target.indexOf('tab-4')>0){
+                pdf_uploader.refresh();
             }
         });
 
@@ -237,7 +291,7 @@
                 priority = data.priority;
                 list = $('#image_panel tbody');
                 list.append( 
-                    "<tr id='img_resource_"+ id +"'>" +
+                    "<tr id='resource_"+ id +"'>" +
                         "<td><img src='"+ source_url +"' width='50' height='50'></td>" + 
                         "<td><a>" + source_url + "</a></td>" +    
                         "<td>"+ priority +"</td>" +
@@ -295,7 +349,7 @@
                 priority = data.priority;
                 list = $('#video_panel tbody');
                 list.append( 
-                    "<tr id='img_resource_"+ id +"'>" +
+                    "<tr id='resource_"+ id +"'>" +
                         "<td><a>" + source_url + "</a></td>" +    
                         "<td><button class='btn btn-white' onclick='deleteItem(" + id + ")'><i class='fa fa-trash'></i> </button></td>"+
                     "</tr>"
@@ -318,7 +372,61 @@
             $percent.css( 'width', '0%' );
         });
 
-        
+        var pdf_uploader = WebUploader.create({
+
+            // 选完文件后，是否自动上传。
+            auto: true,
+            swf: "{{asset('vendor/webuploader/Uploader.swf')}}",
+            server: "{{route('merchant.style.resource.store')}}",
+            pick: '#btn-add-pdf',
+            accept: {
+                title: 'Pdf',
+                mimeTypes: 'application/pdf'
+            },
+            formData:{
+                _token:'{{csrf_token()}}',
+                style_id: '{{$style->id}}',
+                resource_type: 'pdf'
+            }
+            });
+
+            pdf_uploader.on( 'uploadProgress', function( file, percentage ) {
+            $('#pdf_upload_progress_box').show();
+            $percent = $('#pdf_upload_progress_box').find('.progress-bar');
+            $percent.css( 'width', percentage * 100 + '%' );
+        });
+
+        pdf_uploader.on( 'uploadSuccess', function(file, response) {
+            if(response.error == 0){
+                data = response.data;
+                id = data.id;
+                source_url = data.source_url
+                priority = data.priority;
+                list = $('#pdf_panel tbody');
+                list.append( 
+                    "<tr id='resource_"+ id +"'>" +
+                        "<td><div class='form-control'>" + source_url + "</div></td>" +    
+                        "<td><button class='btn btn-white' onclick='deleteItem(" + id + ")'><i class='fa fa-trash'></i> </button></td>"+
+                    "</tr>"
+            );
+                alert('添加成功');
+            }else{
+                $('#pdf_upload_progress_box').hide();
+                alert(response.message);
+            }
+        });
+
+        pdf_uploader.on( 'uploadError', function( file ) {
+            $('#pdf_upload_progress_box').hide();
+            alert('上传出错');
+        });
+
+        pdf_uploader.on( 'uploadComplete', function( file ) {
+            $('#pdf_upload_progress_box').fadeOut();
+            $percent = $('#pdf_upload_progress_box').find('.progress-bar');
+            $percent.css( 'width', '0%' );
+        });
+   
         $('#btn-commit').click(function(){
             var formData = new FormData($('#dataForm')[0]);
             $.ajax({
@@ -356,7 +464,7 @@
                     success : function(data,textStatus,jqXHR){
                         if(data.error == 0){
                             alert('删除成功');
-                            $('#img_resource_'+id).remove();
+                            $('#resource_'+id).remove();
                         }else{
                             alert(data.message);
                         }
