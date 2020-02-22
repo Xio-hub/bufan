@@ -15,9 +15,9 @@ class StyleCategoryPolicy
         return $merchant->id === $style_category->merchant_id;
     }
 
-    public function create(Merchant $merchant)
+    public function edit(Merchant $merchant, StyleCategory $space_category)
     {
-        //
+        return $merchant->id === $space_category->merchant_id;
     }
 
     public function update(Merchant $merchant, StyleCategory $style_category)

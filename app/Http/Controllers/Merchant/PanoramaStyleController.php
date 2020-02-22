@@ -26,7 +26,7 @@ class PanoramaStyleController extends Controller
         }])->get();
         $styles = $merchant->panorama_styles;
         foreach($styles as $k => $style){
-            $style->source_url = Storage::url($style->source_url);
+            $style->cover = Storage::url($style->cover);
         }
         return view('merchants.panoramas.styles.index')->with('styles', $styles);
     }
@@ -102,7 +102,13 @@ class PanoramaStyleController extends Controller
      */
     public function edit($id)
     {
-        //
+        $merchant = Auth::guard('merchant')->user();
+        $style = PanoramaStyle::findOrFail($id);
+        if($merchant->can('edit',$style)){
+            return view('merchants.panoramas.styles.edit')->with('style',$style);
+        }else{
+            abort(404);
+        }
     }
 
     /**
@@ -114,7 +120,38 @@ class PanoramaStyleController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $name = $request->input('name', '');
+        if($name == ''){
+            $error = 1;
+            $message = '请输入风格名称';
+            return response()->json(compact('error','message'));
+        }
+
+        try{
+            $merchant = Auth::guard('merchant')->user();
+            $style = PanoramaStyle::findOrFail($id);
+            if($merchant->can('update',$style)){
+                if ($request->hasFile('cover')) {
+                    $cover =  $request->cover->store('images/spaces/categories/cover');
+                    $style->cover = $cover;
+                }
+                $style->name = $name;
+                $style->save();
+
+                $error = 0;
+                $message = 'success';
+            }else{
+                $error = 1;
+                $message = 'UnAuthorized';
+            }
+        }
+        catch(Exception $e){
+            Log::error($e);
+            $error = 1;
+            $message = '修改失败，请稍后再试或者联系管理员';
+        }finally{
+            return response()->json(compact('error','message'));
+        }
     }
 
     /**

@@ -35,10 +35,13 @@
                                 <tr>
                                     <td>{{$i+1}}</td>
                                     <td>{{$material->name}}</td>
-                                    <td><a href="{{$material->cover}}" target="blank">{{$material->cover}}</a></td>
+                                    <td><img src="{{$material->cover}}"  width='70' height='45'/></td>
                                     <td>{{$material->priority}}</td>
                                     <td>{{$material->created_at}}</td>
-                                    <td><button onclick='deleteItem("{{$material->id}}")' class='down btn btn-default btn-xs btn-delete'>删除</button></td>
+                                    <td>
+                                        <a href="{{route('merchant.material.edit',$material->id)}}" class='down btn btn-default btn-xs btn-delete'>修改</a>
+                                        <button onclick='deleteItem("{{$material->id}}")' class='down btn btn-default btn-xs btn-delete'>删除</button>
+                                    </td>
                                 </tr>
                                 @endforeach
                             </tbody>

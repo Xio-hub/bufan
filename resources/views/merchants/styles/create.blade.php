@@ -61,6 +61,7 @@
                             <div class="col-sm-5">
                                 <div class="i-checks"><label> <input type="radio" id="image_type" value="image" name="detail_type" checked> <i></i>图片</label></div>
                                 <div class="i-checks"><label> <input type="radio" id="video_type" value="video" name="detail_type"> <i></i>视频</label></div>
+                                <div class="i-checks"><label> <input type="radio" id="pdf_type" value="pdf" name="detail_type"> <i></i>PDF</label></div>
                             </div>
                         </div>
                         <div class="hr-line-dashed"></div>
@@ -77,14 +78,21 @@
                                 </div>
 
                                 <div id="video_fileinput_box" style="display: none">
-
                                     <div class="dropzone" id="video_detail_box">
                                         <div class="fallback">
                                             <input name="file" type="file"/>
                                         </div>
                                     </div>
-
                                 </div>
+
+                                <div id="pdf_fileinput_box" style="display: none">
+                                    <div class="dropzone" id="pdf_detail_box">
+                                        <div class="fallback">
+                                            <input name="file" type="file"/>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                         <div class="hr-line-dashed"></div>
@@ -151,6 +159,27 @@
             }
         });
 
+        $("#pdf_detail_box").dropzone({
+            acceptedFiles: 'application/pdf',
+            params:{'_token':$('meta[name="csrf-token"]').attr('content')},
+            url: "{{route('style.pdf.upload')}}",
+            addRemoveLinks: true,
+            maxFiles: 1,
+            paramName: "file", // The name that will be used to transfer the file
+            maxFilesize: 50, // MB
+            dictDefaultMessage: "<strong>请选择PDF文件进行上传</strong>",
+            init: function() {
+                this.on("success", function(file, responseText) {
+                    var html = Dropzone.createElement("<input type='hidden' name='pdf_detail[]' value='"+ responseText +"' />");
+                    file.previewElement.appendChild(html);
+                });
+                this.on("error", function (file, message) {
+                    alert(message);
+                    this.removeFile(file);
+                });
+            }
+        });
+
         $('#btn-commit').click(function(){
             var formData = new FormData($('#dataForm')[0]);
             $.ajax({
@@ -191,12 +220,20 @@
 
             $('#image_type').on('ifChecked', function(event){ //ifCreated 事件应该在插件初始化之前绑定 
                 $('#video_fileinput_box').css('display','none');
+                $('#pdf_fileinput_box').css('display','none'); 
                 $('#image_fileinput_box').css('display','block'); 
             }); 
 
             $('#video_type').on('ifChecked', function(event){ //ifCreated 事件应该在插件初始化之前绑定 
                 $('#image_fileinput_box').css('display','none'); 
+                $('#pdf_fileinput_box').css('display','none'); 
                 $('#video_fileinput_box').css('display','block'); 
+            });
+
+            $('#pdf_type').on('ifChecked', function(event){ //ifCreated 事件应该在插件初始化之前绑定 
+                $('#image_fileinput_box').css('display','none'); 
+                $('#video_fileinput_box').css('display','none'); 
+                $('#pdf_fileinput_box').css('display','block'); 
             }); 
         });
     </script>

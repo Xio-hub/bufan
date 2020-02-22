@@ -107,6 +107,7 @@ Route::group([
     Route::delete('/products/{id}', 'ProductController@destroy')->where('id','\d+')->name('merchant.product.destroy');
     Route::post('products/images' ,'ProductController@storeImage')->name('product.image.upload');
     Route::post('products/videos' ,'ProductController@storeVideo')->name('product.video.upload');
+    Route::post('products/pdfs' ,'ProductController@storePDF')->name('product.pdf.upload');
     Route::post('/products/resources', 'ProductResourceController@store')->name('merchant.product.resource.store');
     Route::patch('/products/resources/{id}', 'ProductResourceController@update')->name('merchant.product.resource.update');
     Route::delete('/products/resources/{id}', 'ProductResourceController@destroy')->where('id','\d+')->name('merchant.product.resource.destroy');
@@ -127,6 +128,7 @@ Route::group([
     Route::delete('/spaces/{id}', 'SpaceController@destroy')->where('id','\d+')->name('merchant.space.destroy');
     Route::post('spaces/images' ,'SpaceController@storeImage')->name('space.image.upload');
     Route::post('spaces/videos' ,'SpaceController@storeVideo')->name('space.video.upload');
+    Route::post('spaces/pdfs' ,'SpaceController@storePDF')->name('space.pdf.upload');
     Route::post('/spaces/resources', 'SpaceResourceController@store')->name('merchant.space.resource.store');
     Route::patch('/spaces/resources/{id}', 'SpaceResourceController@update')->name('merchant.space.resource.update');
     Route::delete('/spaces/resources/{id}', 'SpaceResourceController@destroy')->where('id','\d+')->name('merchant.space.resource.destroy');
@@ -135,8 +137,9 @@ Route::group([
     Route::get('/styles/categories/create', 'StyleCategoryController@create')->name('merchant.style.category.create');
     Route::post('/styles/categories', 'StyleCategoryController@store')->name('merchant.style.category.store');
     Route::get('/styles/categories/{id}/edit', 'StyleCategoryController@edit')->name('merchant.style.category.edit');
-    Route::patch('/styles/categories/{id}', 'StyleCategoryController@update')->name('merchant.style.category.update');
+    Route::post('/styles/categories/{id}', 'StyleCategoryController@update')->name('merchant.style.category.update');
     Route::delete('/styles/categories/{id}', 'StyleCategoryController@destroy')->name('merchant.style.category.destroy');
+    Route::post('styles/categories/cover' ,'StyleCategoryController@storeCover')->name('style.category.cover.upload');
 
     Route::get('/styles', 'StyleController@index')->name('merchant.style.index');
     Route::get('/styles/create', 'StyleController@create')->name('merchant.style.create');
@@ -144,6 +147,9 @@ Route::group([
     Route::get('/styles/{id}/edit', 'StyleController@edit')->where('id','\d+')->name('merchant.style.edit');
     Route::post('/styles/{id}', 'StyleController@update')->where('id','\d+')->name('merchant.style.update');
     Route::delete('/styles/{id}', 'StyleController@destroy')->where('id','\d+')->name('merchant.style.destroy');
+    Route::post('styles/images' ,'StyleController@storeImage')->name('style.image.upload');
+    Route::post('styles/videos' ,'StyleController@storeVideo')->name('style.video.upload');
+    Route::post('styles/pdfs' ,'StyleController@storePDF')->name('style.pdf.upload');
     Route::post('/styles/resources', 'StyleResourceController@store')->name('merchant.style.resource.store');
     Route::patch('/styles/resources/{id}', 'StyleResourceController@update')->name('merchant.style.resource.update');
     Route::delete('/styles/resources/{id}', 'StyleResourceController@destroy')->where('id','\d+')->name('merchant.style.resource.destroy');
@@ -152,7 +158,7 @@ Route::group([
     Route::get('/materials/create', 'MaterialController@create')->name('merchant.material.create');
     Route::post('/materials', 'MaterialController@store')->name('merchant.material.store');
     Route::get('/materials/{id}/edit', 'MaterialController@edit')->where('id','\d+')->name('merchant.material.edit');
-    Route::put('/materials/{id}', 'MaterialController@update')->where('id','\d+')->name('merchant.material.update');
+    Route::post('/materials/{id}', 'MaterialController@update')->where('id','\d+')->name('merchant.material.update');
     Route::delete('/materials/{id}', 'MaterialController@destroy')->where('id','\d+')->name('merchant.material.destroy');
 
     Route::get('/panoramas', 'PanoramaController@index')->name('merchant.panorama.index');
@@ -166,7 +172,7 @@ Route::group([
     Route::get('/panoramas/styles/create', 'PanoramaStyleController@create')->name('merchant.panorama.style.create');
     Route::post('/panoramas/styles', 'PanoramaStyleController@store')->name('merchant.panorama.style.store');
     Route::get('/panoramas/styles/{id}/edit', 'PanoramaStyleController@edit')->where('id','\d+')->name('merchant.panorama.style.edit');
-    Route::put('/panoramas/styles/{id}', 'PanoramaStyleController@update')->where('id','\d+')->name('merchant.panorama.style.update');
+    Route::post('/panoramas/styles/{id}', 'PanoramaStyleController@update')->where('id','\d+')->name('merchant.panorama.style.update');
     Route::delete('/panoramas/styles/{id}', 'PanoramaStyleController@destroy')->where('id','\d+')->name('merchant.panorama.style.destroy');
 
     Route::get('/vertical_views', 'VerticalViewController@index')->name('merchant.vertical_view.index');
@@ -189,10 +195,6 @@ Route::group([
     Route::get('introductions' , 'IntroductionController@index')->where('id', '\d+')->name('merchant.introduction.index');
     Route::get('introductions/{id}/edit' , 'IntroductionController@edit')->where('id', '\d+')->name('merchant.introduction.edit');
     Route::patch('introductions/{id}' , 'IntroductionController@update')->where('id', '\d+')->name('merchant.introduction.update');
-
-    Route::post('styles/categories/cover' ,'StyleCategoryController@storeCover')->name('style.category.cover.upload');
-    Route::post('styles/images' ,'StyleController@storeImage')->name('style.image.upload');
-    Route::post('styles/videos' ,'StyleController@storeVideo')->name('style.video.upload');
 
     Route::post('/materials/cover' ,'MaterialController@storeCover')->name('material.cover.upload');
     Route::post('/panoramas/styles/cover' ,'PanoramaStyleController@storeCover')->name('panorama.style.cover.upload');

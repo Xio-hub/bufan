@@ -52,9 +52,9 @@
                                             <div class="col-sm-5">
                                                 @foreach($categories as $i => $category)
                                                 @if(!empty($category->alias))
-                                                <input type='text' class="form-control" date-cat-id='{{$category->id}}' name='alias[]' value='{{$category->alias}}' placeholder="{{$category->name}}">
+                                                <div style="margin-top:10px"><input type='text' class="form-control" date-cat-id='{{$category['id']}}' name='alias[]' value='{{$category['alias']}}' placeholder="{{$category['name']}}"></div>
                                                 @else
-                                                <input type='text' class="form-control" date-cat-id='{{$category->id}}' name='alias[]' value='{{$category->name}}' placeholder="{{$category->name}}">
+                                                <div style="margin-top:10px"><input type='text' class="form-control" date-cat-id='{{$category['id']}}' name='alias[]' value='{{$category['name']}}' placeholder="{{$category['name']}}"></div>
                                                 @endif    
                                                 @endforeach
                                             </div>

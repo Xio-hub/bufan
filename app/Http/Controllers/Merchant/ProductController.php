@@ -24,6 +24,14 @@ class ProductController extends Controller
         $products = $merchant->products;
         foreach($products as $k => $product){
             $product->cover = Storage::url($product->cover);
+            
+            if($product->type == 'image'){
+                $product->type = '图片';
+            }elseif($product->type == 'video'){
+                $product->type = '视频';
+            }elseif($product->type == 'pdf'){
+                $product->type = 'PDF';
+            }
         }
         return view('merchants.products.index')->with('products',$products);
     }
@@ -39,18 +47,12 @@ class ProductController extends Controller
         $detail_type = $request->input('detail_type','');
         $image_datail = $request->input('image_detail','');
         $video_datail = $request->input('video_detail','');
-
+        $pdf_datail = $request->input('pdf_detail','');
         $hotspot = $request->input('hotspot','');
 
         if($name == ''){
             $error = 1;
             $message = '请输入产品名称';
-            return response()->json(compact('error','message'));
-        }
-
-        if(!in_array($detail_type,['image','video'])){
-            $error = 1;
-            $message = '产品详细类型错误';
             return response()->json(compact('error','message'));
         }
 
@@ -73,6 +75,12 @@ class ProductController extends Controller
             $detail = $image_datail;
         }else if($detail_type == 'video'){
             $detail = $video_datail;
+        }else if($detail_type == 'pdf'){
+            $detail = $pdf_datail;
+        }else{
+            $error = 1;
+            $message = '类型参数错误';
+            return response()->json(compact('error','message'));
         }
 
         if(empty($detail)){
@@ -169,27 +177,31 @@ class ProductController extends Controller
 
         try{
             $product = Product::findOrFail($id);
-
-            DB::beginTransaction();
             $merchant = Auth::guard('merchant')->user();
 
-            $product->name = $name;
-            $product->hotspot = $hotspot;
-            $product->type = $detail_type;
-            
-            if($cover != ''){
-                $product->cover = $cover;
+            if($merchant->can('update', $product)){
+                DB::beginTransaction();
+                $product->name = $name;
+                $product->hotspot = $hotspot;
+                $product->type = $detail_type;
+                
+                if($cover != ''){
+                    $product->cover = $cover;
+                }
+
+                if($background_music != ''){
+                    $product->background_music = $background_music;
+                }
+
+                $product->save();
+
+                DB::commit();
+                $error = 0;
+                $message = 'success';
+            }else{
+                $error = 1;
+                $message = 'UnAuthorized';
             }
-
-            if($background_music != ''){
-                $product->background_music = $background_music;
-            }
-
-            $product->save();
-
-            DB::commit();
-            $error = 0;
-            $message = 'success';
         }catch(Exception $e){
             DB::rollBack();
             $error = 1;
@@ -236,6 +248,12 @@ class ProductController extends Controller
     public function storeVideo(Request $request)
     {
         $path = $request->file('file')->store("videos/products/resources");
+        return $path;
+    }
+
+    public function storePDF(Request $request)
+    {
+        $path = $request->file('file')->store("pdfs/products/resources");
         return $path;
     }
 }

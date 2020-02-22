@@ -79,8 +79,7 @@ class MerchantController extends Controller
 
             $index = MerchantIndex::create([
                 'merchant_id' => $merchant->id,
-                'content' => '商家首页内容',
-                'content_type' => 'text'
+                'type' => 'text'
             ]);
 
             $now = Carbon::now()->toDateTimeString();
@@ -89,7 +88,7 @@ class MerchantController extends Controller
                     'merchant_id' => $merchant->id,
                     'index_id' => $index->id,
                     'content' => '',
-                    'type' => 'text',
+                    'source_type' => 'text',
                     'created_at' => $now,
                     'updated_at' => $now
                 ]

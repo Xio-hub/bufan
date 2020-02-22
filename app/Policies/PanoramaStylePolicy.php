@@ -15,9 +15,9 @@ class PanoramaStylePolicy
         return $merchant->id === $panorama_style->merchant_id;
     }
 
-    public function create(Merchant $merchant)
+    public function edit(Merchant $merchant, PanoramaStyle $panorama_style)
     {
-        //
+        return $merchant->id === $panorama_style->merchant_id;
     }
 
     public function update(Merchant $merchant, PanoramaStyle $panorama_style)

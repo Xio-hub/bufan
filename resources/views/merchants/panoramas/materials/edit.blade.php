@@ -1,10 +1,9 @@
 @extends('merchants.layouts.app')
 
-@section('title','添加材质')
+@section('title','修改材质')
 
 @section('styles')
-<link href="{{asset('css/plugins/dropzone/basic.css')}}" rel="stylesheet">
-<link href="{{asset('css/plugins/dropzone/dropzone.css')}}" rel="stylesheet">
+<link href="{{asset('css/plugins/jasny/jasny-bootstrap.min.css')}}" rel="stylesheet">
 @endsection
 
 @section('content')
@@ -20,18 +19,22 @@
                     <form id='dataForm' enctype="multipart/form-data">
                         <div class="form-group  row">
                             <label class="col-sm-2 col-form-label">名称</label>
-                            <div class="col-sm-5"><input type="text" class="form-control" name='name'></div>
+                            <div class="col-sm-5"><input type="text" class="form-control" name='name' value='{{$material->name}}'></div>
                         </div>
                         <div class="hr-line-dashed"></div>
 
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">封面设置</label>
                             <div class='col-sm-5'>
-                                <div class="dropzone" id="cover_box">
-                                    <div class="fallback">
-                                        <input name="file" type="file" />
-                                    </div>
-                                </div>
+                                <div class="fileinput fileinput-new" data-provides="fileinput">
+                                    <span class="btn btn-default btn-file"><span class="fileinput-new">Select file</span>
+                                    <span class="fileinput-exists">Change</span><input type="file" name="cover" accept="image/*"/></span>
+                                    <span class="fileinput-filename"></span>
+                                    <a href="#" class="close fileinput-exists" data-dismiss="fileinput" style="float: none">×</a>
+                                </div> 
+                                @if($material->cover != '')
+                                <div><img src="{{Storage::url($material->cover)}}" width='120' height='90'></div> 
+                                @endif
                             </div>
                         </div>
                         <div class="hr-line-dashed"></div>
@@ -50,40 +53,22 @@
 @endsection
 
 @section('scripts')
-    <script src="{{asset('js/plugins/dropzone/dropzone.js')}}"></script>
+    <script src="{{asset('js/plugins/jasny/jasny-bootstrap.min.js')}}"></script>
 
     <script>
-        $("#cover_box").dropzone({
-            acceptedFiles: 'image/*',
-            params:{'_token':$('meta[name="csrf-token"]').attr('content')},
-            url: "{{route('material.cover.upload')}}",
-            addRemoveLinks: true,
-            maxFiles: 1,
-            paramName: "file", // The name that will be used to transfer the file
-            maxFilesize: 8, // MB
-            dictDefaultMessage: "<strong>请选择封面图片进行上传</strong>",
-            init: function() {
-                this.on("success", function(file, responseText) {
-                    var html = Dropzone.createElement("<input type='hidden' name='cover' value='"+ responseText +"' />");
-                    file.previewElement.appendChild(html);
-                });
-                this.on("error", function (file, message) {
-                    alert(message);
-                    this.removeFile(file);
-                });
-            }
-        });
-
         $('#btn-commit').click(function(){
+            var formData = new FormData($('#dataForm')[0]);
             $.ajax({
                 type : 'post',
-                url : "{{route('merchant.material.store')}}",
+                url : "{{route('merchant.material.update',$material->id)}}",
                 headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                 dataType : 'json',
-                data: $('#dataForm').serialize(),
+                processData: false,
+               	contentType: false, 
+                data: formData,
                 success : function(data,textStatus,jqXHR){
                     if(data.error == 0){
-                        alert('添加成功');
+                        alert('修改成功');
                         window.location.href = "{{route('merchant.material.index')}}";
                     }else{
                         alert(data.message);

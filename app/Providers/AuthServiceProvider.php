@@ -25,6 +25,7 @@ use App\Policies\PanoramaSingleSpacePolicy;
 use App\Policies\PanoramaStylePolicy;
 use App\Policies\ProductPolicy;
 use App\Policies\ProductResourcePolicy;
+use App\Policies\SpaceCategoryPolicy;
 use App\Policies\SpacePolicy;
 use App\Policies\SpaceResourcePolicy;
 use App\Policies\StyleCategoryPolicy;
@@ -46,7 +47,7 @@ class AuthServiceProvider extends ServiceProvider
         'App\Model' => 'App\Policies\ModelPolicy',
         Product::class => ProductPolicy::class,
         Space::class => SpacePolicy::class,
-        SpaceCategory::class => SpaceCategory::class,
+        SpaceCategory::class => SpaceCategoryPolicy::class,
         Style::class => StylePolicy::class,
         StyleCategory::class => StyleCategoryPolicy::class,
         Material::class => MaterialPolicy::class,

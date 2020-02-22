@@ -9,22 +9,19 @@ use App\Models\IndexResource;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\CategoryAlias;
 
 class IndexController extends Controller
 {
-    public function edit()
+    public function edit(Category $category)
     {
         $merchant = Auth::guard('merchant')->user();
 
         $index_data = $merchant->index;
         $category_ids = json_decode($merchant->base->category_ids,true);
-        $category_ids = implode(',',$category_ids);
 
-        $categories = DB::select('select * from categories left join 
-        (select * from category_alias where merchant_id=?)category_alias ON `categories`.`id` = `category_alias`.`category_id` 
-        WHERE `categories`.`id` IN ('.$category_ids.')', [$merchant->id]);
-
+        $categories = $category->getUserCategories($category_ids, $merchant->id);
         $text_resource = IndexResource::where(['merchant_id'=> $merchant->id,'source_type' => 'text'])->first();
         $video_resources = IndexResource::where(['merchant_id'=> $merchant->id,'source_type' => 'video'])->first();
 

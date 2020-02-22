@@ -102,7 +102,13 @@ class SpaceCategoryController extends Controller
      */
     public function edit($id)
     {
-        //
+        $merchant = Auth::guard('merchant')->user();
+        $space_category = SpaceCategory::findOrFail($id);
+        if($merchant->can('edit',$space_category)){
+            return view('merchants.space_categories.edit')->with('category',$space_category);
+        }else{
+            abort(404);
+        }
     }
 
     /**
@@ -114,7 +120,38 @@ class SpaceCategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $name = $request->input('name', '');
+        if($name == ''){
+            $error = 1;
+            $message = '请输入目录名称';
+            return response()->json(compact('error','message'));
+        }
+
+        try{
+            $merchant = Auth::guard('merchant')->user();
+            $space_category = SpaceCategory::findOrFail($id);
+            if($merchant->can('update',$space_category)){
+                if ($request->hasFile('cover')) {
+                    $cover =  $request->cover->store('images/spaces/categories/cover');
+                    $space_category->cover = $cover;
+                }
+                $space_category->name = $name;
+                $space_category->save();
+
+                $error = 0;
+                $message = 'success';
+            }else{
+                $error = 1;
+                $message = 'UnAuthorized';
+            }
+        }
+        catch(Exception $e){
+            Log::error($e);
+            $error = 1;
+            $message = '修改失败，请稍后再试或者联系管理员';
+        }finally{
+            return response()->json(compact('error','message'));
+        }
     }
 
     /**

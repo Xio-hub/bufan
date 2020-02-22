@@ -24,7 +24,7 @@
                                 <th>序号</th>
                                 <th>材质</th>
                                 <th>风格</th>
-                                <th>全景图</th>
+                                <th>全景类型</th>
                                 <th>发布时间</th>
                                 <th>操作</th>
                             </tr>
@@ -36,7 +36,7 @@
                                     <td>{{$i+1}}</td>
                                     <td>{{$panorama->material->name}}</td>
                                     <td>{{$panorama->style->name}}</td>
-                                    <td><a href="{{$panorama->source_url}}" target="blank">{{$panorama->source_url}}</a></td>
+                                    <td>{{$panorama->source_type}}</td>
                                     <td>{{$panorama->created_at}}</td>
                                     <td><button onclick='deleteItem("{{$panorama->id}}")' class='down btn btn-default btn-xs btn-delete'>删除</button></td>
                                 </tr>

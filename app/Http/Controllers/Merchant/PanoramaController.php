@@ -26,7 +26,12 @@ class PanoramaController extends Controller
         }])->get();
         $panoramas = $merchant->panoramas;
         foreach($panoramas as $k => $panorama){
-            $panorama->cover = Storage::url($panorama->cover);
+            // $panorama->cover = Storage::url($panorama->cover);
+            if($panorama->source_type == 'image'){
+                $panorama->source_type = '全景图';
+            }else if($panorama->source_type == 'link'){
+                $panorama->source_type = '全景链接';
+            }
         }
         return view('merchants.panoramas.index')->with('panoramas', $panoramas);
     }

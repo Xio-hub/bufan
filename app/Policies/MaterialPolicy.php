@@ -15,9 +15,9 @@ class MaterialPolicy
         return $merchant->id === $material->merchant_id;
     }
 
-    public function create(Merchant $merchant)
+    public function edit(Merchant $merchant, Material $material)
     {
-        //
+        return $merchant->id === $material->merchant_id;
     }
 
     public function update(Merchant $merchant, Material $material)

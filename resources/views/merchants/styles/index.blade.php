@@ -22,10 +22,10 @@
                             <thead>
                             <tr>
                                 <th>序号</th>
-                                <th>ID</th>
                                 <th>空间名称</th>
                                 <th>所属分类</th>
                                 <th>封面</th>
+                                <th>类型</th>
                                 <th>展示优先级</th>
                                 <th>发布时间</th>
                                 <th>操作</th>
@@ -36,10 +36,10 @@
                                 @foreach($styles as $i => $style)
                                 <tr>
                                     <td>{{$i+1}}</td>
-                                    <td>{{$style->id}}</td>
                                     <td>{{$style->name}}</td>
                                     <td>{{$style->category_name}}</td>
-                                    <td><a href="{{$style->cover}}" target="blank">{{$style->cover}}</a></td>
+                                    <td><img src="{{$style->cover}}"  width='70' height='45'/></td>
+                                    <td>{{$style->type}}</td>
                                     <td>{{$style->priority}}</td>
                                     <td>{{$style->created_at}}</td>
                                     <td>

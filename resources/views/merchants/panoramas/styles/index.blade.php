@@ -35,10 +35,13 @@
                                 <tr>
                                     <td>{{$i+1}}</td>
                                     <td>{{$style->name}}</td>
-                                    <td><a href="{{$style->cover}}" target="blank">{{$style->cover}}</a></td>
+                                    <td><img src="{{$style->cover}}"  width='70' height='45'/></td>
                                     <td>{{$style->priority}}</td>
                                     <td>{{$style->created_at}}</td>
-                                    <td><button onclick='deleteItem("{{$style->id}}")' class='down btn btn-default btn-xs btn-delete'>删除</button></td>
+                                    <td>
+                                        <a href="{{route('merchant.panorama.style.edit',$style->id)}}" class='down btn btn-default btn-xs btn-delete'>修改</a>
+                                        <button onclick='deleteItem("{{$style->id}}")' class='down btn btn-default btn-xs btn-delete'>删除</button>
+                                    </td>
                                 </tr>
                                 @endforeach
                             </tbody>

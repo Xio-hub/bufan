@@ -15,9 +15,9 @@ class SpaceCategoryPolicy
         return $merchant->id === $space_category->merchant_id;
     }
 
-    public function create(Merchant $merchant)
+    public function edit(Merchant $merchant, SpaceCategory $space_category)
     {
-        //
+        return $merchant->id === $space_category->merchant_id;
     }
 
     public function update(Merchant $merchant, SpaceCategory $space_category)

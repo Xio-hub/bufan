@@ -24,7 +24,7 @@ class SpaceController extends Controller
     {
         $merchant = Auth::guard('merchant')->user();
         $spaces = $space
-            ->select('spaces.id','spaces.name','spaces.cover','spaces.priority','spaces.created_at','space_categories.name as category_name')
+            ->select('spaces.id','spaces.name','spaces.cover','spaces.priority','spaces.type','spaces.created_at','space_categories.name as category_name')
             ->leftJoin('space_categories','spaces.category_id','=','space_categories.id')
             ->orderBy('spaces.created_at','desc')
             ->where(['spaces.merchant_id'=>$merchant->id])
@@ -33,6 +33,14 @@ class SpaceController extends Controller
 
         foreach($spaces as $k => $space){
             $space->cover = Storage::url($space->cover);
+
+            if($space->type == 'image'){
+                $space->type = '图片';
+            }elseif($space->type == 'video'){
+                $space->type = '视频';
+            }elseif($space->type == 'pdf'){
+                $space->type = 'PDF';
+            }
         }
         return view('merchants.spaces.index')->with('spaces',$spaces);
     }
@@ -62,17 +70,12 @@ class SpaceController extends Controller
         $detail_type = $request->input('detail_type','');
         $image_datail = $request->input('image_detail','');
         $video_datail = $request->input('video_detail','');
+        $pdf_datail = $request->input('pdf_detail','');
         $hotspot = $request->input('hotspot','');
 
         if($name == ''){
             $error = 1;
             $message = '请输入名称';
-            return response()->json(compact('error','message'));
-        }
-
-        if(!in_array($detail_type,['image','video'])){
-            $error = 1;
-            $message = '空间详细类型错误';
             return response()->json(compact('error','message'));
         }
 
@@ -95,6 +98,12 @@ class SpaceController extends Controller
             $detail = $image_datail;
         }else if($detail_type == 'video'){
             $detail = $video_datail;
+        }else if($detail_type == 'pdf'){
+            $detail = $pdf_datail;
+        }else{
+            $error = 1;
+            $message = '类型参数错误';
+            return response()->json(compact('error','message'));
         }
 
         if(empty($detail)){
@@ -202,27 +211,31 @@ class SpaceController extends Controller
 
         try{
             $space = Space::findOrFail($id);
-
-            DB::beginTransaction();
             $merchant = Auth::guard('merchant')->user();
+            if($merchant->can('update', $space)){
+                DB::beginTransaction();
+                
+                $space->name = $name;
+                $space->hotspot = $hotspot;
+                $space->type = $detail_type;
+                
+                if($cover != ''){
+                    $space->cover = $cover;
+                }
 
-            $space->name = $name;
-            $space->hotspot = $hotspot;
-            $space->type = $detail_type;
-            
-            if($cover != ''){
-                $space->cover = $cover;
+                if($background_music != ''){
+                    $space->background_music = $background_music;
+                }
+
+                $space->save();
+
+                DB::commit();
+                $error = 0;
+                $message = 'success';
+            }else{
+                $error = 1;
+                $message = 'UnAuthorized';
             }
-
-            if($background_music != ''){
-                $space->background_music = $background_music;
-            }
-
-            $space->save();
-
-            DB::commit();
-            $error = 0;
-            $message = 'success';
         }catch(Exception $e){
             DB::rollBack();
             $error = 1;
@@ -276,6 +289,12 @@ class SpaceController extends Controller
     public function storeVideo(Request $request)
     {
         $path = $request->file('file')->store("videos/spaces");
+        return $path;
+    }
+
+    public function storePDF(Request $request)
+    {
+        $path = $request->file('file')->store("pdfs/products/resources");
         return $path;
     }
 }

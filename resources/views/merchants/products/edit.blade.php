@@ -420,7 +420,7 @@
         $('#btn-commit').click(function(){
             var formData = new FormData($('#dataForm')[0]);
             $.ajax({
-                type : 'patch',
+                type : 'post',
                 url : "{{route('merchant.product.update',$product->id)}}",
                 headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                 dataType : 'json',

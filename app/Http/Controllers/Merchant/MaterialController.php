@@ -102,7 +102,13 @@ class MaterialController extends Controller
      */
     public function edit($id)
     {
-        //
+        $merchant = Auth::guard('merchant')->user();
+        $material = Material::findOrFail($id);
+        if($merchant->can('edit',$material)){
+            return view('merchants.panoramas.materials.edit')->with('material',$material);
+        }else{
+            abort(404);
+        }
     }
 
     /**
@@ -114,7 +120,38 @@ class MaterialController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $name = $request->input('name', '');
+        if($name == ''){
+            $error = 1;
+            $message = '请输入材质名称';
+            return response()->json(compact('error','message'));
+        }
+
+        try{
+            $merchant = Auth::guard('merchant')->user();
+            $material = Material::findOrFail($id);
+            if($merchant->can('update',$material)){
+                if ($request->hasFile('cover')) {
+                    $cover =  $request->cover->store('images/spaces/categories/cover');
+                    $material->cover = $cover;
+                }
+                $material->name = $name;
+                $material->save();
+
+                $error = 0;
+                $message = 'success';
+            }else{
+                $error = 1;
+                $message = 'UnAuthorized';
+            }
+        }
+        catch(Exception $e){
+            Log::error($e);
+            $error = 1;
+            $message = '修改失败，请稍后再试或者联系管理员';
+        }finally{
+            return response()->json(compact('error','message'));
+        }
     }
 
     /**

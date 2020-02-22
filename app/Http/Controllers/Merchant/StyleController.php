@@ -25,13 +25,22 @@ class StyleController extends Controller
         $merchant = Auth::guard('merchant')->user();
 
         $styles = $style
-            ->select('styles.id','styles.name','styles.cover','styles.priority','styles.created_at','style_categories.name as category_name')
+            ->select('styles.id','styles.name','styles.cover','styles.priority','styles.type','styles.created_at','style_categories.name as category_name')
             ->leftJoin('style_categories','styles.category_id','=','style_categories.id')
             ->orderBy('styles.created_at','desc')
             ->where(['styles.merchant_id'=>$merchant->id])
             ->get();
+
         foreach($styles as $k => $style){
             $style->cover = Storage::url($style->cover);
+
+            if($style->type == 'image'){
+                $style->type = '图片';
+            }elseif($style->type == 'video'){
+                $style->type = '视频';
+            }elseif($style->type == 'pdf'){
+                $style->type = 'PDF';
+            }
         }
         return view('merchants.styles.index')->with('styles',$styles);
     }
@@ -61,17 +70,12 @@ class StyleController extends Controller
         $detail_type = $request->input('detail_type','');
         $image_datail = $request->input('image_detail','');
         $video_datail = $request->input('video_detail','');
+        $pdf_datail = $request->input('pdf_detail','');
         $hotspot = $request->input('hotspot','');
 
         if($name == ''){
             $error = 1;
             $message = '请输入名称';
-            return response()->json(compact('error','message'));
-        }
-
-        if(!in_array($detail_type,['image','video'])){
-            $error = 1;
-            $message = '空间详细类型错误';
             return response()->json(compact('error','message'));
         }
 
@@ -94,6 +98,12 @@ class StyleController extends Controller
             $detail = $image_datail;
         }else if($detail_type == 'video'){
             $detail = $video_datail;
+        }else if($detail_type == 'pdf'){
+            $detail = $pdf_datail;
+        }else{
+            $error = 1;
+            $message = '类型参数错误';
+            return response()->json(compact('error','message'));
         }
 
         if(empty($detail)){
@@ -212,27 +222,31 @@ class StyleController extends Controller
 
         try{
             $style = Style::findOrFail($id);
-
-            DB::beginTransaction();
             $merchant = Auth::guard('merchant')->user();
+            if($merchant->can('update', $style)){
+                DB::beginTransaction();
 
-            $style->name = $name;
-            $style->hotspot = $hotspot;
-            $style->type = $detail_type;
-            
-            if($cover != ''){
-                $style->cover = $cover;
+                $style->name = $name;
+                $style->hotspot = $hotspot;
+                $style->type = $detail_type;
+                
+                if($cover != ''){
+                    $style->cover = $cover;
+                }
+
+                if($background_music != ''){
+                    $style->background_music = $background_music;
+                }
+
+                $style->save();
+
+                DB::commit();
+                $error = 0;
+                $message = 'success';
+            }else{
+                $error = 1;
+                $message = 'UnAuthorized';
             }
-
-            if($background_music != ''){
-                $style->background_music = $background_music;
-            }
-
-            $style->save();
-
-            DB::commit();
-            $error = 0;
-            $message = 'success';
         }catch(Exception $e){
             DB::rollBack();
             $error = 1;
@@ -277,12 +291,6 @@ class StyleController extends Controller
         }
     }
 
-    public function storeCover(Request $request)
-    {
-        $path = $request->file('file')->store("images/styles/covers");
-        return $path;
-    }
-
     public function storeImage(Request $request)
     {
         $path = $request->file('file')->store("images/styles/details");
@@ -292,6 +300,12 @@ class StyleController extends Controller
     public function storeVideo(Request $request)
     {
         $path = $request->file('file')->store("videos/styles");
+        return $path;
+    }
+
+    public function storePDF(Request $request)
+    {
+        $path = $request->file('file')->store("pdfs/products/resources");
         return $path;
     }
 }

@@ -22,7 +22,6 @@
                             <thead>
                             <tr>
                                 <th>序号</th>
-                                <th>分类ID</th>
                                 <th>分类名称</th>
                                 <th>封面</th>
                                 <th>展示优先级</th>
@@ -35,12 +34,14 @@
                                 @foreach($categories as $i => $category)
                                 <tr>
                                     <td>{{$i+1}}</td>
-                                    <td>{{$category->id}}</td>
                                     <td>{{$category->name}}</td>
-                                    <td><a href="{{$category->cover}}" target="blank">{{$category->cover}}</a></td>
+                                    <td><img src="{{$category->cover}}"  width='70' height='45'/></td>
                                     <td>{{$category->priority}}</td>
                                     <td>{{$category->created_at}}</td>
-                                    <td><button onclick='deleteItem("{{$category->id}}")' class='down btn btn-default btn-xs btn-delete'>删除</button></td>
+                                    <td>
+                                        <a href="{{route('merchant.style.category.edit',$category->id)}}" class='down btn btn-default btn-xs btn-delete'>修改</a>
+                                        <button onclick='deleteItem("{{$category->id}}")' class='down btn btn-default btn-xs btn-delete'>删除</button>
+                                    </td>
                                 </tr>
                                 @endforeach
                             </tbody>

@@ -22,9 +22,9 @@
                             <thead>
                             <tr>
                                 <th>序号</th>
-                                <th>商品id</th>
                                 <th>商品名称</th>
                                 <th>商品封面</th>
+                                <th>类型</th>
                                 <th>展示优先级</th>
                                 <th>发布时间</th>
                                 <th>操作</th>
@@ -35,9 +35,9 @@
                                 @foreach($products as $i => $product)
                                 <tr>
                                     <td>{{$i+1}}</td>
-                                    <td>{{$product->id}}</td>
                                     <td>{{$product->name}}</td>
-                                    <td><a href="{{$product->cover}}" target="blank">{{$product->cover}}</a></td>
+                                    <td><img src="{{$product->cover}}"  width='70' height='45'/></td>
+                                    <td>{{$product->type}}</td>
                                     <td>{{$product->priority}}</td>
                                     <td>{{$product->created_at}}</td>
                                     <td>
