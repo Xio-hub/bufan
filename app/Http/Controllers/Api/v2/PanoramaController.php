@@ -80,7 +80,7 @@ class PanoramaController extends Controller
             return response()->json(compact('error', 'message'));
         }
 
-        $data = $panorama->select('source_url as url','sourec_type')->where(['style_id'=>$style_id,'material_id'=>$material_id])->first();
+        $data = $panorama->select('source_url as url','source_type')->where(['style_id'=>$style_id,'material_id'=>$material_id])->first();
 
         if(!is_null($data)){
             $data->url = $data->url ? Storage::url($data->url) : '';
