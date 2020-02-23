@@ -80,10 +80,10 @@ class PanoramaController extends Controller
             return response()->json(compact('error', 'message'));
         }
 
-        $data = $panorama->select('source_url as url','source_type')->where(['style_id'=>$style_id,'material_id'=>$material_id])->first();
+        $data = $panorama->select('source_url','source_type')->where(['style_id'=>$style_id,'material_id'=>$material_id])->first();
 
         if(!is_null($data)){
-            $data->url = $data->url ? Storage::url($data->url) : '';
+            $data->source_url = $data->source_url ? Storage::url($data->source_url) : '';
         }
 
         return response()->json($data);
@@ -99,10 +99,10 @@ class PanoramaController extends Controller
             return response()->json(compact('error', 'message'));
         }
 
-        $data = $vertical_view->select('source_url as url')->where(['style_id'=>$style_id])->first();
+        $data = $vertical_view->select('source_url','source_type')->where(['style_id'=>$style_id])->first();
 
         if(!is_null($data)){
-            $data->url = $data->url ? Storage::url($data->url) : '';
+            $data->source_url = $data->source_url ? Storage::url($data->source_url) : '';
         }
 
         return response()->json($data);
@@ -120,10 +120,10 @@ class PanoramaController extends Controller
             return response()->json(compact('error', 'message'));
         }
 
-        $data = $single_space->select('source_url as url')->where(['style_id'=>$style_id, 'material_id' => $material_id])->first();
+        $data = $single_space->select('source_url','source_type')->where(['style_id'=>$style_id, 'material_id' => $material_id])->first();
 
         if(!is_null($data)){
-            $data->url = $data->url ? Storage::url($data->url) : '';
+            $data->source_url = $data->source_url ? Storage::url($data->source_url) : '';
         }
 
         return response()->json($data);
