@@ -6,7 +6,7 @@ return[
         'miniapp_id' => '', // 小程序 APPID
         'mch_id' => '1520313301',
         'key' => '97f0943a2a00abad875ee0a8777d7ca2',
-        'notify_url' => 'http://bufan.test/api/payments/wechat/notify',
+        'notify_url' => 'http://bufan.leagokj.com/api/payments/wechat/notify',
         'cert_client' => '', // optional, 退款，红包等情况时需要用到
         'cert_key' => '',// optional, 退款，红包等情况时需要用到
         'log' => [ // optional
