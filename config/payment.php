@@ -10,7 +10,7 @@ return[
         'cert_client' => '', // optional, 退款，红包等情况时需要用到
         'cert_key' => '',// optional, 退款，红包等情况时需要用到
         'log' => [ // optional
-            'file' => './logs/wechat.log',
+            'file' => storage_path().'/logs/wechat.log',
             'level' => 'debug', // 建议生产环境等级调整为 info，开发环境为 debug
             'type' => 'daily', // optional, 可选 daily.
             'max_file' => 3, // optional, 当 type 为 daily 时有效，默认 30 天
@@ -30,7 +30,7 @@ return[
         'ali_public_key' => '',
         'private_key' => '',
         'log' => [ // optional
-            'file' => './logs/alipay.log',
+            'file' => storage_path().'/logs/alipay.log',
             'level' => 'debug', // 建议生产环境等级调整为 info，开发环境为 debug
             'type' => 'daily', // optional, 可选 daily.
             'max_file' => 3, // optional, 当 type 为 daily 时有效，默认 30 天

@@ -16,16 +16,21 @@ class WechatController extends Controller
     {
         $this->config = config('payment.wechat');
     }
-    
+
     public function createCourseOrder(Request $request)
     {
+        $user = $request->user();
+        $course_id = 1;
+
+        //本地创建订单记录
+
+        //发起微信支付
         $order = [
             'out_trade_no' => time(),
             'body' => 'subject-测试',
             'total_fee' => '1',
         ];
         $wechat = Pay::wechat($this->config);
-        
         return $wechat->wap($order);
     }
 

@@ -17,10 +17,9 @@ class PanoramaSingleSpaceController extends Controller
     {
         $merchant = Auth::guard('merchant')->user();
         $single_spaces = $panorama_single_space
-            ->select('panorama_single_spaces.id','panorama_single_spaces.source_url',
-                'panorama_styles.name as style','spaces.name as space','materials.name as material','panorama_single_spaces.created_at')
+            ->select('panorama_single_spaces.source_url',
+                'panorama_styles.name as style','materials.name as material','panorama_single_spaces.created_at')
             ->leftJoin('panorama_styles','panorama_single_spaces.style_id', '=', 'panorama_styles.id')
-            ->leftJoin('spaces','panorama_single_spaces.space_id', '=', 'spaces.id')
             ->leftJoin('materials','panorama_single_spaces.material_id', '=', 'materials.id')
             ->orderBy('panorama_single_spaces.created_at','desc')
             ->where(['panorama_single_spaces.merchant_id'=>$merchant->id])

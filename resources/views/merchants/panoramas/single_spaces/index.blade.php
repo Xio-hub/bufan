@@ -24,7 +24,6 @@
                                 <th>序号</th>
                                 <th>材质</th>
                                 <th>风格</th>
-                                <th>空间</th>
                                 <th>图片</th>
                                 <th>发布时间</th>
                                 <th>操作</th>
@@ -37,7 +36,6 @@
                                     <td>{{$i+1}}</td>
                                     <td>{{$single_space->material}}</td>
                                     <td>{{$single_space->style}}</td>
-                                    <td>{{$single_space->space}}</td>
                                     <td><a href="{{$single_space->source_url}}" target="blank">{{$single_space->source_url}}</a></td>
                                     <td>{{$single_space->created_at}}</td>
                                     <td><button onclick='deleteItem("{{$single_space->id}}")' class='down btn btn-default btn-xs btn-delete'>删除</button></td>

@@ -110,8 +110,13 @@ Route::group([
     // 'middleware' => ['auth:api']
 ], function() {
     Route::post('wechat/course_order', 'WechatController@createCourseOrder');
-    Route::post('wechat/notify', 'WechatController@notify');
+    Route::post('alipay/course_order', 'AlipayController@createCourseOrder');
+});
 
+Route::group([
+    'namespace' => 'Api\payments',
+    'prefix'    => 'payments',
+], function() {
     Route::post('alipay/course_order', 'AlipayController@createCourseOrder');
     Route::post('alipay/notify', 'AlipayController@notify');
 });
