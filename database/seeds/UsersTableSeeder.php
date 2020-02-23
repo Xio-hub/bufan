@@ -21,7 +21,7 @@ class UsersTableSeeder extends Seeder
             array (
                 'id' => 1,
                 'name' => 'admin',
-                'email' => '653816325@qq.com',
+                'email' => '123456@qq.com',
                 'password' => '$2y$10$1cyIl9E4Y0N5XWZJreUQcOPoXAa0zzlHyl8mjL5fB9n1n6/3Jv50C',
                 'remember_token' => '71zUzk08veWSLNzm0Qt04eTEQY0NGaqP831JjzEBPK436mMJAssxxYgkQkPU',
                 'created_at' => '2020-01-18 15:27:27',

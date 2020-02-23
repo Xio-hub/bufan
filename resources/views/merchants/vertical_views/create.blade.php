@@ -69,7 +69,7 @@
             maxFiles: 1,
             paramName: "file", // The name that will be used to transfer the file
             maxFilesize: 8, // MB
-            dictDefaultMessage: "<strong>请选择封面图片进行上传</strong>",
+            dictDefaultMessage: "<strong>请选择文件进行上传</strong>",
             init: function() {
                 this.on("success", function(file, responseText) {
                     var html = Dropzone.createElement("<input type='hidden' name='vertical_view'' value='"+ responseText +"' />");

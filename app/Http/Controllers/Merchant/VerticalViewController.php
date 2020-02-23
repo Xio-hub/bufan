@@ -69,6 +69,20 @@ class VerticalViewController extends Controller
             return response()->json(compact('error','message'));
         }
 
+        $file_path_info = explode('.',$vertical_view);
+        $file_ext = $file_path_info[1] ?? '';
+
+        $source_type = '';
+        if($file_ext == 'pdf'){
+            $source_type = 'pdf';
+        }else if(is_image_extension($file_ext)){
+            $source_type = 'image';
+        }else{
+            $error = 1;
+            $message = '文件格式错误，请重新上传';
+            return response()->json(compact('error','message'));
+        }
+
         $count = VerticalView::where(['style_id' => $style])->count();
         if($count > 0){
             $error = 1;
@@ -82,6 +96,7 @@ class VerticalViewController extends Controller
                 'merchant_id' => $merchant->id,
                 'style_id' => $style,
                 'source_url' => $vertical_view,
+                'source_type' => $source_type,
             ]);
             $error = 0;
             $message = 'success';

@@ -50,7 +50,7 @@ class PanoramaSingleSpaceController extends Controller
     {
         $style = $request->input('style', '') ?? '';
         $material = $request->input('material', '') ?? '';
-        $picture = $request->input('picture', '') ?? '';
+        $single_space = $request->input('single_space', '') ?? '';
 
         if($style == ''){
             $error = 1;
@@ -64,9 +64,23 @@ class PanoramaSingleSpaceController extends Controller
             return response()->json(compact('error','message'));
         }
 
-        if($picture == ''){
+        if($single_space == ''){
             $error = 1;
-            $message = '请上传图片';
+            $message = '请上传文件';
+            return response()->json(compact('error','message'));
+        }
+
+        $file_path_info = explode('.',$single_space);
+        $file_ext = $file_path_info[1] ?? '';
+
+        $source_type = '';
+        if($file_ext == 'pdf'){
+            $source_type = 'pdf';
+        }else if(is_image_extension($file_ext)){
+            $source_type = 'image';
+        }else{
+            $error = 1;
+            $message = '文件格式错误，请重新上传';
             return response()->json(compact('error','message'));
         }
 
@@ -83,7 +97,8 @@ class PanoramaSingleSpaceController extends Controller
                 'merchant_id' => $merchant->id,
                 'style_id' => $style,
                 'material_id' => $material,
-                'source_url' => $picture,
+                'source_url' => $single_space,
+                'source_type' => $source_type,
             ]);
             $error = 0;
             $message = 'success';
