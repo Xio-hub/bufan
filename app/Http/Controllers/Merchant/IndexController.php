@@ -56,6 +56,23 @@ class IndexController extends Controller
                 $merchant_index->cover = $cover;
                 $merchant_index->cover_type = $cover_type;
             }
+
+            if ($request->hasFile('music1')) {
+                $music1 =  $request->music1->store('audios/index');
+                $merchant_index->music1 = $music1;
+            }
+
+            if ($request->hasFile('music2')) {
+                $music2 =  $request->music1->store('audios/index');
+                $merchant_index->music2 = $music2;
+            }
+
+            if ($request->hasFile('music3')) {
+                $music3 =  $request->music1->store('audios/index');
+                $merchant_index->music3 = $music3;
+            }
+
+
             $merchant_index->type = $show_type;
             $merchant_index->save();
 

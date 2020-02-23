@@ -48,6 +48,49 @@
                                         <div class="hr-line-dashed"></div>
 
                                         <div class="form-group  row">
+                                            <label class="col-sm-2 col-form-label">背景音乐1</label>
+                                            <div class="fileinput fileinput-new" data-provides="fileinput">
+                                                <span class="btn btn-default btn-file"><span class="fileinput-new">Select file</span>
+                                                <span class="fileinput-exists">Change</span><input type="file" name="music1"  accept="audio/*"/></span>
+                                                <span class="fileinput-filename"></span>
+                                                <a href="#" class="close fileinput-exists" data-dismiss="fileinput" style="float: none">×</a>
+                                            </div> 
+                                            @if($data->music1 != '')
+                                            <div class='form-control col-md-8'>{{Storage::url($data->music1)}}</div> 
+                                            @endif
+                                        </div>
+                                        <div class="hr-line-dashed"></div>
+
+                                        <div class="form-group  row">
+                                            <label class="col-sm-2 col-form-label">背景音乐2</label>
+                                            <div class="fileinput fileinput-new" data-provides="fileinput">
+                                                <span class="btn btn-default btn-file"><span class="fileinput-new">Select file</span>
+                                                <span class="fileinput-exists">Change</span><input type="file" name="music2"  accept="audio/*"/></span>
+                                                <span class="fileinput-filename"></span>
+                                                <a href="#" class="close fileinput-exists" data-dismiss="fileinput" style="float: none">×</a>
+                                            </div> 
+                                            @if($data->music2 != '')
+                                            <div class='form-control col-md-8'>{{Storage::url($data->music2)}}</div> 
+                                            @endif
+                                        </div>
+                                        <div class="hr-line-dashed"></div>
+
+                                        <div class="form-group  row">
+                                            <label class="col-sm-2 col-form-label">背景音乐3</label>
+                                            <div class="fileinput fileinput-new" data-provides="fileinput">
+                                                <span class="btn btn-default btn-file"><span class="fileinput-new">Select file</span>
+                                                <span class="fileinput-exists">Change</span><input type="file" name="music3"  accept="audio/*"/></span>
+                                                <span class="fileinput-filename"></span>
+                                                <a href="#" class="close fileinput-exists" data-dismiss="fileinput" style="float: none">×</a>
+                                            </div> 
+                                            @if($data->music3 != '')
+                                            <div class='form-control col-md-8'>{{Storage::url($data->music3)}}</div> 
+                                            @endif
+                                        </div>
+                                        <div class="hr-line-dashed"></div>
+
+
+                                        <div class="form-group  row">
                                             <label class="col-sm-2 col-form-label">菜单别名</label>
                                             <div class="col-sm-5">
                                                 @foreach($categories as $i => $category)

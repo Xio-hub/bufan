@@ -12,7 +12,7 @@ class MerchantIndex extends Model
 
     public static function getIndexContent($user_id)
     {
-        $data = DB::select('select `merchant_index`.`cover`,`merchant_index`.`type`,`index_resources`.`content` from `merchant_index`
+        $data = DB::select('select `merchant_index`.`cover`,`merchant_index`.`music1`,`merchant_index`.`music2`,`merchant_index`.`music3`,`merchant_index`.`type`,`index_resources`.`content` from `merchant_index`
          left join `index_resources` on `merchant_index`.`id` = `index_resources`.`index_id`
           where (`merchant_index`.`merchant_id` = ? and `index_resources`.`source_type` = `merchant_index`.`type`) limit 1', [$user_id]);
         return $data ? $data[0] : [];

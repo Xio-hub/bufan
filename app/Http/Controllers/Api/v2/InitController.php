@@ -28,8 +28,19 @@ class InitController extends Controller
     {
         $merchant_id = $request->user()->id;
         $data = MerchantIndex::getIndexContent($merchant_id);
+        $data = MerchantIndex::select('id','cover','music1','music2','music3','type')->first();
         if(!empty($data)){
-            $data->cover = Storage::url($data->cover);
+            $data = $data->toArray();
+            $data['cover'] = $data['cover'] ? Storage::url($data['cover']) : '';
+            $data['music1'] = $data['music1'] ? Storage::url($data['music1']) : '';
+            $data['music2'] = $data['music2'] ? Storage::url($data['music2']) : '';
+            $data['music3'] = $data['music3'] ? Storage::url($data['music3']) : '';
+            $index_resource = IndexResource::select('content')->where(['index_id'=> $data['id'], 'source_type' => $data['type']])->first();
+            if($index_resource){
+                $data['content'] = $index_resource->content;
+            }else{
+                $data['content'] = '';
+            }
         }
   
         return response()->json($data);
