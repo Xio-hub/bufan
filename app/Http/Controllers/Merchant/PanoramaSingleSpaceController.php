@@ -51,7 +51,6 @@ class PanoramaSingleSpaceController extends Controller
     {
         $style = $request->input('style', '') ?? '';
         $material = $request->input('material', '') ?? '';
-        $space = $request->input('space', '') ?? '';
         $picture = $request->input('picture', '') ?? '';
 
         if($style == ''){
@@ -66,19 +65,13 @@ class PanoramaSingleSpaceController extends Controller
             return response()->json(compact('error','message'));
         }
 
-        if($space == ''){
-            $error = 1;
-            $message = '请选择空间';
-            return response()->json(compact('error','message'));
-        }
-
         if($picture == ''){
             $error = 1;
             $message = '请上传图片';
             return response()->json(compact('error','message'));
         }
 
-        $count = PanoramaSingleSpace::where(['style_id' => $style, 'material_id' => $material, 'space_id' => $space])->count();
+        $count = PanoramaSingleSpace::where(['style_id' => $style, 'material_id' => $material])->count();
         if($count > 0){
             $error = 1;
             $message = '数据已存在，无法添加';
@@ -91,7 +84,6 @@ class PanoramaSingleSpaceController extends Controller
                 'merchant_id' => $merchant->id,
                 'style_id' => $style,
                 'material_id' => $material,
-                'space_id' => $space,
                 'source_url' => $picture,
             ]);
             $error = 0;

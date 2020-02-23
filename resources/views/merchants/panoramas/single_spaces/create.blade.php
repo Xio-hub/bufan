@@ -46,18 +46,6 @@
                         </div>
                         <div class="hr-line-dashed"></div>
 
-                        <div class="form-group  row">
-                            <label class="col-sm-2 col-form-label">空间</label>
-                            <div class="col-sm-5">
-                                <select class="form-control m-b" name="space">
-                                    @foreach($spaces as $space)
-                                    <option value="{{$space->id}}">{{$space->name}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="hr-line-dashed"></div>
-
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label">上传图片</label>
                             <div class='col-sm-5'>
@@ -89,7 +77,7 @@
     <script src="{{asset('js/plugins/iCheck/icheck.min.js')}}"></script>
     <script>
         $("#image_box").dropzone({
-            acceptedFiles: 'image/*',
+            acceptedFiles: 'image/*,application/pdf',
             params:{'_token':$('meta[name="csrf-token"]').attr('content')},
             url: "{{route('panorama.single_space.upload')}}",
             addRemoveLinks: true,

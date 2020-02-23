@@ -112,16 +112,15 @@ class PanoramaController extends Controller
     {
         $style_id = $request->input('style_id','') ?? '';
         $material_id = $request->input('material_id','') ?? '';
-        $space_id = $request->input('space_id','') ?? '';
 
-        if($style_id == '' or $material_id == '' or $space_id == '')
+        if($style_id == '' or $material_id == '')
         {
             $error = 1;
             $message = '参数错误';
             return response()->json(compact('error', 'message'));
         }
 
-        $data = $single_space->select('source_url as url')->where(['style_id'=>$style_id, 'space_id' => $space_id, 'material_id' => $material_id])->first();
+        $data = $single_space->select('source_url as url')->where(['style_id'=>$style_id, 'material_id' => $material_id])->first();
 
         if(!is_null($data)){
             $data->url = $data->url ? Storage::url($data->url) : '';

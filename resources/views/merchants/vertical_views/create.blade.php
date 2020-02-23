@@ -62,7 +62,7 @@
     <script src="{{asset('js/plugins/iCheck/icheck.min.js')}}"></script>
     <script>
         $("#image_box").dropzone({
-            acceptedFiles: 'image/*',
+            acceptedFiles: 'image/*,application/pdf',
             params:{'_token':$('meta[name="csrf-token"]').attr('content')},
             url: "{{route('vertical_view.upload')}}",
             addRemoveLinks: true,
