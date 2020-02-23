@@ -11,11 +11,10 @@
         "laravel/passport": "~4.0",
         "laravel/tinker": "~1.0",
         "overtrue/laravel-ueditor": "~1.0",
-        "overtrue/laravel-wechat": "~4.0",
-        "overtrue/wechat": "~4.0",
         "paragonie/random_compat": "2.*",
         "spatie/laravel-permission": "2.*",
-        "yajra/laravel-datatables-oracle": "8.*"
+        "yajra/laravel-datatables-oracle": "8.*",
+        "yansongda/laravel-pay": "^2.1"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.2",

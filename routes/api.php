@@ -107,10 +107,13 @@ Route::group([
 Route::group([
     'namespace' => 'Api\payments',
     'prefix'    => 'payments',
-    'middleware' => ['auth:api']
+    // 'middleware' => ['auth:api']
 ], function() {
-    Route::post('/wechat/order', 'WechatController@order');
-    Route::post('/wechat-notify', 'WechatController@notify');
+    Route::post('wechat/course_order', 'WechatController@createCourseOrder');
+    Route::post('wechat/notify', 'WechatController@notify');
+
+    Route::post('alipay/course_order', 'AlipayController@createCourseOrder');
+    Route::post('alipay/notify', 'AlipayController@notify');
 });
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
