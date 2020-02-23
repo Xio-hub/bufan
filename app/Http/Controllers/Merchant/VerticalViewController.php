@@ -69,6 +69,13 @@ class VerticalViewController extends Controller
             return response()->json(compact('error','message'));
         }
 
+        $count = VerticalView::where(['style_id' => $style])->count();
+        if($count > 0){
+            $error = 1;
+            $message = '数据已存在，无法添加';
+            return response()->json(compact('error','message'));
+        }
+
         try{
             $merchant = Auth::guard('merchant')->user();
             VerticalView::create([

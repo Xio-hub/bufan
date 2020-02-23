@@ -78,6 +78,13 @@ class PanoramaSingleSpaceController extends Controller
             return response()->json(compact('error','message'));
         }
 
+        $count = PanoramaSingleSpace::where(['style_id' => $style, 'material_id' => $material, 'space_id' => $space])->count();
+        if($count > 0){
+            $error = 1;
+            $message = '数据已存在，无法添加';
+            return response()->json(compact('error','message'));
+        }
+
         try{
             $merchant = Auth::guard('merchant')->user();
             PanoramaSingleSpace::create([
