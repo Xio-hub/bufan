@@ -158,12 +158,12 @@
                                         <tbody>
                                             @if($video_resource)
 
-                                            <tr id='resource_{{$item->id}}'>
+                                            <tr id='resource_{{$video_resource->id}}'>
                                                 <td>
-                                                    <input type="text" class="form-control" disabled value="{{Storage::url($item->source_url)}}">
+                                                    <input type="text" class="form-control" disabled value="{{Storage::url($video_resource->source_url)}}">
                                                 </td>
                                                 <td>
-                                                    <button class="btn btn-white" onclick="deleteItem({{$item->id}})"><i class="fa fa-trash"></i> </button>
+                                                    <button class="btn btn-white" onclick="deleteItem({{$video_resource->id}})"><i class="fa fa-trash"></i> </button>
                                                 </td>
                                             </tr>
                                                 
