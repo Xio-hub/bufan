@@ -14,9 +14,9 @@ class AddMusicToMerchantIndexTable extends Migration
     public function up()
     {
         Schema::table('merchant_index', function (Blueprint $table) {
-            $table->string('music1');
-            $table->string('music2');
-            $table->string('music3');
+            $table->string('music1')->default('');
+            $table->string('music2')->default('');
+            $table->string('music3')->default('');
         });
     }
 
