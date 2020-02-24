@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Merchant;
+use Illuminate\Support\Carbon;
 
 class MerchantService
 {
@@ -14,6 +15,7 @@ class MerchantService
         $merchant_name = $request->input('merchant_name','') ?? '';
         $categories = $request->input('categories') ?? '';
         $permissions = $request->input('permissions') ?? '';
+        $expired_at = $request->input('expired_at') ?? '';
 
         if($username == ''){
             $message = '请输入用户名';
@@ -57,6 +59,14 @@ class MerchantService
         }
         if(empty($permissions)){
             $message = '请选择权限';
+            return ['error'=>1,'message'=>$message];
+        }
+        if(empty($expired_at)){
+            $message = '请选择到期时间';
+            return ['error'=>1,'message'=>$message];
+        }
+        if(Carbon::parse($expired_at)->toDateTimeString() < Carbon::now()->toDateTimeString()){
+            $message = '到期时间不能早于当前日期';
             return ['error'=>1,'message'=>$message];
         }
 

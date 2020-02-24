@@ -34,14 +34,11 @@ class PanoramaSingleSpaceController extends Controller
     public function create()
     {
         $merchant = Auth::guard('merchant')->user();
-        $merchant->with(['panorama_styles', 'spaces', 'materials'])->get();
         $materials = $merchant->materials;
-        $styles = $merchant->styles;
-        $spaces = $merchant->spaces;
+        $styles = $merchant->panorama_styles;
 
         return view('merchants.panoramas.single_spaces.create')->with([
             'styles' => $styles,
-            'spaces' => $spaces,
             'materials' => $materials
         ]);
     }

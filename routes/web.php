@@ -52,6 +52,7 @@ Route::group([
     'middleware' => ['auth']
 ], function () {
     Route::get('merchants', 'MerchantController@index')->name('merchants.index');
+    Route::get('merchants/getList', 'MerchantController@getList')->name('merchants.list');
     Route::get('merchants/create', 'MerchantController@create')->name('merchants.create');
     Route::post('merchants', 'MerchantController@store')->name('merchants.store');
     Route::get('merchants/{id}/edit', 'MerchantController@edit')->where('id','\d+')->name('merchants.edit');
@@ -194,7 +195,8 @@ Route::group([
 
     Route::get('introductions' , 'IntroductionController@index')->where('id', '\d+')->name('merchant.introduction.index');
     Route::get('introductions/{id}/edit' , 'IntroductionController@edit')->where('id', '\d+')->name('merchant.introduction.edit');
-    Route::patch('introductions/{id}' , 'IntroductionController@update')->where('id', '\d+')->name('merchant.introduction.update');
+    Route::post('introductions/{id}' , 'IntroductionController@update')->where('id', '\d+')->name('merchant.introduction.update');
+    Route::post('introductions/images' , 'IntroductionController@storeImage')->where('id', '\d+')->name('merchant.introduction.image.upload');
 
     Route::post('/materials/cover' ,'MaterialController@storeCover')->name('material.cover.upload');
     Route::post('/panoramas/styles/cover' ,'PanoramaStyleController@storeCover')->name('panorama.style.cover.upload');

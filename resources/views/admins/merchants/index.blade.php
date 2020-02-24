@@ -22,7 +22,9 @@
                             <thead>
                             <tr>
                                 <th>id</th>
+                                <th>username</th>
                                 <th>name</th>
+                                <th>expired_at</th>
                                 <th>optoions</th>
                             </tr>
                             </thead>
@@ -50,7 +52,7 @@
             $('.dataTables-example').DataTable({
                 serverSide: true,
                 ajax: {
-                    url: "{{url('api/v1/merchants')}}",
+                    url: "{{route('merchants.list')}}",
                     dataFilter: function(data){
                         var json = jQuery.parseJSON( data );
                         return JSON.stringify( json ); // return JSON string
@@ -67,8 +69,17 @@
                         }
                     },
                     {
-                        "data": "name" ,
-                        "title" : "商家名称",
+                        "data": "username" ,
+                        "title" : "商家账号",
+                    },
+                    { 
+                        "data": "name",
+                        "title": "商家名称",
+                        "name" : "merchant_base.name"
+                    },
+                    { 
+                        "data": "expired_at",
+                        "title": "过期时间"
                     },
                     { 
                         "data": "options",

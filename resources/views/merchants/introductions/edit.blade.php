@@ -61,9 +61,33 @@
 				    //           [ 'insert', [ 'link'] ],
 				    //           [ 'view', [ 'undo', 'redo', 'fullscreen', 'codeview', 'help' ] ]
 				    //       ]
+                    callbacks: {
+                        onImageUpload: function(files) {
+                            uploadImage(files[0])
+                        }
+                    }
                 }
             );
         });
+
+        function uploadImage(file) {
+            var formData = new FormData();
+            formData.append("file", file);
+            $.ajax({
+                url: "{{route('merchant.introduction.image.upload')}}",//这里是你的后端控制器 后面会写到后端控制器
+                headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                processData: false,
+                contentType: false,
+                data: formData,
+                type: 'POST',
+                success: function (data) {
+                    $('#summernote').summernote('insertImage', data.path, 'img');//这里是将返回的url地址重新添加到编辑器内
+                },
+                error : function() {
+                    alert("上传图片出错，请稍后再试或联系管理员！");
+                }
+            });
+        }
 
         $('#btn-cancel').click(function(){
             window.location.href = "{{route('merchant.introduction.index')}}";
@@ -73,7 +97,7 @@
         function save()
         {
             $.ajax({
-                type: "Patch",
+                type: "post",
                 dataType: "json",
                 url: "{{route('merchant.introduction.update',$introduction->id)}}",
                 data: $('#formData').serialize(),

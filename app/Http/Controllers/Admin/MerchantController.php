@@ -2,21 +2,22 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Auth;
 use Exception;
 use App\Models\Category;
 use App\Models\Merchant;
+use App\Models\Introduction;
 use App\Models\MerchantBase;
 use Illuminate\Http\Request;
+use App\Models\IndexResource;
+use App\Models\MerchantIndex;
+use Illuminate\Support\Carbon;
+use App\Services\MerchantService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
-use App\Models\IndexResource;
-use App\Models\Introduction;
-use App\Models\MerchantIndex;
-use App\Services\MerchantService;
 use Spatie\Permission\Models\Permission;
-use Auth;
-use Illuminate\Support\Carbon;
+use Yajra\DataTables\Facades\DataTables;
 
 class MerchantController extends Controller
 {
@@ -25,11 +26,27 @@ class MerchantController extends Controller
         return view('admins.merchants.index');
     }
 
+    public function getList(Request $request)
+    {
+        $start = $request->input('start');
+        $length = $request->input('length');
+        
+        $total = Merchant::all()->count();
+        // $model = MerchantBase::query()->offset($start)->limit($length)->select(['merchant_id', 'name']);
+
+        $models = Merchant::query()->select('merchants.username','merchants.expired_at','merchant_base.name')
+                    ->leftJoin('merchant_base','merchants.id','=','merchant_base.merchant_id')
+                    ->offset($start)->limit($length);
+                    
+        return DataTables::eloquent($models)->setTotalRecords($total)->toJson();
+    }
+
     public function create()
     {
         $categories = Category::all();
         $permissions = Permission::where('guard_name','merchant')->get();
-        return view('admins.merchants.create')->with(['categories' => $categories, 'permissions' => $permissions]);
+        $expired_date = Carbon::tomorrow()->toDateString();
+        return view('admins.merchants.create')->with(['categories' => $categories, 'permissions' => $permissions,'expired_date'=>$expired_date]);
     }
 
 
@@ -42,6 +59,7 @@ class MerchantController extends Controller
         $slogan = $request->input('slogan') ?? '';
         $categories = $request->input('categories') ?? '';
         $permissions = $request->input('permissions') ?? '';
+        $expired_at = $request->input('expired_at') ?? '';
         
         $validate = $merchant_service->validateCreateMerchantForm($request);
         if($validate['error'] == 1){
@@ -53,7 +71,8 @@ class MerchantController extends Controller
             $merchant = Merchant::create([
                 'username' => $username,
                 'email' => $email,
-                'password' => bcrypt($password)
+                'password' => bcrypt($password),
+                'expired_at' => Carbon::parse($expired_at)->toDateTimeString(),
             ]);
 
             $top_logo = '';
@@ -173,7 +192,9 @@ class MerchantController extends Controller
             'merchant'=>$merchant,
             'merchant_base'=>$merchant_base,
             'permissions'=>$permissions,
-            'categories'=>$categories]);
+            'categories'=>$categories,
+            'expired_date' => Carbon::parse($merchant->expired_at)->toDateString()
+        ]);
     }
     
     public function update(Request $request)
@@ -185,6 +206,7 @@ class MerchantController extends Controller
         $slogan = $request->input('slogan') ?? '';
         $categories = $request->input('categories');
         $permissions = $request->input('permissions');
+        $expired_at = $request->input('expired_at') ?? '';
 
         if(empty($categories)){
             $message = '请选择栏目';
@@ -194,9 +216,20 @@ class MerchantController extends Controller
             $message = '请选择权限';
             return ['error'=>1,'message'=>$message];
         }
+        if(empty($expired_at)){
+            $message = '请选择到期时间';
+            return ['error'=>1,'message'=>$message];
+        }
+        if(Carbon::parse($expired_at)->toDateTimeString() < Carbon::now()->toDateTimeString()){
+            $message = '到期时间不能早于当前日期';
+            return ['error'=>1,'message'=>$message];
+        }
 
         try{
             DB::beginTransaction();
+            $merchant->expired_at = Carbon::parse($expired_at)->toDateTimeString();
+            $merchant->save();
+
             $top_logo = '';
             if ($request->hasFile('top_logo')) {
                 $this->validate($request, ['top_logo'=>'image',]);

@@ -8,6 +8,7 @@
 <link href="{{asset('css/plugins/jasny/jasny-bootstrap.min.css')}}" rel="stylesheet">
 <link href="{{asset('css/plugins/iCheck/custom.css')}}" rel="stylesheet">
 <link href="{{asset('css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css')}}" rel="stylesheet">
+<link href="{{asset('css/plugins/datapicker/datepicker3.css')}}" rel="stylesheet">
 @endsection
 
 @section('content')
@@ -75,6 +76,14 @@
                             </div>
                         </div>
                         <div class="hr-line-dashed"></div>
+
+                        <div class="form-group  row" id='datepicker'>
+                            <label class="col-sm-2 col-form-label">到期时间</label>
+                            <div class="col-sm-5 input-group date">
+                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" name='expired_at' class="form-control" value="{{$expired_date}}">
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
                         
                         <div class="form-group row">
                             <div class="col-sm-4 col-sm-offset-2">
@@ -92,6 +101,8 @@
 @section('scripts')
     <script src="{{asset('js/plugins/jasny/jasny-bootstrap.min.js')}}"></script>
 
+    <script src="{{asset('js/plugins/datapicker/bootstrap-datepicker.js')}}"></script>
+
     <script src="{{asset('js/plugins/iCheck/icheck.min.js')}}"></script>
 
     <script>
@@ -99,6 +110,15 @@
             $('.i-checks').iCheck({
                 checkboxClass: 'icheckbox_square-green',
                 radioClass: 'iradio_square-green',
+            });
+
+            $('#datepicker .input-group.date').datepicker({
+                startView: 1,
+                todayBtn: "linked",
+                keyboardNavigation: false,
+                forceParse: false,
+                autoclose: true,
+                format: "yyyy-mm-dd"
             });
         });
 

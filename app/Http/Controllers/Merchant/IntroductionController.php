@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class IntroductionController extends Controller
 {
@@ -63,5 +64,18 @@ class IntroductionController extends Controller
         }finally{
             return response()->json(compact('error','message'));
         }
+    }
+
+    public function storeImage(Request $request){
+        $path = $request->file('file')->store("images/introductions");
+        
+        if($path){
+            $error = 0;
+            $path = Storage::url($path);
+        }else{
+            $error = 1;
+        }
+
+        return response()->json(compact('error','path'));
     }
 }

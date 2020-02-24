@@ -5,6 +5,7 @@
                 <div class="dropdown profile-element">
                     <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                     <span class="block m-t-xs font-bold">{{Auth::guard('merchant')->user()->username}}</span>
+                    <span class="block m-t-xs font-bold">到期时间：{{Carbon\Carbon::parse(Auth::guard('merchant')->user()->expired_at)->toDateString()}}</span>
                         <span class="text-muted text-xs block">menu <b class="caret"></b></span>
                     </a>
                     <ul class="dropdown-menu animated fadeInRight m-t-xs">
