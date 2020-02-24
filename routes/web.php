@@ -35,6 +35,7 @@ Route::group([
 ], function () {
     /*super admin*/
     Route::get('users', 'UserController@index')->name('admin.index');
+    Route::get('users/getList', 'UserController@getList')->name('admin.list');
     Route::get('create', 'UserController@create')->name('admin.create');
     Route::post('users', 'UserController@store')->name('admin.store');
 

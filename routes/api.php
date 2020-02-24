@@ -17,9 +17,6 @@ Route::group([
     'namespace' => 'Api\v1',
     'prefix'    => 'v1'
 ], function() {
-    Route::get('admins','AdminController@list');
-    Route::get('merchants','MerchantController@list');
-
     Route::post('users/login', 'PassportController@login');
 
     Route::get('init', 'InitController@init');

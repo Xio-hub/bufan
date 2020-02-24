@@ -3,14 +3,15 @@
 namespace App\Http\Controllers\Admin;
 
 use Auth;
-use App\Models\User;
-
 use Exception;
+
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use Yajra\DataTables\Facades\DataTables;
 
 class UserController extends Controller
 {
@@ -21,6 +22,20 @@ class UserController extends Controller
      */
     public function index() {
         return view('admins.index');
+    }
+
+    public function getList(Request $request)
+    {
+        $start = $request->input('start');
+        $length = $request->input('length');
+        
+        $total = User::all()->count();
+        $model = User::query()
+                    ->select(['id', 'name', 'email'])
+                    ->offset($start)
+                    ->limit($length);
+
+        return DataTables::eloquent($model)->setTotalRecords($total)->toJson();
     }
 
     /**

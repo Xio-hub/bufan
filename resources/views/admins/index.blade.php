@@ -44,7 +44,7 @@
             $('.dataTables-example').DataTable({
                 serverSide: true,
                 ajax: {
-                    url: "{{url('api/v1/admins')}}",
+                    url: "{{route('admin.list')}}",
                     dataFilter: function(data){
                         var json = jQuery.parseJSON( data );
                         return JSON.stringify( json ); // return JSON string
