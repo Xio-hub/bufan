@@ -21,12 +21,13 @@ class PanoramaController extends Controller
     public function index()
     {
         $merchant = Auth::guard('merchant')->user();
-        $merchant::with(['panoramas' => function ($query) {
-            $query->orderBy('created_at', 'desc');
-        }])->get();
-        $panoramas = $merchant->panoramas;
+        $panoramas = Panorama::select('panoramas.id','panoramas.created_at','panoramas.source_type','materials.name as material_name','panorama_styles.name as style_name')
+                            ->leftJoin('materials','panoramas.material_id','=','materials.id')
+                            ->leftJoin('panorama_styles','panoramas.style_id','panorama_styles.id')
+                            ->where(['panoramas.merchant_id' => $merchant->id])
+                            ->get();
+
         foreach($panoramas as $k => $panorama){
-            // $panorama->cover = Storage::url($panorama->cover);
             if($panorama->source_type == 'image'){
                 $panorama->source_type = '全景图';
             }else if($panorama->source_type == 'link'){

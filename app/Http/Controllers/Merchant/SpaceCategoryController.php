@@ -21,9 +21,6 @@ class SpaceCategoryController extends Controller
     public function index()
     {
         $merchant = Auth::guard('merchant')->user();
-        $merchant::with(['spaceCategories' => function ($query) {
-            $query->orderBy('created_at', 'desc');
-        }])->get();
         $categories = $merchant->spaceCategories;
         foreach($categories as $k => $category){
             $category->cover = Storage::url($category->cover);

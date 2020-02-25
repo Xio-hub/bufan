@@ -20,7 +20,6 @@ class InitController extends Controller
                             ->first();
         $data->top_logo = Storage::url($data->top_logo);
         $data->sitebar_logo = Storage::url($data->sitebar_logo);
-        $data->slogan = Storage::url($data->slogan);
         return response()->json($data);
     }
 

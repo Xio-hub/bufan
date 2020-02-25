@@ -21,9 +21,6 @@ class VerticalViewController extends Controller
     public function index()
     {
         $merchant = Auth::guard('merchant')->user();
-        $merchant::with(['vertical_views' => function ($query) {
-            $query->orderBy('created_at', 'desc');
-        }])->get();
         $vertical_views = $merchant->vertical_views;
         foreach($vertical_views as $k => $vertical_view){
             $vertical_view->source_url = Storage::url($vertical_view->source_url);

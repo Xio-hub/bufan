@@ -18,9 +18,6 @@ class ProductController extends Controller
     public function index()
     {
         $merchant = Auth::guard('merchant')->user();
-        $merchant::with(['products' => function ($query) {
-            $query->orderBy('created_at', 'desc');
-        }])->get();
         $products = $merchant->products;
         foreach($products as $k => $product){
             $product->cover = Storage::url($product->cover);

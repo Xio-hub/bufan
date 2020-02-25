@@ -34,8 +34,8 @@
                                 @foreach($panoramas as $i => $panorama)
                                 <tr>
                                     <td>{{$i+1}}</td>
-                                    <td>{{$panorama->material->name}}</td>
-                                    <td>{{$panorama->style->name}}</td>
+                                    <td>{{$panorama->material_name}}</td>
+                                    <td>{{$panorama->style_name}}</td>
                                     <td>{{$panorama->source_type}}</td>
                                     <td>{{$panorama->created_at}}</td>
                                     <td><button onclick='deleteItem("{{$panorama->id}}")' class='down btn btn-default btn-xs btn-delete'>删除</button></td>

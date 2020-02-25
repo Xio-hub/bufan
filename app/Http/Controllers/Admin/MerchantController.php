@@ -32,9 +32,7 @@ class MerchantController extends Controller
         $length = $request->input('length');
         
         $total = Merchant::all()->count();
-        // $model = MerchantBase::query()->offset($start)->limit($length)->select(['merchant_id', 'name']);
-
-        $models = Merchant::query()->select('merchants.username','merchants.expired_at','merchant_base.name')
+        $models = Merchant::query()->select('merchants.username','merchants.expired_at','merchant_base.merchant_id','merchant_base.name')
                     ->leftJoin('merchant_base','merchants.id','=','merchant_base.merchant_id')
                     ->offset($start)->limit($length);
                     

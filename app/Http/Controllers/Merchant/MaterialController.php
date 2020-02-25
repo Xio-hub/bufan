@@ -21,9 +21,6 @@ class MaterialController extends Controller
     public function index()
     {
         $merchant = Auth::guard('merchant')->user();
-        $merchant::with(['materials' => function ($query) {
-            $query->orderBy('created_at', 'desc');
-        }])->get();
         $materials = $merchant->materials;
         foreach($materials as $k => $material){
             $material->cover = Storage::url($material->cover);

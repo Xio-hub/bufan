@@ -21,9 +21,6 @@ class StyleCategoryController extends Controller
     public function index()
     {
         $merchant = Auth::guard('merchant')->user();
-        $merchant::with(['styleCategories' => function ($query) {
-            $query->orderBy('created_at', 'desc');
-        }])->get();
         $categories = $merchant->styleCategories;
         foreach($categories as $k => $category){
             $category->cover = Storage::url($category->cover);

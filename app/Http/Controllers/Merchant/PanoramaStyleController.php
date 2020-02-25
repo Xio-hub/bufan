@@ -21,9 +21,6 @@ class PanoramaStyleController extends Controller
     public function index()
     {
         $merchant = Auth::guard('merchant')->user();
-        $merchant::with(['panorama_styles' => function ($query) {
-            $query->orderBy('created_at', 'desc');
-        }])->get();
         $styles = $merchant->panorama_styles;
         foreach($styles as $k => $style){
             $style->cover = Storage::url($style->cover);
