@@ -60,8 +60,10 @@ Route::group([
     Route::post('merchants/{id}', 'MerchantController@update')->name('merchants.update');
     Route::delete('merchants/{id}', 'MerchantController@destroy');
 
+    Route::get('merchant_applications', 'ApplicationController@index')->name('merchants.applications.index');
+    Route::get('merchant_applications/getList', 'ApplicationController@getList')->name('merchants.applications.list');
+
     Route::get('courses/background/edit', 'CourseController@editBackground')->name('courses.background.edit');
-    // Route::post('courses/background', 'CourseController@updateBackground')->name('courses.background.update');
     Route::post('/courses/background_image' ,'CourseController@storeBackground')->name('courses.background.upload');
 
     Route::get('courses/info/edit', 'CourseController@editInfo')->name('courses.info.edit');

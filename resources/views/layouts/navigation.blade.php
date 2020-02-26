@@ -38,6 +38,10 @@
             </li>
 
             <li>
+                <a href="{{route('merchants.applications.index')}}"><i class="fa fa-th-large"></i>申请列表</a>
+            </li>
+
+            {{-- <li>
                 <a href="#"><i class="fa fa-th-large"></i> <span class="nav-label">课程管理</span> <span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
                     <li><a href="{{route('courses.background.edit')}}">更换背景</a></li>
@@ -46,7 +50,7 @@
                     <li><a href="{{route('courses.price.edit')}}">课程价格</a></li>
                     <li><a href="{{route('courses.outline.index')}}">大纲列表</a></li>
                 </ul>
-            </li>
+            </li> --}}
 
             <li>
                 <a href="#"><i class="fa fa-th-large"></i> <span class="nav-label">订单管理</span> <span class="fa arrow"></span></a>

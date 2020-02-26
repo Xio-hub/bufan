@@ -48,6 +48,12 @@
                                         <div class="hr-line-dashed"></div>
 
                                         <div class="form-group  row">
+                                            <label class="col-sm-2 col-form-label">企业官网</label>
+                                            <div class="col-sm-5"><input type="text" class="form-control" name='website'></div>
+                                        </div>
+                                        <div class="hr-line-dashed"></div>
+
+                                        <div class="form-group  row">
                                             <label class="col-sm-2 col-form-label">背景音乐1</label>
                                             <div class="fileinput fileinput-new" data-provides="fileinput">
                                                 <span class="btn btn-default btn-file"><span class="fileinput-new">Select file</span>
@@ -111,7 +117,7 @@
                                                 <div class="i-checks"><label> <input type="radio" id="image_type" value="text" name="show_type" checked> <i></i>图文</label></div>
                                                 <div class="i-checks"><label> <input type="radio" id="video_type" value="video" name="show_type"> <i></i>视频</label></div>
                                                 @else
-                                                <div class="i-checks"><label> <input type="radio" id="image_type" value="text" name="show_type"> <i></i>图片</label></div>
+                                                <div class="i-checks"><label> <input type="radio" id="image_type" value="text" name="show_type"> <i></i>图文</label></div>
                                                 <div class="i-checks"><label> <input type="radio" id="video_type" value="video" name="show_type" checked> <i></i>视频</label></div>
                                                 @endif
                                             </div>

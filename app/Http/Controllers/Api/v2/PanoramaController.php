@@ -82,7 +82,7 @@ class PanoramaController extends Controller
 
         $data = $panorama->select('source_url','source_type')->where(['style_id'=>$style_id,'material_id'=>$material_id])->first();
 
-        if(!is_null($data)){
+        if(!is_null($data) && $data['source_type'] == 'image'){
             $data->source_url = $data->source_url ? Storage::url($data->source_url) : '';
         }
 

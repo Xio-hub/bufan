@@ -36,6 +36,7 @@ class IndexController extends Controller
     public function update(Request $request)
     {
         $alias = $request->input('alias', []) ?? [];
+        $website = $request->input('website', '') ?? '';
         $show_type = $request->input('show_type', []) ?? [];
         if(empty($alias)){
             $error = 1;
@@ -72,8 +73,8 @@ class IndexController extends Controller
                 $merchant_index->music3 = $music3;
             }
 
-
             $merchant_index->type = $show_type;
+            $merchant_index->website = $website;
             $merchant_index->save();
 
             //category

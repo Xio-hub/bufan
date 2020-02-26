@@ -22,7 +22,7 @@
                             <thead>
                             <tr>
                                 <th>序号</th>
-                                <th>空间名称</th>
+                                <th>风格名称</th>
                                 <th>所属分类</th>
                                 <th>封面</th>
                                 <th>类型</th>

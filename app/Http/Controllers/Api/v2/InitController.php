@@ -15,7 +15,7 @@ class InitController extends Controller
     public function init(Request $request)
     {
         $merchant_id = $request->user()->id;
-        $data = MerchantBase::select('top_logo','sitebar_logo','slogan')
+        $data = MerchantBase::select('top_logo','sitebar_logo','slogan','website')
                             ->where(['merchant_id'=>$merchant_id])
                             ->first();
         $data->top_logo = Storage::url($data->top_logo);
@@ -36,7 +36,7 @@ class InitController extends Controller
             $data['music3'] = $data['music3'] ? Storage::url($data['music3']) : '';
             $index_resource = IndexResource::select('content')->where(['index_id'=> $data['id'], 'source_type' => $data['type']])->first();
             if($index_resource){
-                $data['content'] = $index_resource->content;
+                $data['content'] = $index_resource->content ? Storage::url($index_resource->content) : '';
             }else{
                 $data['content'] = '';
             }

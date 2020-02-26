@@ -77,13 +77,12 @@ class SpaceController extends Controller
     {
         $id = $request->id;
 
-        $data = $space->select('id','name','type','background_music','hotspot')
+        $data = $space->select('id','name','type','hotspot')
                         ->where(['id' => $id])
                         ->first();
 
         if($data){
             $data = $data->toArray();
-            $data['background_music'] = $data['background_music'] ? Storage::url($data['background_music']) : '';
             $resources = $space_resource->select('source_type as type','source_url')
                             ->where(['space_id' => $id,'source_type' => $data['type']])    
                             ->orderBy('priority', 'asc')

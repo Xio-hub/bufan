@@ -53,11 +53,14 @@ Route::group([
     Route::get('search', 'SearchController@search');
 });
 
+
+
 Route::group([
     'namespace' => 'Api\v2',
     'prefix'    => 'v2',
 ], function() {
     Route::post('users/login', 'PassportController@login');
+    Route::post('users/applications', 'ApplicationController@createApplication');
 });
 
 Route::group([
