@@ -27,7 +27,7 @@ class InitController extends Controller
     {
         $merchant_id = $request->user()->id;
         $data = MerchantIndex::getIndexContent($merchant_id);
-        $data = MerchantIndex::select('id','cover','music1','music2','music3','type')->where(['merchant_id'=>$merchant_id])->first();
+        $data = MerchantIndex::select('id','cover','music1','music2','music3','website','type')->where(['merchant_id'=>$merchant_id])->first();
         if(!empty($data)){
             $data = $data->toArray();
             $data['cover'] = $data['cover'] ? Storage::url($data['cover']) : '';
