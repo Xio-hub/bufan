@@ -60,8 +60,8 @@ Route::group([
     Route::post('merchants/{id}', 'MerchantController@update')->name('merchants.update');
     Route::delete('merchants/{id}', 'MerchantController@destroy');
 
-    Route::get('merchant_applications', 'ApplicationController@index')->name('merchants.applications.index');
-    Route::get('merchant_applications/getList', 'ApplicationController@getList')->name('merchants.applications.list');
+    Route::get('applications', 'ApplicationController@index')->name('merchants.applications.index');
+    Route::get('applications/getList', 'ApplicationController@getList')->name('merchants.applications.list');
 
     Route::get('courses/background/edit', 'CourseController@editBackground')->name('courses.background.edit');
     Route::post('/courses/background_image' ,'CourseController@storeBackground')->name('courses.background.upload');
@@ -206,6 +206,14 @@ Route::group([
     Route::post('/panoramas/images' ,'PanoramaController@storeImage')->name('panorama.upload');
     Route::post('/vertical_views/images' ,'VerticalViewController@storeImage')->name('vertical_view.upload');
     Route::post('/panoramas/single_space/images' ,'PanoramaSingleSpaceController@storeImage')->name('panorama.single_space.upload');
+
+    Route::get('/articles', 'ArticleController@index')->name('articles.index');
+    Route::get('/articles/create', 'ArticleController@create')->name('articles.create');
+    Route::post('/articles', 'ArticleController@store')->name('articles.store');
+    Route::get('/articles/{id}/edit', 'ArticleController@edit')->where('id','\d+')->name('articles.edit');
+    Route::put('/articles/{id}', 'ArticleController@update')->where('id','\d+')->name('articles.update');
+    Route::delete('/articles/{id}', 'ArticleController@destroy')->where('id','\d+')->name('articles.destroy');
+    Route::get('articles/getList', 'ArticleController@getList')->name('articles.list');
 });
 
 Route::get('test' ,'HomeController@test');

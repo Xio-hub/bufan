@@ -91,8 +91,8 @@ class Merchant extends Model implements
         return $this->hasMany('App\Models\PanoramaSingleSpace', 'merchant_id');
     }
 
-    public function course_orders()
+    public function articles()
     {
-        return $this->hasMany('App\Models\VerticalView', 'user_id');
+        return $this->hasMany('App\Models\Article', 'merchant_id');
     }
 }

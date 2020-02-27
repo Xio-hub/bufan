@@ -35,7 +35,9 @@ class ProductController extends Controller
 
     public function create()
     {
-        return view('merchants.products.create');
+        $merchant = Auth::guard('merchant')->user();
+        $articles = $merchant->articles;
+        return view('merchants.products.create')->with('articles', $articles);
     }
 
     public function store(Request $request)
@@ -128,12 +130,14 @@ class ProductController extends Controller
 
         $merchant = Auth::guard('merchant')->user();
         $product = Product::findOrFail($id);
+        $articles = $merchant->articles;
         $image_resources = ProductResource::where(['product_id'=> $id,'source_type' => 'image'])->orderBy('priority','asc')->get();
         $video_resources = ProductResource::where(['product_id'=> $id,'source_type' => 'video'])->orderBy('priority','asc')->get();
         $pdf_resources = ProductResource::where(['product_id'=> $id,'source_type' => 'pdf'])->orderBy('priority','asc')->get();
         if($merchant->can('edit', $product)){
             return view('merchants.products.edit')->with([
                 'product' => $product,
+                'articles' => $articles,
                 'image_resources' => $image_resources,
                 'video_resources' => $video_resources,
                 'pdf_resources' => $pdf_resources

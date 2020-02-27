@@ -2,36 +2,6 @@
 
 namespace App\Providers;
 
-use App\Models\IndexResource;
-use App\Models\Introduction;
-use App\Models\Material;
-use App\Models\Panorama;
-use App\Models\PanoramaSingleSpace;
-use App\Models\PanoramaStyle;
-use App\Models\Product;
-use App\Models\ProductResource;
-use App\Models\Space;
-use App\Models\SpaceCategory;
-use App\Models\SpaceResource;
-use App\Models\Style;
-use App\Models\StyleCategory;
-use App\Models\StyleResource;
-use App\Models\VerticalView;
-use App\Policies\IndexResourcePolicy;
-use App\Policies\IntroductionPolicy;
-use App\Policies\MaterialPolicy;
-use App\Policies\PanoramaPolicy;
-use App\Policies\PanoramaSingleSpacePolicy;
-use App\Policies\PanoramaStylePolicy;
-use App\Policies\ProductPolicy;
-use App\Policies\ProductResourcePolicy;
-use App\Policies\SpaceCategoryPolicy;
-use App\Policies\SpacePolicy;
-use App\Policies\SpaceResourcePolicy;
-use App\Policies\StyleCategoryPolicy;
-use App\Policies\StylePolicy;
-use App\Policies\StyleResourcePolicy;
-use App\Policies\VerticalViewPolicy;
 use Laravel\Passport\Passport;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -45,21 +15,22 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         'App\Model' => 'App\Policies\ModelPolicy',
-        Product::class => ProductPolicy::class,
-        Space::class => SpacePolicy::class,
-        SpaceCategory::class => SpaceCategoryPolicy::class,
-        Style::class => StylePolicy::class,
-        StyleCategory::class => StyleCategoryPolicy::class,
-        Material::class => MaterialPolicy::class,
-        Panorama::class => PanoramaPolicy::class,
-        PanoramaStyle::class => PanoramaStylePolicy::class,
-        VerticalView::class => VerticalViewPolicy::class,
-        Introduction::class => IntroductionPolicy::class,
-        PanoramaSingleSpace::class => PanoramaSingleSpacePolicy::class,
-        ProductResource::class => ProductResourcePolicy::class,
-        SpaceResource::class => SpaceResourcePolicy::class,
-        StyleResource::class => StyleResourcePolicy::class,
-        IndexResource::class => IndexResourcePolicy::class,
+        \App\Models\Product::class => \App\Policies\ProductPolicy::class,
+        \App\Models\Space::class => \App\Policies\SpacePolicy::class,
+        \App\Models\SpaceCategory::class => \App\Policies\SpaceCategoryPolicy::class,
+        \App\Models\Style::class => \App\Policies\StylePolicy::class,
+        \App\Models\StyleCategory::class => \App\Policies\StyleCategoryPolicy::class,
+        \App\Models\Material::class => \App\Policies\MaterialPolicy::class,
+        \App\Models\Panorama::class => \App\Policies\PanoramaPolicy::class,
+        \App\Models\PanoramaStyle::class => \App\Policies\PanoramaStylePolicy::class,
+        \App\Models\VerticalView::class => \App\Policies\VerticalViewPolicy::class,
+        \App\Models\Introduction::class => \App\Policies\IntroductionPolicy::class,
+        \App\Models\PanoramaSingleSpace::class => \App\Policies\PanoramaSingleSpacePolicy::class,
+        \App\Models\ProductResource::class => \App\Policies\ProductResourcePolicy::class,
+        \App\Models\SpaceResource::class => \App\Policies\SpaceResourcePolicy::class,
+        \App\Models\StyleResource::class => \App\Policies\StyleResourcePolicy::class,
+        \App\Models\IndexResource::class => \App\Policies\IndexResourcePolicy::class,
+        \App\Models\Article::class => \App\Policies\ArticlePolicy::class,
     ];
 
     /**

@@ -23,6 +23,10 @@
             <li>
                 <a href="{{route('merchant.index.edit')}}"><i class="fa fa-th-large"></i> <span class="nav-label">首页设置</span></a>
             </li>
+
+            <li>
+                <a href="{{route('articles.index')}}"><i class="fa fa-th-large"></i> <span class="nav-label">文章管理</span></a>
+            </li>
    
             @can('新品管理')
             <li>

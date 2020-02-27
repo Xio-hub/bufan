@@ -102,6 +102,8 @@ Route::group([
 
     Route::get('introductions/categories', 'IntroductionController@categories');
     Route::get('introductions/{id}', 'IntroductionController@detail')->where('id', '\d+');
+
+    Route::get('articles/{id}', 'ArticleController@detail')->where('id', '\d+');
 });
 
 Route::group([

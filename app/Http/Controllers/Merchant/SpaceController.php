@@ -54,7 +54,11 @@ class SpaceController extends Controller
     {
         $merchant = Auth::guard('merchant')->user();
         $categories = $merchant->spaceCategories;
-        return view('merchants.spaces.create')->with('categories', $categories);
+        $articles = $merchant->articles;
+        return view('merchants.spaces.create')->with([
+            'categories'=> $categories,
+            'articles' => $articles
+        ]);
     }
 
     /**
@@ -162,6 +166,7 @@ class SpaceController extends Controller
 
         $merchant = Auth::guard('merchant')->user();
         $categories = $merchant->spaceCategories;
+        $articles = $merchant->articles;
         $space = Space::findOrFail($id);
         $image_resources = SpaceResource::where(['space_id'=> $id,'source_type' => 'image'])->orderBy('priority','asc')->get();
         $video_resources = SpaceResource::where(['space_id'=> $id,'source_type' => 'video'])->orderBy('priority','asc')->get();
@@ -169,6 +174,7 @@ class SpaceController extends Controller
         if($merchant->can('edit', $space)){
             return view('merchants.spaces.edit')->with([
                 'categories' => $categories,
+                'articles' => $articles,
                 'space' => $space,
                 'image_resources' => $image_resources,
                 'video_resources' => $video_resources,

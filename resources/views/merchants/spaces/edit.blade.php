@@ -65,7 +65,18 @@
 
                                             <div class="form-group  row">
                                                 <label class="col-sm-2 col-form-label">热点连接</label>
-                                                <div class="col-sm-5"><input type="url" class="form-control" name='hotspot' value="{{$space->hotspot}}"></div>
+                                                <div class="col-sm-5">
+                                                    <select class="form-control m-b" name="hotspot">
+                                                        <option value="0">无</option>
+                                                        @foreach($articles as $article)
+                                                            @if($article->id == $space->hotspot)
+                                                            <option value="{{$article->id}}" selected>{{$article->title}}</option>
+                                                            @else
+                                                            <option value="{{$article->id}}">{{$article->title}}</option>
+                                                            @endif
+                                                        @endforeach
+                                                    </select>
+                                                </div>
                                             </div>
                                             <div class="hr-line-dashed"></div>
 

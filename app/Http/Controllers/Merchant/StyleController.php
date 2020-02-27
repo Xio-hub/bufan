@@ -54,7 +54,11 @@ class StyleController extends Controller
     {
         $merchant = Auth::guard('merchant')->user();
         $categories = $merchant->styleCategories;
-        return view('merchants.styles.create')->with('categories', $categories);
+        $articles = $merchant->articles;
+        return view('merchants.styles.create')->with([
+            'categories'=> $categories,
+            'articles' => $articles
+        ]);
     }
 
     /**
@@ -173,6 +177,7 @@ class StyleController extends Controller
 
         $merchant = Auth::guard('merchant')->user();
         $categories = $merchant->styleCategories;
+        $articles = $merchant->articles;
         $style = Style::findOrFail($id);
         $image_resources = StyleResource::where(['style_id'=> $id,'source_type' => 'image'])->orderBy('priority','asc')->get();
         $video_resources = StyleResource::where(['style_id'=> $id,'source_type' => 'video'])->orderBy('priority','asc')->get();
@@ -180,6 +185,7 @@ class StyleController extends Controller
         if($merchant->can('edit', $style)){
             return view('merchants.styles.edit')->with([
                 'categories' => $categories,
+                'articles' => $articles,
                 'style' => $style,
                 'image_resources' => $image_resources,
                 'video_resources' => $video_resources,

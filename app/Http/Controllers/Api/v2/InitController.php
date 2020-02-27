@@ -15,7 +15,7 @@ class InitController extends Controller
     public function init(Request $request)
     {
         $merchant_id = $request->user()->id;
-        $data = MerchantBase::select('top_logo','sitebar_logo','slogan','website')
+        $data = MerchantBase::select('top_logo','sitebar_logo','slogan')
                             ->where(['merchant_id'=>$merchant_id])
                             ->first();
         $data->top_logo = Storage::url($data->top_logo);
