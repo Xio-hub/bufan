@@ -15,9 +15,9 @@ class ArticleController extends Controller
         $article = Article::select('merchant_id','title','content')->where(['id' => $id])->first();
         if($article && $user->can('view',$article)){
             unset($article->merchant_id);
-            return response()->json($article);
         }else{
-            return response('UnAuthorized',405);
+            $article = null;
         }
+        return response()->json($article);
     }
 }

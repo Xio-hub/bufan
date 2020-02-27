@@ -73,17 +73,18 @@ class StyleController extends Controller
         return response()->json(['data' => $data, 'meta' => ['total_count' => $total, 'next' => $page->getNext(), 'previous' => $page->getPrev()]]);
     }
 
-    public function detail(Request $request, Style $style, StyleResource $style_resource)
+    public function detail(Request $request)
     {
         $id = $request->id;
-
-        $data = $style->select('id','name','type','hotspot')
+        $user = $request->user();
+        $style = Style::select('id','merchant_id','name','type','hotspot')
                         ->where(['id' => $id])
                         ->first();
 
-        if($data){
-            $data = $data->toArray();
-            $resources = $style_resource->select('source_type as type','source_url')
+        if($style && $user->can('view',$style)){
+            $data = $style->toArray();
+            unset($data['merchant_id']);
+            $resources = StyleResource::select('source_type as type','source_url')
                             ->where(['style_id' => $id, 'source_type' => $data['type']])    
                             ->orderBy('priority', 'asc')
                             ->get()

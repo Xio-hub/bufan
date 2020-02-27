@@ -27,17 +27,18 @@ class ProductController extends Controller
         return response()->json($data);
     }
 
-    public function detail(Request $request,Product $product,ProductResource $product_resource)
+    public function detail(Request $request)
     {
         $id = $request->id;
-
-        $data = $product->select('id','name','type','hotspot')
+        $user = $request->user();
+        $product = Product::select('id','merchant_id','name','type','hotspot')
                         ->where(['id' => $id])
                         ->first();
 
-        if($data){
-            $data = $data->toArray();
-            $resources = $product_resource->select('source_type as type','source_url')
+        if($product && $user->can('view',$product)){
+            $data = $product->toArray();
+            unset($data['merchant_id']);
+            $resources = ProductResource::select('source_type as type','source_url')
                             ->where(['product_id' => $id,'source_type' => $data['type']])    
                             ->orderBy('priority', 'asc')
                             ->get()
