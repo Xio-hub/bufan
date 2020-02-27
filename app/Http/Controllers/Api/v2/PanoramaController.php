@@ -69,7 +69,7 @@ class PanoramaController extends Controller
         return response()->json(['data' => $data, 'meta' => ['total_count' => $total, 'next' => $page->getNext(), 'previous' => $page->getPrev()]]);
     }
 
-    public function detail(Request $request,Panorama $panorama)
+    public function detail(Request $request)
     {
         $style_id = $request->input('style_id');
         $material_id = $request->input('material_id');
@@ -80,16 +80,22 @@ class PanoramaController extends Controller
             return response()->json(compact('error', 'message'));
         }
 
-        $data = $panorama->select('source_url','source_type')->where(['style_id'=>$style_id,'material_id'=>$material_id])->first();
+        $user = $request->user();
+        $data = Panorama::select('merchant_id','source_url','source_type')->where(['style_id'=>$style_id,'material_id'=>$material_id])->first();
 
-        if(!is_null($data) && $data['source_type'] == 'image'){
-            $data->source_url = $data->source_url ? Storage::url($data->source_url) : '';
+        if($data && $user->can('view',$data)){
+            unset($data->merchant_id);
+            if($data->source_type == 'image'){
+                $data->source_url = $data->source_url ? Storage::url($data->source_url) : '';
+            }
+        }else{
+            $data = null;
         }
 
         return response()->json($data);
     }
 
-    public function getVerticalView(Request $request, VerticalView $vertical_view)
+    public function getVerticalView(Request $request)
     {
         $style_id = $request->input('style_id');
 
@@ -99,16 +105,20 @@ class PanoramaController extends Controller
             return response()->json(compact('error', 'message'));
         }
 
-        $data = $vertical_view->select('source_url','source_type')->where(['style_id'=>$style_id])->first();
+        $user = $request->user();
+        $data = VerticalView::select('merchant_id','source_url','source_type')->where(['style_id'=>$style_id])->first();
 
-        if(!is_null($data)){
+        if($data && $user->can('view',$data)){
+            unset($data->merchant_id);
             $data->source_url = $data->source_url ? Storage::url($data->source_url) : '';
+        }else{
+            $data = null;
         }
 
         return response()->json($data);
     }
 
-    public function getSingleSpaceDetail(Request $request,PanoramaSingleSpace $single_space)
+    public function getSingleSpaceDetail(Request $request)
     {
         $style_id = $request->input('style_id','') ?? '';
         $material_id = $request->input('material_id','') ?? '';
@@ -120,10 +130,14 @@ class PanoramaController extends Controller
             return response()->json(compact('error', 'message'));
         }
 
-        $data = $single_space->select('source_url','source_type')->where(['style_id'=>$style_id, 'material_id' => $material_id])->first();
+        $user = $request->user();
+        $data = PanoramaSingleSpace::select('merchant_id','source_url','source_type')->where(['style_id'=>$style_id, 'material_id' => $material_id])->first();
 
-        if(!is_null($data)){
+        if($data && $user->can('view',$data)){
+            unset($data->merchant_id);
             $data->source_url = $data->source_url ? Storage::url($data->source_url) : '';
+        }else{
+            $data = null;
         }
 
         return response()->json($data);
