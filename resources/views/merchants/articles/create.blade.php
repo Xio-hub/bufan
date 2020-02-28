@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('merchants.layouts.app')
 
 @section('title','添加文章')
 
