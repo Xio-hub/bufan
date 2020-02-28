@@ -14,7 +14,7 @@ class AddHotspotToProductResourcesTable extends Migration
     public function up()
     {
         Schema::table('product_resources', function (Blueprint $table) {
-            $table->string('hotspot');
+            $table->string('hotspot')->nullable()->default('');
         });
     }
 
