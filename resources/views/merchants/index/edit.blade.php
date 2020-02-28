@@ -49,7 +49,7 @@
 
                                         <div class="form-group  row">
                                             <label class="col-sm-2 col-form-label">企业官网</label>
-                                            <div class="col-sm-5"><input type="text" class="form-control" name='website'></div>
+                                            <div class="col-sm-5"><input type="text" class="form-control" name='website' value="{{$data->website}}"></div>
                                         </div>
                                         <div class="hr-line-dashed"></div>
 
@@ -113,7 +113,7 @@
                                         <div class="form-group  row">
                                             <label class="col-sm-2 col-form-label">类型</label>
                                             <div class="col-sm-5">
-                                                @if($data->content_type == 'text')
+                                                @if($data->type == 'text')
                                                 <div class="i-checks"><label> <input type="radio" id="image_type" value="text" name="show_type" checked> <i></i>图文</label></div>
                                                 <div class="i-checks"><label> <input type="radio" id="video_type" value="video" name="show_type"> <i></i>视频</label></div>
                                                 @else
@@ -142,9 +142,9 @@
                                         <input type='hidden' name='resource_type' value='text'>
                                         <input type='hidden' name='index_id' value='{{$data->id}}'>
                                         <textarea id="editor" type="text/plain" style="height:500px;" name='text_content'>{{$text_resource->content}}</textarea>
-                                    <div class="col-sm-4 col-sm-offset-2" style="margin-top:2rem">
-                                        <button class="btn btn-primary btn-lg" id="btn-save" type="button" onclick="saveText()">保存</button>
-                                    </div>
+                                        <div class="col-sm-4 col-sm-offset-2" style="margin-top:2rem">
+                                            <button class="btn btn-primary btn-lg" id="btn-save" type="button" onclick="saveText()">保存</button>
+                                        </div>
                                     </form>
                                 </div>
                             </div>

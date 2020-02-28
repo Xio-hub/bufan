@@ -3,8 +3,9 @@
 @section('title','首页设置')
 
 @section('styles')
-<link href="{{asset('css/plugins/summernote/summernote-bs4.css')}}" rel="stylesheet">
 @endsection
+
+@include('vendor.ueditor.assets')
 
 @section('content')
     <div class="wrapper wrapper-content animated fadeInRight">
@@ -19,9 +20,14 @@
                     <form id='formData'>
                         <input type="hidden" name="_token" value="{{csrf_token()}}">
 
-                        <div class="form-group  row"><label class="col-sm-2 col-form-label">{{$introduction->title}}</label></div>
+                        <div class="form-group  row">
+                            <label class="col-sm-1 col-form-label">栏目名称</label>
+                            <div class="col-sm-5"><input type="text" class="form-control" name='title' value="{{$introduction->title}}"></div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
                         <div class="ibox-content no-padding">            
-                            <textarea id="summernote" name="content">{{$introduction->content}}</textarea>
+                            <input id="editorValue" value="{{$introduction->content}}" type="hidden" />
+                            <textarea id="editor" type="text/plain" style="height:500px;" name='content'></textarea>
                         </div>
                         <div class="hr-line-dashed"></div>
 
@@ -39,55 +45,14 @@
 @endsection
 
 @section('scripts')
-    <!-- SUMMERNOTE -->
-    <script src="{{asset('js/plugins/summernote/summernote-bs4.js')}}"></script>
-
     <script>
         $(document).ready(function(){
-
-            $('#summernote').summernote(
-                {
-                    height: 500,
-                    tabsize: 2,
-                    lang: 'zh-CN',
-                    // toolbar: [
-				    //           [ 'style', [ 'style' ] ],
-				    //           [ 'font', [ 'bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear'] ],
-				    //           [ 'fontname', [ 'fontname' ] ],
-				    //           [ 'fontsize', [ 'fontsize' ] ],
-				    //           [ 'color', [ 'color' ] ],
-				    //           [ 'para', [ 'ol', 'ul', 'paragraph', 'height' ] ],
-				    //           [ 'table', [ 'table' ] ],
-				    //           [ 'insert', [ 'link'] ],
-				    //           [ 'view', [ 'undo', 'redo', 'fullscreen', 'codeview', 'help' ] ]
-				    //       ]
-                    callbacks: {
-                        onImageUpload: function(files) {
-                            uploadImage(files[0])
-                        }
-                    }
-                }
-            );
-        });
-
-        function uploadImage(file) {
-            var formData = new FormData();
-            formData.append("file", file);
-            $.ajax({
-                url: "{{route('merchant.introduction.image.upload')}}",//这里是你的后端控制器 后面会写到后端控制器
-                headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                processData: false,
-                contentType: false,
-                data: formData,
-                type: 'POST',
-                success: function (data) {
-                    $('#summernote').summernote('insertImage', data.path, 'img');//这里是将返回的url地址重新添加到编辑器内
-                },
-                error : function() {
-                    alert("上传图片出错，请稍后再试或联系管理员！");
-                }
+            var ue = UE.getEditor('editor');
+            var htmlStr = $("#editorValue").val();
+            ue.ready(function() {
+                ue.setContent(htmlStr, false);
             });
-        }
+        });
 
         $('#btn-cancel').click(function(){
             window.location.href = "{{route('merchant.introduction.index')}}";
@@ -97,7 +62,7 @@
         function save()
         {
             $.ajax({
-                type: "post",
+                type: "patch",
                 dataType: "json",
                 url: "{{route('merchant.introduction.update',$introduction->id)}}",
                 data: $('#formData').serialize(),

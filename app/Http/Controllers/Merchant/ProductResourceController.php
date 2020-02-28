@@ -91,26 +91,27 @@ class ProductResourceController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $priority = $request->input('priority',0) ?? 0;
+        
         try{
-            $path = $request->file('file')->store("images/products/resources");
+            $merchant = Auth::guard('merchant')->user();
             $resource = ProductResource::find($id);
-            Storage::delete($resource->source_url);
-            $resource->source_url = $path;
-            $resource->save();
-            
-            $error = 0;
-        }catch(Exception $e)
-        {
+            if($merchant->can('update',$resource)){
+                $resource->priority = $priority;
+                $resource->save();
+                $error = 0;
+                $message = 'success';
+            }else{
+                $error = 1;
+                $message = 'UnAuthorized';
+            }
+        }catch(Exception $e){
             Log::error($e);
             $error = 1;
+            $message = '修改失败';
+        }finally{
+            return response()->json(compact('error','message'));
         }
-        
-        $result = [
-            'error' => $error,
-            'path' => Storage::url($path)
-        ];
-
-        return response()->json($resource);
     }
 
     /**

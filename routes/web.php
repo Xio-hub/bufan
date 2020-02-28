@@ -108,6 +108,7 @@ Route::group([
     Route::post('/products', 'ProductController@store')->name('merchant.product.store');
     Route::get('/products/{id}/edit', 'ProductController@edit')->where('id','\d+')->name('merchant.product.edit');
     Route::post('/products/{id}', 'ProductController@update')->where('id','\d+')->name('merchant.product.update');
+
     Route::delete('/products/{id}', 'ProductController@destroy')->where('id','\d+')->name('merchant.product.destroy');
     Route::post('products/images' ,'ProductController@storeImage')->name('product.image.upload');
     Route::post('products/videos' ,'ProductController@storeVideo')->name('product.video.upload');
@@ -198,8 +199,7 @@ Route::group([
 
     Route::get('introductions' , 'IntroductionController@index')->where('id', '\d+')->name('merchant.introduction.index');
     Route::get('introductions/{id}/edit' , 'IntroductionController@edit')->where('id', '\d+')->name('merchant.introduction.edit');
-    Route::post('introductions/{id}' , 'IntroductionController@update')->where('id', '\d+')->name('merchant.introduction.update');
-    Route::post('introductions/images' , 'IntroductionController@storeImage')->where('id', '\d+')->name('merchant.introduction.image.upload');
+    Route::patch('introductions/{id}' , 'IntroductionController@update')->where('id', '\d+')->name('merchant.introduction.update');
 
     Route::post('/materials/cover' ,'MaterialController@storeCover')->name('material.cover.upload');
     Route::post('/panoramas/styles/cover' ,'PanoramaStyleController@storeCover')->name('panorama.style.cover.upload');

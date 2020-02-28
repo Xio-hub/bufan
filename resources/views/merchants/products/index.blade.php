@@ -38,7 +38,11 @@
                                     <td>{{$product->name}}</td>
                                     <td><img src="{{$product->cover}}"  width='70' height='45'/></td>
                                     <td>{{$product->type}}</td>
-                                    <td>{{$product->priority}}</td>
+                                    <td>
+                                        <span style="display: none">{{$product->priority}}</span>
+                                        <input type='text' value="{{$product->priority}}"  maxlength="4" class="ipt_priority">
+                                        <button data-id='{{$product->id}}' class='down btn btn-default btn-xs btn-priority'>确认</button>
+                                    </td>
                                     <td>{{$product->created_at}}</td>
                                     <td>
                                         <a href="{{route('merchant.product.edit',$product->id)}}" class='down btn btn-default btn-xs btn-delete'>修改</a>
@@ -69,6 +73,32 @@
                     pageLength: 25,
                 }
             );
+
+            //控制输入框的输入==只能输入四位，且必须是数字
+            $(".ipt_priority").attr("onkeyup", "if(this.value.length>4){this.value=this.value.substr(0,4)};value=value.replace(/[^0-9]/g, '')");
+            $(".ipt_priority").attr("onpaste", "if(this.value.length>4){this.value=this.value.substr(0,4)};value=value.replace(/[^0-9]/g, '')");
+            $(".ipt_priority").attr("oncontextmenu", "if(this.value.length>4){this.value=this.value.substr(0,4)};value=value.replace(/[^0-9]/g, '')");
+
+            $('.btn-priority').on('click', function () {
+                var priority = $(this).parent().find(".ipt_priority").val();
+                var id = $(this).attr('data-id');
+                $.ajax({
+                    type : 'post',
+                    url : "{{env('APP_URL')}}/merchant/management/products/"+id,
+                    contentType : 'application/x-www-form-urlencoded;charset=UTF-8',
+                    headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+                    dataType : 'json',
+                    data: {"priority":priority},
+                    success : function(data,textStatus,jqXHR){
+                        if(data.error == 0){
+                            alert('修改成功');
+                            // window.location.reload();
+                        }else{
+                            alert(data.message);
+                        }
+                    }
+                });
+            });
         });
 
         function deleteItem(id){

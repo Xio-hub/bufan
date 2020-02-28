@@ -150,53 +150,42 @@ class ProductController extends Controller
     public function update(Request $request)
     {
         $id = $request->id;
-        $name = $request->input('name','');
-        $detail_type = $request->input('detail_type','');
-        $hotspot = $request->input('hotspot','');
-
-        if($name == ''){
-            $error = 1;
-            $message = '请输入产品名称';
-            return response()->json(compact('error','message'));
-        }
-
-        if(!in_array($detail_type,['image','video'])){
-            $error = 1;
-            $message = '产品详细类型错误';
-            return response()->json(compact('error','message'));
-        }
-
-        $cover = '';
-        if ($request->hasFile('cover')) {
-            $cover =  $request->top_logo->store('images/products/cover');
-        }
-
-        $background_music = '';
-        if ($request->hasFile('background_music')) {
-            $background_music =  $request->background_music->store('audios/background_musics');
-        }
-
+        $name = $request->input('name','') ?? '';
+        $detail_type = $request->input('detail_type','') ?? '';
+        $hotspot = $request->input('hotspot','') ?? '';
+        $priority = $request->input('priority',0) ?? 0;
+        
         try{
             $product = Product::findOrFail($id);
             $merchant = Auth::guard('merchant')->user();
 
             if($merchant->can('update', $product)){
-                DB::beginTransaction();
-                $product->name = $name;
-                $product->hotspot = $hotspot;
-                $product->type = $detail_type;
-                
-                if($cover != ''){
-                    $product->cover = $cover;
+
+                if ($request->has('name')) {
+                    $product->name = $name;
                 }
 
-                if($background_music != ''){
-                    $product->background_music = $background_music;
+                if ($request->has('detail_type')) {
+                    $product->type = $detail_type;
+                }
+
+                if ($request->has('hotspot')) {
+                    $product->hotspot = $hotspot;
+                }
+
+                if ($request->has('priority')) {
+                    $product->priority = $priority;
+                }
+
+                if ($request->hasFile('cover')) {
+                    $product->cover =  $request->top_logo->store('images/products/cover');
+                }
+        
+                if ($request->hasFile('background_music')) {
+                    $product->background_music =  $request->background_music->store('audios/background_musics');
                 }
 
                 $product->save();
-
-                DB::commit();
                 $error = 0;
                 $message = 'success';
             }else{
@@ -204,7 +193,6 @@ class ProductController extends Controller
                 $message = 'UnAuthorized';
             }
         }catch(Exception $e){
-            DB::rollBack();
             $error = 1;
             $message = '修改失败，请稍后再试或联系管理员';
             Log::error($e);

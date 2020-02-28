@@ -32,7 +32,11 @@
                                 <tr>
                                     <td>{{$i+1}}</td>
                                     <td>{{$introduction->title}}</td>
-                                    <td>{{$introduction->priority}}</td>
+                                    <td>
+                                        <span style="display:none">{{$introduction->priority}}</span>
+                                        <input type='text' value="{{$introduction->priority}}"  maxlength="4" class="ipt_priority">
+                                        <button data-id='{{$introduction->id}}' class='down btn btn-default btn-xs btn-priority'>确认</button>
+                                    </td>
                                     <td class='data_{{$introduction->id}}_status'>
                                         @if($introduction->status == 1)
                                         显示
@@ -75,6 +79,32 @@
                     pageLength: 25,
                 }
             );
+
+            //控制输入框的输入==只能输入四位，且必须是数字
+            $(".ipt_priority").attr("onkeyup", "if(this.value.length>4){this.value=this.value.substr(0,4)};value=value.replace(/[^0-9]/g, '')");
+            $(".ipt_priority").attr("onpaste", "if(this.value.length>4){this.value=this.value.substr(0,4)};value=value.replace(/[^0-9]/g, '')");
+            $(".ipt_priority").attr("oncontextmenu", "if(this.value.length>4){this.value=this.value.substr(0,4)};value=value.replace(/[^0-9]/g, '')");
+
+            $('.btn-priority').on('click', function () {
+                var priority = $(this).parent().find(".ipt_priority").val();
+                var id = $(this).attr('data-id');
+                $.ajax({
+                    type : 'patch',
+                    url : "{{env('APP_URL')}}/merchant/management/introductions/"+id,
+                    contentType : 'application/x-www-form-urlencoded;charset=UTF-8',
+                    headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+                    dataType : 'json',
+                    data: {"priority":priority},
+                    success : function(data,textStatus,jqXHR){
+                        if(data.error == 0){
+                            alert('修改成功');
+                            // window.location.reload();
+                        }else{
+                            alert(data.message);
+                        }
+                    }
+                });
+            });
 
             $('.btn-status-toggle').click(function(){
                 var status = $(this).attr('data-value');

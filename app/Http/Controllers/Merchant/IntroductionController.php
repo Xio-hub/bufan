@@ -32,8 +32,9 @@ class IntroductionController extends Controller
         try{
             $merchant = Auth::guard('merchant')->user();
             $id = $request->id;
-            $content = $request->input('content');
-            $priority = $request->input('priority');
+            $title = $request->input('title','') ?? '';
+            $content = $request->input('content','') ?? '';
+            $priority = $request->input('priority',0);
             $status = $request->input('status');
 
             $introduction = Introduction::where(['id'=>$id])->firstOrFail();
@@ -43,15 +44,19 @@ class IntroductionController extends Controller
                 return response()->json(compact('error','message'));
             }
             
-            if($content){
+            if($request->has('title')){
+                $introduction->title = $title;
+            }
+
+            if($request->has('content')){
                 $introduction->content = $content;
             }
 
-            if($priority){
+            if($request->has('priority')){
                 $introduction->priority = $priority;
             }
 
-            if($status !== null){
+            if($request->has('status')){
                 $introduction->status = $status;
             }
             $introduction->save();
@@ -64,18 +69,5 @@ class IntroductionController extends Controller
         }finally{
             return response()->json(compact('error','message'));
         }
-    }
-
-    public function storeImage(Request $request){
-        $path = $request->file('file')->store("images/introductions");
-        
-        if($path){
-            $error = 0;
-            $path = Storage::url($path);
-        }else{
-            $error = 1;
-        }
-
-        return response()->json(compact('error','path'));
     }
 }
