@@ -4,13 +4,13 @@ namespace App\Http\Controllers\Merchant;
 
 use Exception;
 use Illuminate\Http\Request;
-use App\Models\StyleResource;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use App\Models\PanoramaSingleSpaceResource;
 
-class StyleResourceController extends Controller
+class PanoramaSingleSpaceResourceController extends Controller
 {
     /**
      * Store a newly created resource in storage.
@@ -21,11 +21,11 @@ class StyleResourceController extends Controller
     public function store(Request $request)
     {
         $resource_type = $request->input('resource_type', '') ?? '';
-        $style_id = $request->input('style_id', '') ?? '';
+        $single_space_id = $request->input('single_space_id', '') ?? '';
         $upload_path = '';
         if($resource_type == 'image'){
             $upload_path = 'images/styles/resources';
-            $count = StyleResource::where(['style_id' => $style_id, 'source_type' => 'image'])->count();
+            $count = PanoramaSingleSpaceResource::where(['single_space_id' => $single_space_id, 'source_type' => 'image'])->count();
             if($count == 30){
                 $error = 1;
                 $message = '最多只能上传30张图片';
@@ -33,7 +33,7 @@ class StyleResourceController extends Controller
             }
         }else if($resource_type == 'video'){
             $upload_path = 'videos/styles/resources';
-            $count = StyleResource::where(['style_id' => $style_id, 'source_type' => 'video'])->count();
+            $count = PanoramaSingleSpaceResource::where(['single_space_id' => $single_space_id, 'source_type' => 'video'])->count();
             if($count == 1){
                 $error = 1;
                 $message = '只能上传一个视频';
@@ -41,7 +41,7 @@ class StyleResourceController extends Controller
             }
         }else if($resource_type == 'pdf'){
             $upload_path = 'pdfs/styles/resources';
-            $count = StyleResource::where(['style_id' => $style_id, 'source_type' => 'pdf'])->count();
+            $count = PanoramaSingleSpaceResource::where(['single_space_id' => $single_space_id, 'source_type' => 'pdf'])->count();
             if($count == 1){
                 $error = 1;
                 $message = '只能上传一个pdf';
@@ -57,13 +57,12 @@ class StyleResourceController extends Controller
             $merchant = Auth::guard('merchant')->user();
             $priority = 0;
             $path = $request->file('file')->store($upload_path);
-            $resource = StyleResource::create([
+            $resource = PanoramaSingleSpaceResource::create([
                 'merchant_id' => $merchant->id,
-                'style_id' => $style_id,
+                'single_space_id' => $single_space_id,
                 'source_url' => $path,
                 'source_type' => $resource_type,
                 'priority' => 0,
-                'hotspot' => 0
             ]);
             $id = $resource->id;
 
@@ -96,7 +95,7 @@ class StyleResourceController extends Controller
         $hotspot = $request->input('hotspot', '') ?? '';
         try{
             $merchant = Auth::guard('merchant')->user();
-            $resource = StyleResource::find($id);
+            $resource = PanoramaSingleSpaceResource::find($id);
             if($merchant->can('update',$resource)){
                 $resource->priority = $priority;
                 $resource->hotspot = $hotspot;
@@ -126,7 +125,7 @@ class StyleResourceController extends Controller
     {
         try{
             $merchant = Auth::guard('merchant')->user();
-            $resource = StyleResource::find($id);
+            $resource = PanoramaSingleSpaceResource::find($id);
             if($merchant->can('delete',$resource)){
                 $source_url = $resource->source_url;
                 $result = $resource->delete();

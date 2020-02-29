@@ -67,6 +67,7 @@ class MaterialController extends Controller
                 'merchant_id' => $merchant->id,
                 'name' => $name,
                 'cover' => $cover,
+                'priority' => 0
             ]);
             $error = 0;
             $message = 'success';
@@ -117,22 +118,29 @@ class MaterialController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $name = $request->input('name', '');
-        if($name == ''){
-            $error = 1;
-            $message = '请输入材质名称';
-            return response()->json(compact('error','message'));
-        }
-
         try{
             $merchant = Auth::guard('merchant')->user();
             $material = Material::findOrFail($id);
             if($merchant->can('update',$material)){
+
+                if($request->has('name')){
+                    $name = $request->input('name','');
+                    if($name == ''){
+                        $error = 1;
+                        $message = '请输入名称';
+                        return response()->json(compact('error','message'));
+                    }
+                    $material->name = $name;
+                }
+
                 if ($request->hasFile('cover')) {
                     $cover =  $request->cover->store('images/spaces/categories/cover');
                     $material->cover = $cover;
                 }
-                $material->name = $name;
+
+                if ($request->has('priority')) {
+                    $material->priority = $request->input('priority');
+                }
                 $material->save();
 
                 $error = 0;

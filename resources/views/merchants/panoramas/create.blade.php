@@ -22,17 +22,6 @@
             <div class="col-lg-12">
                 <div class="ibox-content">
                     <form id='dataForm' enctype="multipart/form-data">
-                        <div class="form-group  row">
-                            <label class="col-sm-2 col-form-label">风格</label>
-                            <div class="col-sm-5">
-                                <select class="form-control m-b" name="style">
-                                    @foreach($styles as $style)
-                                    <option value="{{$style->id}}">{{$style->name}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="hr-line-dashed"></div>
 
                         <div class="form-group  row">
                             <label class="col-sm-2 col-form-label">材质</label>
@@ -41,6 +30,28 @@
                                     @foreach($materials as $material)
                                     <option value="{{$material->id}}">{{$material->name}}</option>
                                     @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+
+                        <div class="form-group  row">
+                            <label class="col-sm-2 col-form-label">风格分类</label>
+                            <div class="col-sm-5">
+                                <select class="form-control m-b" name="category" id='category_selector'>
+                                    <option value="">请选择分类</option>
+                                    @foreach($categories as $category)
+                                    <option value="{{$category->id}}">{{$category->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+
+                        <div class="form-group  row">
+                            <label class="col-sm-2 col-form-label">风格</label>
+                            <div class="col-sm-5">
+                                <select class="form-control m-b" name="style" id='style_selector'>
                                 </select>
                             </div>
                         </div>
@@ -147,6 +158,29 @@
         
         $('#btn-cancel').click(function(){
             window.location.href = "{{route('merchant.panorama.index')}}";
+        });
+
+        $("#category_selector").change(function(){
+            var category_id =  $("#category_selector").val();
+            $("#style_selector").empty();
+
+            $.ajax({
+                type : 'get',
+                url : "{{env('APP_URL')}}/merchant/management/getCategoryStyles/"+category_id,
+                dataType : 'json',
+                success : function(data,textStatus,jqXHR){
+                    if(data.error == 0){
+                        var styles = data.data;
+                        $.each(styles,function(i,val){
+                            var option = $("<option>").val(val.id).text(val.name);
+                            $("#style_selector").append(option);
+                        });
+                    }else{
+                        alert('获取失败，请刷新重试');
+                    }
+                }
+            });
+
         });
     </script>
 @endsection

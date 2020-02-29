@@ -60,7 +60,6 @@
                 <a href="#"><i class="fa fa-th-large"></i> <span class="nav-label">全景管理</span> <span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
                     <li><a href="{{route('merchant.material.index')}}">材质管理</a></li>
-                    <li><a href="{{route('merchant.panorama.style.index')}}">风格管理</a></li>
                     <li><a href="{{route('merchant.panorama.index')}}" id="damian">全景图管理</a></li>
                     <li><a href="{{route('merchant.vertical_view.index')}}" id="damian">鸟瞰图管理</a></li>
                     <li><a href="{{route('merchant.panorama.single_space.index')}}" id="damian">单个空间</a></li>

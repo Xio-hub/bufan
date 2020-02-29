@@ -63,6 +63,8 @@ class ProductResourceController extends Controller
                 'product_id' => $product_id,
                 'source_url' => $path,
                 'source_type' => $resource_type,
+                'priority' => 0,
+                'hotspot' => 0
             ]);
             $id = $resource->id;
 
@@ -91,13 +93,14 @@ class ProductResourceController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $priority = $request->input('priority',0) ?? 0;
-        
+        $priority = $request->input('priority', 0) ?? 0;
+        $hotspot = $request->input('hotspot', '') ?? '';
         try{
             $merchant = Auth::guard('merchant')->user();
             $resource = ProductResource::find($id);
             if($merchant->can('update',$resource)){
                 $resource->priority = $priority;
+                $resource->hotspot = $hotspot;
                 $resource->save();
                 $error = 0;
                 $message = 'success';

@@ -117,13 +117,6 @@ class SpaceCategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $name = $request->input('name', '');
-        if($name == ''){
-            $error = 1;
-            $message = '请输入目录名称';
-            return response()->json(compact('error','message'));
-        }
-
         try{
             $merchant = Auth::guard('merchant')->user();
             $space_category = SpaceCategory::findOrFail($id);
@@ -132,7 +125,22 @@ class SpaceCategoryController extends Controller
                     $cover =  $request->cover->store('images/spaces/categories/cover');
                     $space_category->cover = $cover;
                 }
-                $space_category->name = $name;
+
+                if($request->has('name')){
+                    $name = $request->input('name');
+                    if(empty($name)){
+                        $error = 1;
+                        $message = '请输入目录名称';
+                        return response()->json(compact('error','message'));
+                    }
+                    $space_category->name = $name;
+                }
+
+                if($request->has('priority')){
+                    $priority = $request->input('priority');
+                    $space_category->priority = $priority;
+                }
+                
                 $space_category->save();
 
                 $error = 0;

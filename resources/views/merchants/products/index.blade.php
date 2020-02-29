@@ -23,7 +23,7 @@
                             <tr>
                                 <th>序号</th>
                                 <th>商品名称</th>
-                                <th>商品封面</th>
+                                {{-- <th>商品封面</th> --}}
                                 <th>类型</th>
                                 <th>展示优先级</th>
                                 <th>发布时间</th>
@@ -36,10 +36,10 @@
                                 <tr>
                                     <td>{{$i+1}}</td>
                                     <td>{{$product->name}}</td>
-                                    <td><img src="{{$product->cover}}"  width='70' height='45'/></td>
+                                    {{-- <td><img src="{{$product->cover}}"  width='70' height='45'/></td> --}}
                                     <td>{{$product->type}}</td>
                                     <td>
-                                        <span style="display: none">{{$product->priority}}</span>
+                                        <span id="priority_box_{{$product->id}}" style="display: none">{{$product->priority}}</span>
                                         <input type='text' value="{{$product->priority}}"  maxlength="4" class="ipt_priority">
                                         <button data-id='{{$product->id}}' class='down btn btn-default btn-xs btn-priority'>确认</button>
                                     </td>
@@ -91,6 +91,7 @@
                     data: {"priority":priority},
                     success : function(data,textStatus,jqXHR){
                         if(data.error == 0){
+                            $('#priority_box_'+id).text(priority);
                             alert('修改成功');
                             // window.location.reload();
                         }else{

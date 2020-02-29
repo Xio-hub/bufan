@@ -86,10 +86,6 @@ class SpaceController extends Controller
         $cover = '';
         if ($request->hasFile('cover')) {
             $cover =  $request->cover->store('images/spaces/cover');
-        }else{
-            $error = 1;
-            $message = '请上传封面图片';
-            return response()->json(compact('error','message'));
         }
 
         $background_music = '';
@@ -137,6 +133,8 @@ class SpaceController extends Controller
                 $detail_data[$i]['space_id'] = $space->id;
                 $detail_data[$i]['source_type'] = $detail_type;
                 $detail_data[$i]['source_url'] = $v;
+                $detail_data[$i]['priority'] = 0;
+                $detail_data[$i]['hotspot'] = 0;
                 $detail_data[$i]['created_at'] = $now;
                 $detail_data[$i]['updated_at'] = $now;
             }
@@ -195,25 +193,6 @@ class SpaceController extends Controller
     public function update(Request $request, $id)
     {
         $id = $request->id;
-        $name = $request->input('name','');
-        $detail_type = $request->input('detail_type','');
-        $hotspot = $request->input('hotspot','');
-
-        if($name == ''){
-            $error = 1;
-            $message = '请输入风格名称';
-            return response()->json(compact('error','message'));
-        }
-
-        $cover = '';
-        if ($request->hasFile('cover')) {
-            $cover =  $request->cover->store('images/styles/cover');
-        }
-
-        $background_music = '';
-        if ($request->hasFile('background_music')) {
-            $background_music =  $request->background_music->store('audios/background_musics');
-        }
 
         try{
             $space = Space::findOrFail($id);
@@ -221,16 +200,38 @@ class SpaceController extends Controller
             if($merchant->can('update', $space)){
                 DB::beginTransaction();
                 
-                $space->name = $name;
-                $space->hotspot = $hotspot;
-                $space->type = $detail_type;
-                
-                if($cover != ''){
-                    $space->cover = $cover;
+                if($request->has('name')){
+                    $name = $request->input('name','');
+                    if($name == ''){
+                        $error = 1;
+                        $message = '请输入名称';
+                        return response()->json(compact('error','message'));
+                    }
+                    $space->name = $name;
                 }
 
-                if($background_music != ''){
-                    $space->background_music = $background_music;
+                if($request->has('category')){
+                    $space->category_id = $request->input('category');
+                }
+
+                if($request->has('hotspot')){
+                    $space->hotspot = $request->input('hotspot');
+                }
+
+                if($request->has('detail_type')){
+                    $space->type = $request->input('detail_type');
+                }
+
+                if($request->has('priority')){
+                    $space->priority = $request->input('priority');
+                }
+
+                if ($request->hasFile('cover')) {
+                    $space->cover =  $request->cover->store('images/styles/cover');
+                }
+
+                if ($request->hasFile('background_music')) {
+                    $space->background_music =  $request->background_music->store('audios/background_musics');
                 }
 
                 $space->save();
@@ -303,4 +304,5 @@ class SpaceController extends Controller
         $path = $request->file('file')->store("pdfs/products/resources");
         return $path;
     }
+
 }

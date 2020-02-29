@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -114,15 +116,15 @@ Route::group([
     Route::post('products/videos' ,'ProductController@storeVideo')->name('product.video.upload');
     Route::post('products/pdfs' ,'ProductController@storePDF')->name('product.pdf.upload');
     Route::post('/products/resources', 'ProductResourceController@store')->name('merchant.product.resource.store');
-    Route::patch('/products/resources/{id}', 'ProductResourceController@update')->name('merchant.product.resource.update');
+    Route::patch('/products/resources/{id}', 'ProductResourceController@update')->where('id','\d+')->name('merchant.product.resource.update');
     Route::delete('/products/resources/{id}', 'ProductResourceController@destroy')->where('id','\d+')->name('merchant.product.resource.destroy');
 
     Route::get('/spaces/categories', 'SpaceCategoryController@index')->name('merchant.space.category.index');
     Route::get('/spaces/categories/create', 'SpaceCategoryController@create')->name('merchant.space.category.create');
     Route::post('/spaces/categories', 'SpaceCategoryController@store')->name('merchant.space.category.store');
     Route::get('/spaces/categories/{id}/edit', 'SpaceCategoryController@edit')->name('merchant.space.category.edit');
-    Route::post('/spaces/categories/{id}', 'SpaceCategoryController@update')->name('merchant.space.category.update');
-    Route::delete('/spaces/categories/{id}', 'SpaceCategoryController@destroy')->name('merchant.space.category.destroy');
+    Route::post('/spaces/categories/{id}', 'SpaceCategoryController@update')->where('id','\d+')->name('merchant.space.category.update');
+    Route::delete('/spaces/categories/{id}', 'SpaceCategoryController@destroy')->where('id','\d+')->name('merchant.space.category.destroy');
     Route::post('spaces/categories/cover' ,'SpaceCategoryController@storeCover')->name('space.category.cover.upload');
 
     Route::get('/spaces', 'SpaceController@index')->name('merchant.space.index');
@@ -142,8 +144,8 @@ Route::group([
     Route::get('/styles/categories/create', 'StyleCategoryController@create')->name('merchant.style.category.create');
     Route::post('/styles/categories', 'StyleCategoryController@store')->name('merchant.style.category.store');
     Route::get('/styles/categories/{id}/edit', 'StyleCategoryController@edit')->name('merchant.style.category.edit');
-    Route::post('/styles/categories/{id}', 'StyleCategoryController@update')->name('merchant.style.category.update');
-    Route::delete('/styles/categories/{id}', 'StyleCategoryController@destroy')->name('merchant.style.category.destroy');
+    Route::post('/styles/categories/{id}', 'StyleCategoryController@update')->where('id','\d+')->name('merchant.style.category.update');
+    Route::delete('/styles/categories/{id}', 'StyleCategoryController@destroy')->where('id','\d+')->name('merchant.style.category.destroy');
     Route::post('styles/categories/cover' ,'StyleCategoryController@storeCover')->name('style.category.cover.upload');
 
     Route::get('/styles', 'StyleController@index')->name('merchant.style.index');
@@ -155,8 +157,9 @@ Route::group([
     Route::post('styles/images' ,'StyleController@storeImage')->name('style.image.upload');
     Route::post('styles/videos' ,'StyleController@storeVideo')->name('style.video.upload');
     Route::post('styles/pdfs' ,'StyleController@storePDF')->name('style.pdf.upload');
+
     Route::post('/styles/resources', 'StyleResourceController@store')->name('merchant.style.resource.store');
-    Route::patch('/styles/resources/{id}', 'StyleResourceController@update')->name('merchant.style.resource.update');
+    Route::patch('/styles/resources/{id}', 'StyleResourceController@update')->where('id','\d+')->name('merchant.style.resource.update');
     Route::delete('/styles/resources/{id}', 'StyleResourceController@destroy')->where('id','\d+')->name('merchant.style.resource.destroy');
 
     Route::get('/materials', 'MaterialController@index')->name('merchant.material.index');
@@ -173,12 +176,12 @@ Route::group([
     Route::put('/panoramas/{id}', 'PanoramaController@update')->where('id','\d+')->name('merchant.panorama.update');
     Route::delete('/panoramas/{id}', 'PanoramaController@destroy')->where('id','\d+')->name('merchant.panorama.destroy');
 
-    Route::get('/panoramas/styles', 'PanoramaStyleController@index')->name('merchant.panorama.style.index');
-    Route::get('/panoramas/styles/create', 'PanoramaStyleController@create')->name('merchant.panorama.style.create');
-    Route::post('/panoramas/styles', 'PanoramaStyleController@store')->name('merchant.panorama.style.store');
-    Route::get('/panoramas/styles/{id}/edit', 'PanoramaStyleController@edit')->where('id','\d+')->name('merchant.panorama.style.edit');
-    Route::post('/panoramas/styles/{id}', 'PanoramaStyleController@update')->where('id','\d+')->name('merchant.panorama.style.update');
-    Route::delete('/panoramas/styles/{id}', 'PanoramaStyleController@destroy')->where('id','\d+')->name('merchant.panorama.style.destroy');
+    // Route::get('/panoramas/styles', 'PanoramaStyleController@index')->name('merchant.panorama.style.index');
+    // Route::get('/panoramas/styles/create', 'PanoramaStyleController@create')->name('merchant.panorama.style.create');
+    // Route::post('/panoramas/styles', 'PanoramaStyleController@store')->name('merchant.panorama.style.store');
+    // Route::get('/panoramas/styles/{id}/edit', 'PanoramaStyleController@edit')->where('id','\d+')->name('merchant.panorama.style.edit');
+    // Route::post('/panoramas/styles/{id}', 'PanoramaStyleController@update')->where('id','\d+')->name('merchant.panorama.style.update');
+    // Route::delete('/panoramas/styles/{id}', 'PanoramaStyleController@destroy')->where('id','\d+')->name('merchant.panorama.style.destroy');
 
     Route::get('/vertical_views', 'VerticalViewController@index')->name('merchant.vertical_view.index');
     Route::get('/vertical_views/create', 'VerticalViewController@create')->name('merchant.vertical_view.create');
@@ -191,8 +194,15 @@ Route::group([
     Route::get('/panoramas/single_spaces/create', 'PanoramaSingleSpaceController@create')->name('merchant.panorama.single_space.create');
     Route::post('/panoramas/single_spaces', 'PanoramaSingleSpaceController@store')->name('merchant.panorama.single_space.store');
     Route::get('/panoramas/single_spaces/{id}/edit', 'PanoramaSingleSpaceController@edit')->where('id','\d+')->name('merchant.panorama.single_space.edit');
-    Route::put('/panoramas/single_spaces/{id}', 'PanoramaSingleSpaceController@update')->where('id','\d+')->name('merchant.panorama.single_space.update');
+    Route::post('/panoramas/single_spaces/{id}', 'PanoramaSingleSpaceController@update')->where('id','\d+')->name('merchant.panorama.single_space.update');
     Route::delete('/panoramas/single_spaces/{id}', 'PanoramaSingleSpaceController@destroy')->where('id','\d+')->name('merchant.panorama.single_space.destroy');
+    Route::post('/panoramas/single_spaces/images' ,'PanoramaSingleSpaceController@storeImage')->name('single_space.image.upload');
+    Route::post('/panoramas/single_spaces/videos' ,'PanoramaSingleSpaceController@storeVideo')->name('single_space.video.upload');
+    Route::post('/panoramas/single_spaces/pdfs' ,'PanoramaSingleSpaceController@storePDF')->name('single_space.pdf.upload');
+
+    Route::post('/panoramas/single_spaces/resources', 'PanoramaSingleSpaceResourceController@store')->name('merchant.single_spaces.resource.store');
+    Route::patch('/panoramas/single_spaces/resources/{id}', 'PanoramaSingleSpaceResourceController@update')->name('merchant.single_spaces.resource.update');
+    Route::delete('/panoramas/single_spaces/resources/{id}', 'PanoramaSingleSpaceResourceController@destroy')->where('id','\d+')->name('merchant.single_spaces.resource.destroy');
 
     Route::get('categories/{id}/edit' , 'CategoryController@edit')->where('id', '\d+')->name('merchant.category.edit');
     Route::patch('categories/{id}' , 'CategoryController@update')->where('id', '\d+')->name('merchant.category.update');
@@ -214,6 +224,8 @@ Route::group([
     Route::put('/articles/{id}', 'ArticleController@update')->where('id','\d+')->name('articles.update');
     Route::delete('/articles/{id}', 'ArticleController@destroy')->where('id','\d+')->name('articles.destroy');
     Route::get('articles/getList', 'ArticleController@getList')->name('articles.list');
+
+    Route::get('getCategoryStyles/{id}' ,'StyleCategoryController@getStyleByCategoryID')->where('id','\d+');
 });
 
 Route::get('test' ,'HomeController@test');

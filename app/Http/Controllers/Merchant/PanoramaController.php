@@ -21,9 +21,10 @@ class PanoramaController extends Controller
     public function index()
     {
         $merchant = Auth::guard('merchant')->user();
-        $panoramas = Panorama::select('panoramas.id','panoramas.created_at','panoramas.source_type','materials.name as material_name','panorama_styles.name as style_name')
+        $panoramas = Panorama::select('panoramas.id','panoramas.created_at','panoramas.source_type','materials.name as material_name','style_categories.name as style_category','styles.name as style_name')
                             ->leftJoin('materials','panoramas.material_id','=','materials.id')
-                            ->leftJoin('panorama_styles','panoramas.style_id','panorama_styles.id')
+                            ->leftJoin('styles','panoramas.style_id','styles.id')
+                            ->leftJoin('style_categories','styles.category_id','style_categories.id')
                             ->where(['panoramas.merchant_id' => $merchant->id])
                             ->get();
 
@@ -45,11 +46,12 @@ class PanoramaController extends Controller
     public function create()
     {
         $merchant = Auth::guard('merchant')->user();
-        $styles = $merchant->panorama_styles;
         $materials = $merchant->materials;
+        $categories = $merchant->styleCategories;
+
         return view('merchants.panoramas.create')->with([
-            'styles' => $styles,
-            'materials' => $materials
+            'materials' => $materials,
+            'categories' => $categories,
         ]);
     }
 

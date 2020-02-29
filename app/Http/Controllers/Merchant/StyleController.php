@@ -86,10 +86,6 @@ class StyleController extends Controller
         $cover = '';
         if ($request->hasFile('cover')) {
             $cover =  $request->cover->store('images/spaces/cover');
-        }else{
-            $error = 1;
-            $message = '请上传封面图片';
-            return response()->json(compact('error','message'));
         }
 
         $background_music = '';
@@ -137,6 +133,8 @@ class StyleController extends Controller
                 $detail_data[$i]['style_id'] = $style->id;
                 $detail_data[$i]['source_type'] = $detail_type;
                 $detail_data[$i]['source_url'] = $v;
+                $detail_data[$i]['priority'] = 0;
+                $detail_data[$i]['hotspot'] = 0;
                 $detail_data[$i]['created_at'] = $now;
                 $detail_data[$i]['updated_at'] = $now;
             }
@@ -206,42 +204,45 @@ class StyleController extends Controller
     public function update(Request $request)
     {
         $id = $request->id;
-        $name = $request->input('name','');
-        $detail_type = $request->input('detail_type','');
-        $hotspot = $request->input('hotspot','');
-
-        if($name == ''){
-            $error = 1;
-            $message = '请输入风格名称';
-            return response()->json(compact('error','message'));
-        }
-
-        $cover = '';
-        if ($request->hasFile('cover')) {
-            $cover =  $request->cover->store('images/styles/cover');
-        }
-
-        $background_music = '';
-        if ($request->hasFile('background_music')) {
-            $background_music =  $request->background_music->store('audios/background_musics');
-        }
 
         try{
             $style = Style::findOrFail($id);
             $merchant = Auth::guard('merchant')->user();
             if($merchant->can('update', $style)){
                 DB::beginTransaction();
-
-                $style->name = $name;
-                $style->hotspot = $hotspot;
-                $style->type = $detail_type;
                 
-                if($cover != ''){
-                    $style->cover = $cover;
+                if($request->has('name')){
+                    $name = $request->input('name','');
+                    if($name == ''){
+                        $error = 1;
+                        $message = '请输入名称';
+                        return response()->json(compact('error','message'));
+                    }
+                    $style->name = $name;
                 }
 
-                if($background_music != ''){
-                    $style->background_music = $background_music;
+                if($request->has('category')){
+                    $style->category_id = $request->input('category');
+                }
+
+                if($request->has('hotspot')){
+                    $style->hotspot = $request->input('hotspot');
+                }
+
+                if($request->has('detail_type')){
+                    $style->type = $request->input('detail_type');
+                }
+
+                if($request->has('priority')){
+                    $style->priority = $request->input('priority');
+                }
+
+                if ($request->hasFile('cover')) {
+                    $style->cover =  $request->cover->store('images/styles/cover');
+                }
+
+                if ($request->hasFile('background_music')) {
+                    $style->background_music =  $request->background_music->store('audios/background_musics');
                 }
 
                 $style->save();

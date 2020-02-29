@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Models\PanoramaStyle;
 use App\Http\Controllers\Controller;
 use App\Models\PanoramaSingleSpace;
+use App\Models\PanoramaSingleSpaceResource;
 use Illuminate\Support\Facades\Storage;
 
 class PanoramaController extends Controller
@@ -97,16 +98,17 @@ class PanoramaController extends Controller
 
     public function getVerticalView(Request $request)
     {
+        $material_id = $request->input('material_id');
         $style_id = $request->input('style_id');
 
-        if(is_null($style_id) or !is_positive_integer($style_id)){
+        if(is_null($style_id) or !is_positive_integer($style_id) or !is_positive_integer($material_id)){
             $error = 1;
             $message = '参数错误';
             return response()->json(compact('error', 'message'));
         }
 
         $user = $request->user();
-        $data = VerticalView::select('merchant_id','source_url','source_type')->where(['style_id'=>$style_id])->first();
+        $data = VerticalView::select('merchant_id','source_url','source_type')->where(['style_id'=>$style_id,'material_id'=>$material_id])->first();
 
         if($data && $user->can('view',$data)){
             unset($data->merchant_id);
@@ -131,11 +133,22 @@ class PanoramaController extends Controller
         }
 
         $user = $request->user();
-        $data = PanoramaSingleSpace::select('merchant_id','source_url','source_type')->where(['style_id'=>$style_id, 'material_id' => $material_id])->first();
+        $data = PanoramaSingleSpace::select('id','merchant_id','type')->where(['style_id'=>$style_id, 'material_id' => $material_id])->first();
 
         if($data && $user->can('view',$data)){
-            unset($data->merchant_id);
-            $data->source_url = $data->source_url ? Storage::url($data->source_url) : '';
+            $data = $data->toArray();
+            $resources = PanoramaSingleSpaceResource::select('source_type as type','source_url','hotspot')
+                            ->where(['single_space_id' => $data['id'],'source_type' => $data['type']])    
+                            ->orderBy('priority', 'asc')
+                            ->get()
+                            ->toArray();
+            unset($data['merchant_id']);
+
+            foreach($resources as $k => $v){
+                $resources[$k]['source_url'] = $v['source_url'] ? Storage::url($v['source_url']) : '';
+            }
+
+            $data['content'] = $resources;
         }else{
             $data = null;
         }

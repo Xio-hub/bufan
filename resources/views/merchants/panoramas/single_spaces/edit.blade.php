@@ -1,6 +1,6 @@
 @extends('merchants.layouts.app')
 
-@section('title','修改新品')
+@section('title','修改单个空间')
 
 @section('styles')
 <link href="{{asset('css/plugins/iCheck/custom.css')}}" rel="stylesheet">
@@ -17,29 +17,72 @@
             <div class="col-lg-12">
                 <div class="tabs-container">
                     <ul class="nav nav-tabs">
-                        <li><a class="nav-link active" data-toggle="tab" href="#tab-1">商品信息</a></li>
-                        <li><a class="nav-link" data-toggle="tab" href="#tab-2">商品详细(图片)</a></li>
-                        <li><a class="nav-link" data-toggle="tab" href="#tab-3">商品详细(视频)</a></li>
-                        <li><a class="nav-link" data-toggle="tab" href="#tab-4">商品详细(PDF)</a></li>
+                        <li><a class="nav-link active" data-toggle="tab" href="#tab-1">基本信息</a></li>
+                        <li><a class="nav-link" data-toggle="tab" href="#tab-2">详细(图片)</a></li>
+                        <li><a class="nav-link" data-toggle="tab" href="#tab-3">详细(视频)</a></li>
+                        <li><a class="nav-link" data-toggle="tab" href="#tab-4">详细(PDF)</a></li>
                     </ul>
                     <div class="tab-content">
                         <div id="tab-1" class="tab-pane active">
                             <div class="panel-body">
-
                                 <fieldset>
                                     <form id='dataForm'>
+
                                         <div class="form-group  row">
-                                            <label class="col-sm-2 col-form-label">新品名称</label>
-                                            <div class="col-sm-5"><input type="text" class="form-control" name='name' value="{{$product->name}}"></div>
+                                            <label class="col-sm-2 col-form-label">材质</label>
+                                            <div class="col-sm-5">
+                                                <select class="form-control m-b" name="material">
+                                                    @foreach($materials as $material)
+                                                    @if($material->id == $single_space->material_id)
+                                                    <option value="{{$material->id}}" selected>{{$material->name}}</option>
+                                                    @else
+                                                    <option value="{{$material->id}}">{{$material->name}}</option>
+                                                    @endif
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="hr-line-dashed"></div>
+                
+                                        <div class="form-group  row">
+                                            <label class="col-sm-2 col-form-label">风格分类</label>
+                                            <div class="col-sm-5">
+                                                <select class="form-control m-b" name="category" id='category_selector'>
+                                                    <option value="">请选择分类</option>
+                                                    @foreach($categories as $category)
+                                                    @if($category->id == $single_space_style_category->id)
+                                                    <option value="{{$category->id}}" selected>{{$category->name}}</option>
+                                                    @else
+                                                    <option value="{{$category->id}}">{{$category->name}}</option>
+                                                    @endif
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="hr-line-dashed"></div>
+                
+                                        <div class="form-group  row">
+                                            <label class="col-sm-2 col-form-label">风格</label>
+                                            <div class="col-sm-5">
+                                                <select class="form-control m-b" name="style" id='style_selector'>
+                                                    @foreach($styles as $style)
+                                                    @if($style->id == $single_space->style_id)
+                                                    <option value="{{$style->id}}" selected>{{$style->name}}</option>
+                                                    @else
+                                                    <option value="{{$style->id}}">{{$style->name}}</option>
+                                                    @endif
+                                                    @endforeach
+                                                </select>
+                                            </div>
                                         </div>
                                         <div class="hr-line-dashed"></div>
 
                                         <div class="form-group  row">
                                             <label class="col-sm-2 col-form-label">产品展示类型</label>
                                             <div class="col-sm-5">
-                                                <div class="i-checks"><label> <input type="radio" id="image_type" value="image" name="detail_type" @if($product->type == 'image') checked @endif> <i></i>图片</label></div>
-                                                <div class="i-checks"><label> <input type="radio" id="video_type" value="video" name="detail_type" @if($product->type == 'video') checked @endif> <i></i>视频</label></div>
-                                                <div class="i-checks"><label> <input type="radio" id="video_type" value="pdf" name="detail_type" @if($product->type == 'pdf') checked @endif> <i></i>pdf</label></div>
+                                                <div class="i-checks"><label> <input type="radio" id="image_type" value="image" name="detail_type" @if($single_space->type == 'image') checked @endif> <i></i>图片</label></div>
+                                                <div class="i-checks"><label> <input type="radio" id="video_type" value="video" name="detail_type" @if($single_space->type == 'video') checked @endif> <i></i>视频</label></div>
+                                                <div class="i-checks"><label> <input type="radio" id="video_type" value="pdf" name="detail_type" @if($single_space->type == 'pdf') checked @endif> <i></i>pdf</label></div>
                                             </div>
                                         </div>
 
@@ -76,6 +119,7 @@
                                             <td>
                                                 <img src="{{Storage::url($item->source_url)}}" width='{{config('constant.IMAGE_RESOURCE_WIDTH')}}' height='{{config('constant.IMAGE_RESOURCE_HEIGHT')}}'>
                                             </td>
+
                                             <td>
                                                 <div class="col-sm-7">
                                                     <select class="form-control m-b" name="hotspot">
@@ -89,7 +133,8 @@
                                                         @endforeach
                                                     </select>
                                                 </div>
-                                            </td>    
+                                            </td> 
+
                                             <td>
                                                 <input type='text' value="{{$item->priority}}"  maxlength="4" class="ipt_priority">
                                             </td>
@@ -231,7 +276,7 @@
                 // 选完文件后，是否自动上传。
                 auto: true,
                 swf: "{{asset('vendor/webuploader/Uploader.swf')}}",
-                server: "{{route('merchant.product.resource.store')}}",
+                server: "{{route('merchant.single_spaces.resource.store')}}",
                 pick: '#btn-add-image',
                 // 只允许选择图片文件。
                 accept: {
@@ -241,7 +286,7 @@
                 },
                 formData:{
                     _token:'{{csrf_token()}}',
-                    product_id: '{{$product->id}}',
+                    single_space_id: '{{$single_space->id}}',
                     resource_type: 'image'
                 }
             });
@@ -305,7 +350,7 @@
                 // 选完文件后，是否自动上传。
                 auto: true,
                 swf: "{{asset('vendor/webuploader/Uploader.swf')}}",
-                server: "{{route('merchant.product.resource.store')}}",
+                server: "{{route('merchant.single_spaces.resource.store')}}",
                 pick: '#btn-add-video',
                 accept: {
                     title: 'Video',
@@ -313,7 +358,7 @@
                 },
                 formData:{
                     _token:'{{csrf_token()}}',
-                    product_id: '{{$product->id}}',
+                    single_space_id: '{{$single_space->id}}',
                     resource_type: 'video'
                 }
             });
@@ -361,7 +406,7 @@
                 // 选完文件后，是否自动上传。
                 auto: true,
                 swf: "{{asset('vendor/webuploader/Uploader.swf')}}",
-                server: "{{route('merchant.product.resource.store')}}",
+                server: "{{route('merchant.single_spaces.resource.store')}}",
                 pick: '#btn-add-pdf',
                 accept: {
                     title: 'Pdf',
@@ -369,7 +414,7 @@
                 },
                 formData:{
                     _token:'{{csrf_token()}}',
-                    product_id: '{{$product->id}}',
+                    single_space_id: '{{$single_space->id}}',
                     resource_type: 'pdf'
                 }
             });
@@ -382,18 +427,18 @@
 
             pdf_uploader.on( 'uploadSuccess', function(file, response) {
                 if(response.error == 0){
-                data = response.data;
-                id = data.id;
-                source_url = data.source_url
-                priority = data.priority;
-                list = $('#pdf_panel tbody');
-                list.append( 
-                    "<tr id='resource_"+ id +"'>" +
-                        "<td><div class='form-control'>" + source_url + "</div></td>" +    
-                        "<td><button class='btn btn-white' onclick='deleteItem(" + id + ")'><i class='fa fa-trash'></i> </button></td>"+
-                    "</tr>"
-                );
-                    alert('添加成功');
+                    data = response.data;
+                    id = data.id;
+                    source_url = data.source_url
+                    priority = data.priority;
+                    list = $('#pdf_panel tbody');
+                    list.append( 
+                        "<tr id='resource_"+ id +"'>" +
+                            "<td><div class='form-control'>" + source_url + "</div></td>" +    
+                            "<td><button class='btn btn-white' onclick='deleteItem(" + id + ")'><i class='fa fa-trash'></i> </button></td>"+
+                        "</tr>"
+                    );
+                        alert('添加成功');
                 }else{
                     $('#pdf_upload_progress_box').hide();
                     alert(response.message);
@@ -417,7 +462,7 @@
             var formData = new FormData($('#dataForm')[0]);
             $.ajax({
                 type : 'post',
-                url : "{{route('merchant.product.update',$product->id)}}",
+                url : "{{route('merchant.panorama.single_space.update',$single_space->id)}}",
                 headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                 dataType : 'json',
                 processData: false,
@@ -426,7 +471,7 @@
                 success : function(data,textStatus,jqXHR){
                     if(data.error == 0){
                         alert('修改成功');
-                        window.location.href = "{{route('merchant.product.index')}}";
+                        window.location.href = "{{route('merchant.panorama.single_space.index')}}";
                     }else{
                         alert(data.message);
                     }
@@ -435,7 +480,29 @@
         });
         
         $('#btn-cancel').click(function(){
-            window.location.href = "{{route('merchant.product.index')}}";
+            window.location.href = "{{route('merchant.panorama.single_space.index')}}";
+        });
+
+        $("#category_selector").change(function(){
+            var category_id =  $("#category_selector").val();
+            $("#style_selector").empty();
+
+            $.ajax({
+                type : 'get',
+                url : "{{env('APP_URL')}}/merchant/management/getCategoryStyles/"+category_id,
+                dataType : 'json',
+                success : function(data,textStatus,jqXHR){
+                    if(data.error == 0){
+                        var styles = data.data;
+                        $.each(styles,function(i,val){
+                            var option = $("<option>").val(val.id).text(val.name);
+                            $("#style_selector").append(option);
+                        });
+                    }else{
+                        alert('获取失败，请刷新重试');
+                    }
+                }
+            });
         });
 
         function deleteItem(id)
@@ -443,7 +510,7 @@
             if(confirm('确认删除?')){
                 $.ajax({
                     type : 'delete',
-                    url : "{{env('APP_URL')}}/merchant/management/products/resources/"+id,
+                    url : "{{env('APP_URL')}}/merchant/management/panoramas/single_spaces/resources/"+id,
                     contentType : 'application/json;charset=UTF-8',
                     headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
                     dataType : 'json',
@@ -471,7 +538,7 @@
                 var priority =  $("#resource_"+id).find(".ipt_priority").val();
                 $.ajax({
                     type : 'patch',
-                    url : "{{env('APP_URL')}}/merchant/management/products/resources/"+id,
+                    url : "{{env('APP_URL')}}/merchant/management/panoramas/single_spaces/resources/"+id,
                     contentType : 'application/x-www-form-urlencoded;charset=UTF-8',
                     headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
                     dataType : 'json',

@@ -49,36 +49,6 @@
                                                 <div class="col-sm-5"><input type="text" class="form-control" name='name' value="{{$style->name}}"></div>
                                             </div>
                                             <div class="hr-line-dashed"></div>
-
-                                            <div class="form-group  row"><label class="col-sm-2 col-form-label">封面</label>
-                                                <div class="fileinput fileinput-new" data-provides="fileinput">
-                                                    <span class="btn btn-default btn-file"><span class="fileinput-new">Select file</span>
-                                                    <span class="fileinput-exists">Change</span><input type="file" name="cover" accept="image/*"/></span>
-                                                    <span class="fileinput-filename"></span>
-                                                    <a href="#" class="close fileinput-exists" data-dismiss="fileinput" style="float: none">×</a>
-                                                </div> 
-                                                @if($style->cover != '')
-                                                <div><img src="{{Storage::url($style->cover)}}" width='120' height='90'></div> 
-                                                @endif
-                                            </div>
-                                            <div class="hr-line-dashed"></div>
-
-                                            <div class="form-group  row">
-                                                <label class="col-sm-2 col-form-label">热点连接</label>
-                                                <div class="col-sm-5">
-                                                    <select class="form-control m-b" name="hotspot">
-                                                        <option value="0">无</option>
-                                                        @foreach($articles as $article)
-                                                            @if($article->id == $style->hotspot)
-                                                            <option value="{{$article->id}}" selected>{{$article->title}}</option>
-                                                            @else
-                                                            <option value="{{$article->id}}">{{$article->title}}</option>
-                                                            @endif
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="hr-line-dashed"></div>
                     
                                             <div class="form-group  row">
                                                 <label class="col-sm-2 col-form-label">展示类型</label>
@@ -110,7 +80,7 @@
                                             <thead>
                                             <tr>
                                                 <th>图片预览</th>
-                                                <th>图片地址</th>
+                                                <th>热点连接</th>
                                                 <th>展示优先级</th>
                                                 <th>操作</th>
                                             </tr>
@@ -120,15 +90,27 @@
 
                                             <tr id='resource_{{$item->id}}'>
                                                 <td>
-                                                    <img src="{{Storage::url($item->source_url)}}" width='50' height='50'>
+                                                    <img src="{{Storage::url($item->source_url)}}" width='{{config('constant.IMAGE_RESOURCE_WIDTH')}}' height='{{config('constant.IMAGE_RESOURCE_HEIGHT')}}'>
                                                 </td>
                                                 <td>
-                                                    <a>{{Storage::url($item->source_url)}}</a>
+                                                    <div class="col-sm-7">
+                                                        <select class="form-control m-b" name="hotspot">
+                                                            <option value="0">无</option>
+                                                            @foreach($articles as $article)
+                                                                @if($article->id == $item->hotspot)
+                                                                <option value="{{$article->id}}" selected>{{$article->title}}</option>
+                                                                @else
+                                                                <option value="{{$article->id}}">{{$article->title}}</option>
+                                                                @endif
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
                                                 </td>    
                                                 <td>
-                                                    {{$item->priority}}
+                                                    <input type='text' value="{{$item->priority}}"  maxlength="4" class="ipt_priority">
                                                 </td>
                                                 <td>
+                                                    <button data-id='{{$item->id}}' class='btn btn-white btn-priority'>更新</button>
                                                     <button class="btn btn-white" onclick="deleteItem({{$item->id}})"><i class="fa fa-trash"></i> </button>
                                                 </td>
                                             </tr>
@@ -242,6 +224,8 @@
                 checkboxClass: 'icheckbox_square-green',
                 radioClass: 'iradio_square-green',
             });
+
+            bindImageItemEvent()
         })
 
         $('a[data-toggle="tab"]').on('shown.bs.tab',function(e){
@@ -291,12 +275,26 @@
                 list = $('#image_panel tbody');
                 list.append( 
                     "<tr id='resource_"+ id +"'>" +
-                        "<td><img src='"+ source_url +"' width='50' height='50'></td>" + 
-                        "<td><a>" + source_url + "</a></td>" +    
-                        "<td>"+ priority +"</td>" +
-                        "<td><button class='btn btn-white' onclick='deleteItem(" + id + ")'><i class='fa fa-trash'></i> </button></td>"+
+                        "<td><img src='"+ source_url +"' width='{{config('constant.IMAGE_RESOURCE_WIDTH')}}' height='{{config('constant.IMAGE_RESOURCE_HEIGHT')}}'></td>" +
+                        "<td><div class='col-sm-7'>" + 
+                                "<select class='form-control m-b' name='hotspot'>" +
+                                    "<option value='0'>无</option>" +
+                                    @foreach($articles as $article)
+                                        @if($article->id == $item->hotspot)
+                                        "<option value'{{$article->id}}' selected>{{$article->title}}</option>" +
+                                        @else
+                                        "<option value='{{$article->id}}'>{{$article->title}}</option>" +
+                                        @endif
+                                    @endforeach
+                                "</select>" +
+                            "</div>" +
+                        "</td>" +
+                        "<td><input type='text' value='"+ priority +"'  maxlength='4' class='ipt_priority'></td>" +
+                        "<td><button data-id='"+id+"' class='btn btn-white btn-priority'>更新</button> " +
+                        "<button class='btn btn-white' onclick='deleteItem(" + id + ")'><i class='fa fa-trash'></i> </button></td>"+
                     "</tr>"
                 );
+                bindImageItemEvent();
                 alert('添加成功');
             }else{
                 $('#image_upload_progress_box').hide();
@@ -470,6 +468,34 @@
                     }
                 });
             }
+        }
+
+        function bindImageItemEvent(){
+            //控制输入框的输入==只能输入四位，且必须是数字
+            $(".ipt_priority").attr("onkeyup", "if(this.value.length>4){this.value=this.value.substr(0,4)};value=value.replace(/[^0-9]/g, '')");
+            $(".ipt_priority").attr("onpaste", "if(this.value.length>4){this.value=this.value.substr(0,4)};value=value.replace(/[^0-9]/g, '')");
+            $(".ipt_priority").attr("oncontextmenu", "if(this.value.length>4){this.value=this.value.substr(0,4)};value=value.replace(/[^0-9]/g, '')");
+
+            $('.btn-priority').on('click', function () {
+                var id = $(this).attr('data-id');
+                var hotspot = $("#resource_"+id).find("select[name=hotspot]").val();
+                var priority =  $("#resource_"+id).find(".ipt_priority").val();
+                $.ajax({
+                    type : 'patch',
+                    url : "{{env('APP_URL')}}/merchant/management/styles/resources/"+id,
+                    contentType : 'application/x-www-form-urlencoded;charset=UTF-8',
+                    headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+                    dataType : 'json',
+                    data: {"priority":priority,"hotspot":hotspot},
+                    success : function(data,textStatus,jqXHR){
+                        if(data.error == 0){
+                            alert('修改成功');
+                        }else{
+                            alert(data.message);
+                        }
+                    }
+                });
+            });
         }
     </script>
 @endsection

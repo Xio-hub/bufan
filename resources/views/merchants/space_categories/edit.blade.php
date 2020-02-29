@@ -68,7 +68,7 @@
                 data: formData,
                 success : function(data,textStatus,jqXHR){
                     if(data.error == 0){
-                        alert('添加成功');
+                        alert('修改成功');
                         window.location.href = "{{route('merchant.space.category.index')}}";
                     }else{
                         alert(data.message);

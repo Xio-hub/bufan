@@ -24,7 +24,7 @@
                                 <th>序号</th>
                                 <th>风格名称</th>
                                 <th>所属分类</th>
-                                <th>封面</th>
+                                {{-- <th>封面</th> --}}
                                 <th>类型</th>
                                 <th>展示优先级</th>
                                 <th>发布时间</th>
@@ -38,9 +38,13 @@
                                     <td>{{$i+1}}</td>
                                     <td>{{$style->name}}</td>
                                     <td>{{$style->category_name}}</td>
-                                    <td><img src="{{$style->cover}}"  width='70' height='45'/></td>
+                                    {{-- <td><img src="{{$style->cover}}"  width='70' height='45'/></td> --}}
                                     <td>{{$style->type}}</td>
-                                    <td>{{$style->priority}}</td>
+                                    <td>
+                                        <span id="priority_box_{{$style->id}}" style="display: none">{{$style->priority}}</span>
+                                        <input type='text' value="{{$style->priority}}"  maxlength="4" class="ipt_priority">
+                                        <button data-id='{{$style->id}}' class='down btn btn-default btn-xs btn-priority'>确认</button>
+                                    </td>
                                     <td>{{$style->created_at}}</td>
                                     <td>
                                         <a href="{{route('merchant.style.edit',$style->id)}}" class='down btn btn-default btn-xs btn-delete'>修改</a>
@@ -71,6 +75,34 @@
                     pageLength: 25,
                 }
             );
+
+            //控制输入框的输入==只能输入四位，且必须是数字
+            $(".ipt_priority").attr("onkeyup", "if(this.value.length>4){this.value=this.value.substr(0,4)};value=value.replace(/[^0-9]/g, '')");
+            $(".ipt_priority").attr("onpaste", "if(this.value.length>4){this.value=this.value.substr(0,4)};value=value.replace(/[^0-9]/g, '')");
+            $(".ipt_priority").attr("oncontextmenu", "if(this.value.length>4){this.value=this.value.substr(0,4)};value=value.replace(/[^0-9]/g, '')");
+
+            $('.btn-priority').on('click', function () {
+                var priority = $(this).parent().find(".ipt_priority").val();
+                var id = $(this).attr('data-id');
+                $.ajax({
+                    type : 'post',
+                    url : "{{env('APP_URL')}}/merchant/management/styles/"+id,
+                    contentType : 'application/x-www-form-urlencoded;charset=UTF-8',
+                    headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+                    dataType : 'json',
+                    data: {"priority":priority},
+                    success : function(data,textStatus,jqXHR){
+                        if(data.error == 0){
+                            $('#priority_box_'+id).text(priority);
+                            alert('修改成功');
+                            // window.location.reload();
+                        }else{
+                            alert(data.message);
+                        }
+                    }
+                });
+            });
+
         });
 
         function deleteItem(id){

@@ -23,6 +23,7 @@
                             <tr>
                                 <th>序号</th>
                                 <th>材质</th>
+                                <th>风格栏目</th>
                                 <th>风格</th>
                                 <th>全景类型</th>
                                 <th>发布时间</th>
@@ -35,6 +36,7 @@
                                 <tr>
                                     <td>{{$i+1}}</td>
                                     <td>{{$panorama->material_name}}</td>
+                                    <td>{{$panorama->style_category}}</td>
                                     <td>{{$panorama->style_name}}</td>
                                     <td>{{$panorama->source_type}}</td>
                                     <td>{{$panorama->created_at}}</td>

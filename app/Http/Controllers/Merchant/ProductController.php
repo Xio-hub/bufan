@@ -47,7 +47,7 @@ class ProductController extends Controller
         $image_datail = $request->input('image_detail','');
         $video_datail = $request->input('video_detail','');
         $pdf_datail = $request->input('pdf_detail','');
-        $hotspot = $request->input('hotspot','');
+        $hotspot = $request->input('hotspot','') ?? '';
 
         if($name == ''){
             $error = 1;
@@ -58,10 +58,6 @@ class ProductController extends Controller
         $cover = '';
         if ($request->hasFile('cover')) {
             $cover =  $request->cover->store('images/products/cover');
-        }else{
-            $error = 1;
-            $message = '请上传封面图片';
-            return response()->json(compact('error','message'));
         }
 
         $background_music = '';
@@ -107,6 +103,8 @@ class ProductController extends Controller
                 $detail_data[$i]['product_id'] = $product->id;
                 $detail_data[$i]['source_type'] = $detail_type;
                 $detail_data[$i]['source_url'] = $v;
+                $detail_data[$i]['priority'] = 0;
+                $detail_data[$i]['hotspot'] = 0;
                 $detail_data[$i]['created_at'] = $now;
                 $detail_data[$i]['updated_at'] = $now;
             }
@@ -150,10 +148,6 @@ class ProductController extends Controller
     public function update(Request $request)
     {
         $id = $request->id;
-        $name = $request->input('name','') ?? '';
-        $detail_type = $request->input('detail_type','') ?? '';
-        $hotspot = $request->input('hotspot','') ?? '';
-        $priority = $request->input('priority',0) ?? 0;
         
         try{
             $product = Product::findOrFail($id);
@@ -162,19 +156,25 @@ class ProductController extends Controller
             if($merchant->can('update', $product)){
 
                 if ($request->has('name')) {
+                    $name = $request->input('name','');
+                    if($name == ''){
+                        $error = 1;
+                        $message = '请输入名称';
+                        return response()->json(compact('error','message'));
+                    }
                     $product->name = $name;
                 }
 
                 if ($request->has('detail_type')) {
-                    $product->type = $detail_type;
+                    $product->type = $request->input('detail_type','');
                 }
 
                 if ($request->has('hotspot')) {
-                    $product->hotspot = $hotspot;
+                    $product->hotspot = $request->input('hotspot','');
                 }
 
                 if ($request->has('priority')) {
-                    $product->priority = $priority;
+                    $product->priority = $request->input('priority',0);
                 }
 
                 if ($request->hasFile('cover')) {

@@ -3,13 +3,18 @@
 namespace App\Http\Controllers\Merchant;
 
 use Exception;
+use App\Models\Style;
+use App\Models\Panorama;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
+use App\Models\PanoramaSingleSpace;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
-use App\Models\Panorama;
-use App\Models\PanoramaSingleSpace;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use App\Models\PanoramaSingleSpaceResource;
+use App\Models\StyleCategory;
 
 class PanoramaSingleSpaceController extends Controller
 {
@@ -17,16 +22,21 @@ class PanoramaSingleSpaceController extends Controller
     {
         $merchant = Auth::guard('merchant')->user();
         $single_spaces = $panorama_single_space
-            ->select('panorama_single_spaces.source_url',
-                'panorama_styles.name as style','materials.name as material','panorama_single_spaces.created_at')
-            ->leftJoin('panorama_styles','panorama_single_spaces.style_id', '=', 'panorama_styles.id')
+            ->select('style_categories.name as style_category','styles.name as style','materials.name as material','panorama_single_spaces.id','panorama_single_spaces.type','panorama_single_spaces.created_at')
+            ->leftJoin('styles','panorama_single_spaces.style_id', '=', 'styles.id')
             ->leftJoin('materials','panorama_single_spaces.material_id', '=', 'materials.id')
-            ->orderBy('panorama_single_spaces.created_at','desc')
+            ->leftJoin('style_categories','styles.category_id','style_categories.id')
             ->where(['panorama_single_spaces.merchant_id'=>$merchant->id])
             ->get();
 
         foreach($single_spaces as $k => $single_space){
-            $single_space->source_url = Storage::url($single_space->source_url);
+            if($single_space->type == 'image'){
+                $single_space->type = '图片';
+            }elseif($single_space->type == 'video'){
+                $single_space->type = '视频';
+            }elseif($single_space->type == 'pdf'){
+                $single_space->type = 'PDF';
+            }
         }
         return view('merchants.panoramas.single_spaces.index')->with('single_spaces', $single_spaces);
     }
@@ -35,11 +45,11 @@ class PanoramaSingleSpaceController extends Controller
     {
         $merchant = Auth::guard('merchant')->user();
         $materials = $merchant->materials;
-        $styles = $merchant->panorama_styles;
+        $categories = $merchant->styleCategories;
 
         return view('merchants.panoramas.single_spaces.create')->with([
-            'styles' => $styles,
-            'materials' => $materials
+            'materials' => $materials,
+            'categories' => $categories,
         ]);
     }
 
@@ -47,7 +57,10 @@ class PanoramaSingleSpaceController extends Controller
     {
         $style = $request->input('style', '') ?? '';
         $material = $request->input('material', '') ?? '';
-        $single_space = $request->input('single_space', '') ?? '';
+        $detail_type = $request->input('detail_type','');
+        $image_datail = $request->input('image_detail','');
+        $video_datail = $request->input('video_detail','');
+        $pdf_datail = $request->input('pdf_detail','');
 
         if($style == ''){
             $error = 1;
@@ -61,23 +74,22 @@ class PanoramaSingleSpaceController extends Controller
             return response()->json(compact('error','message'));
         }
 
-        if($single_space == ''){
+        $detail = '';
+        if($detail_type == 'image'){
+            $detail = $image_datail;
+        }else if($detail_type == 'video'){
+            $detail = $video_datail;
+        }else if($detail_type == 'pdf'){
+            $detail = $pdf_datail;
+        }else{
             $error = 1;
-            $message = '请上传文件';
+            $message = '类型参数错误';
             return response()->json(compact('error','message'));
         }
 
-        $file_path_info = explode('.',$single_space);
-        $file_ext = $file_path_info[1] ?? '';
-
-        $source_type = '';
-        if($file_ext == 'pdf'){
-            $source_type = 'pdf';
-        }else if(is_image_extension($file_ext)){
-            $source_type = 'image';
-        }else{
+        if(empty($detail)){
             $error = 1;
-            $message = '文件格式错误，请重新上传';
+            $message = '请上传产品资料';
             return response()->json(compact('error','message'));
         }
 
@@ -89,20 +101,37 @@ class PanoramaSingleSpaceController extends Controller
         }
 
         try{
+            DB::beginTransaction();
             $merchant = Auth::guard('merchant')->user();
-            PanoramaSingleSpace::create([
+            $single_space = PanoramaSingleSpace::create([
                 'merchant_id' => $merchant->id,
                 'style_id' => $style,
                 'material_id' => $material,
-                'source_url' => $single_space,
-                'source_type' => $source_type,
+                'type' => $detail_type,
             ]);
+
+            $detail_data = [];
+            foreach($detail as $i => $v){
+                $now = Carbon::now()->toDateTimeString();
+                $detail_data[$i]['merchant_id'] = $merchant->id;
+                $detail_data[$i]['single_space_id'] = $single_space->id;
+                $detail_data[$i]['source_type'] = $detail_type;
+                $detail_data[$i]['source_url'] = $v;
+                $detail_data[$i]['priority'] = 0;
+                $detail_data[$i]['hotspot'] = 0;
+                $detail_data[$i]['created_at'] = $now;
+                $detail_data[$i]['updated_at'] = $now;
+            }
+            PanoramaSingleSpaceResource::insert($detail_data);
+
+            DB::commit();
             $error = 0;
             $message = 'success';
         }
         catch(Exception $e){
+            DB::rollBack();
             Log::error($e);
-            $error = 0;
+            $error = 1;
             $message = '添加失败，请稍后再试或者联系管理员';
         }finally{
             return response()->json(compact('error','message'));
@@ -113,11 +142,34 @@ class PanoramaSingleSpaceController extends Controller
     {
         $id = $request->id;
         $single_space = PanoramaSingleSpace::findOrFail($id);
+
         $merchant = Auth::guard('merchant')->user();
-        $styles = $merchant->panorama_styles;
+        $articles = $merchant->articles;
         $materials = $merchant->materials;
-        $spaces = $merchant->spaces;
-        return view('merchants.panoramas.single_spaces.edit');
+        $categories = $merchant->styleCategories;
+
+        $image_resources = PanoramaSingleSpaceResource::where(['single_space_id'=> $id,'source_type' => 'image'])->orderBy('priority','asc')->get();
+        $video_resources = PanoramaSingleSpaceResource::where(['single_space_id'=> $id,'source_type' => 'video'])->orderBy('priority','asc')->get();
+        $pdf_resources = PanoramaSingleSpaceResource::where(['single_space_id'=> $id,'source_type' => 'pdf'])->orderBy('priority','asc')->get();
+
+        $single_space_style_category = StyleCategory::select('style_categories.id','style_categories.name')
+                                            ->leftJoin('styles','style_categories.id','=','styles.category_id')
+                                            ->where(['styles.id' => $single_space->style_id])
+                                            ->first();
+
+        $styles = Style::select('id','name')->where(['category_id' => $single_space_style_category->id])->get();
+
+        return view('merchants.panoramas.single_spaces.edit')->with([
+            'articles' => $articles,
+            'single_space' => $single_space,
+            'materials' => $materials,
+            'categories' => $categories,
+            'single_space_style_category' => $single_space_style_category,
+            'styles' => $styles,
+            'image_resources' => $image_resources,
+            'video_resources' => $video_resources,
+            'pdf_resources' => $pdf_resources
+        ]);
     }
 
     public function update(Request $request)
@@ -125,8 +177,7 @@ class PanoramaSingleSpaceController extends Controller
         $id = $request->id;
         $style = $request->input('style', '') ?? '';
         $material = $request->input('material', '') ?? '';
-        $space = $request->input('space', '') ?? '';
-        $picture = $request->input('picture', '') ?? '';
+        $type = $request->input('detail_type', '') ?? '';
 
         if($style == ''){
             $error = 1;
@@ -137,18 +188,6 @@ class PanoramaSingleSpaceController extends Controller
         if($material == ''){
             $error = 1;
             $message = '请选择材质';
-            return response()->json(compact('error','message'));
-        }
-
-        if($space == ''){
-            $error = 1;
-            $message = '请选择空间';
-            return response()->json(compact('error','message'));
-        }
-
-        if($picture == ''){
-            $error = 1;
-            $message = '请上传图片';
             return response()->json(compact('error','message'));
         }
 
@@ -163,8 +202,8 @@ class PanoramaSingleSpaceController extends Controller
             
             
             $single_space->style_id = $style;
-            $single_space->space_id = $space;
             $single_space->material_id = $material;
+            $single_space->type = $type;
             $single_space->save();
             $error = 0;
             $message = 'success';
@@ -204,7 +243,19 @@ class PanoramaSingleSpaceController extends Controller
 
     public function storeImage(Request $request)
     {
-        $path = $request->file('file')->store("images/panoramas/single_spaces");
+        $path = $request->file('file')->store("images/single_spaces/resources");
+        return $path;
+    }
+
+    public function storeVideo(Request $request)
+    {
+        $path = $request->file('file')->store("videos/single_spaces/resources");
+        return $path;
+    }
+
+    public function storePDF(Request $request)
+    {
+        $path = $request->file('file')->store("pdfs/single_spaces/resources");
         return $path;
     }
 }

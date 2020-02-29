@@ -31,6 +31,7 @@ class AuthServiceProvider extends ServiceProvider
         \App\Models\StyleResource::class => \App\Policies\StyleResourcePolicy::class,
         \App\Models\IndexResource::class => \App\Policies\IndexResourcePolicy::class,
         \App\Models\Article::class => \App\Policies\ArticlePolicy::class,
+        \App\Models\PanoramaSingleSpaceResource::class => \App\Policies\PanoramaSingleSpaceResourcePolicy::class, 
     ];
 
     /**

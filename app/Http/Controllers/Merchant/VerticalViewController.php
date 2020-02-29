@@ -21,9 +21,21 @@ class VerticalViewController extends Controller
     public function index()
     {
         $merchant = Auth::guard('merchant')->user();
-        $vertical_views = $merchant->vertical_views;
+        
+        $merchant = Auth::guard('merchant')->user();
+        $vertical_views = VerticalView::select('vertical_views.id','vertical_views.created_at','vertical_views.source_type','materials.name as material_name','style_categories.name as style_category','styles.name as style_name')
+                            ->leftJoin('materials','vertical_views.material_id','=','materials.id')
+                            ->leftJoin('styles','vertical_views.style_id','styles.id')
+                            ->leftJoin('style_categories','styles.category_id','style_categories.id')
+                            ->where(['vertical_views.merchant_id' => $merchant->id])
+                            ->get();
+
         foreach($vertical_views as $k => $vertical_view){
-            $vertical_view->source_url = Storage::url($vertical_view->source_url);
+            if($vertical_view->source_type == 'image'){
+                $vertical_view->source_type = '鸟瞰图片';
+            }else if($vertical_view->source_type == 'link'){
+                $vertical_view->source_type = '鸟瞰链接';
+            }
         }
         return view('merchants.vertical_views.index')->with('vertical_views', $vertical_views);
     }
@@ -36,10 +48,12 @@ class VerticalViewController extends Controller
     public function create()
     {
         $merchant = Auth::guard('merchant')->user();
-        $styles = $merchant->panorama_styles;
         $materials = $merchant->materials;
+        $categories = $merchant->styleCategories;
+
         return view('merchants.vertical_views.create')->with([
-            'styles' => $styles,
+            'materials' => $materials,
+            'categories' => $categories,
         ]);
     }
 
@@ -52,7 +66,10 @@ class VerticalViewController extends Controller
     public function store(Request $request)
     {
         $style = $request->input('style', '') ?? '';
-        $vertical_view = $request->input('vertical_view', '');
+        $material = $request->input('material', '') ?? '';
+        $vertical_view = $request->input('vertical_view', '') ?? '';
+        $source_type = $request->input('source_type','') ?? '';
+        $link = $request->input('link','') ?? '';
 
         if($style == ''){
             $error = 1;
@@ -60,27 +77,30 @@ class VerticalViewController extends Controller
             return response()->json(compact('error','message'));
         }
 
-        if($vertical_view == ''){
+        if($material == ''){
             $error = 1;
-            $message = '请上传俯视图图';
+            $message = '请选择材质';
             return response()->json(compact('error','message'));
         }
 
-        $file_path_info = explode('.',$vertical_view);
-        $file_ext = $file_path_info[1] ?? '';
+        if($vertical_view == '' && $link == ''){
+            $error = 1;
+            $message = '请上传鸟瞰图 或输入鸟瞰图链接';
+            return response()->json(compact('error','message'));
+        }
 
-        $source_type = '';
-        if($file_ext == 'pdf'){
-            $source_type = 'pdf';
-        }else if(is_image_extension($file_ext)){
-            $source_type = 'image';
+        $source_url = '';
+        if($source_type == 'image'){
+            $source_url = $vertical_view;
+        }else if($source_type == 'link'){
+            $source_url = $link;
         }else{
             $error = 1;
-            $message = '文件格式错误，请重新上传';
+            $message = '请选择类型';
             return response()->json(compact('error','message'));
         }
 
-        $count = VerticalView::where(['style_id' => $style])->count();
+        $count = VerticalView::where(['style_id' => $style, 'material_id' => $material])->count();
         if($count > 0){
             $error = 1;
             $message = '数据已存在，无法添加';
@@ -92,8 +112,9 @@ class VerticalViewController extends Controller
             VerticalView::create([
                 'merchant_id' => $merchant->id,
                 'style_id' => $style,
-                'source_url' => $vertical_view,
-                'source_type' => $source_type,
+                'material_id' => $material,
+                'source_url' => $source_url,
+                'source_type' => $source_type
             ]);
             $error = 0;
             $message = 'success';

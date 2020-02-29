@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Merchant;
 
 use Exception;
+use App\Models\Style;
 use Illuminate\Http\Request;
 use App\Models\StyleCategory;
 use Illuminate\Support\Facades\DB;
@@ -117,13 +118,6 @@ class StyleCategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $name = $request->input('name', '');
-        if($name == ''){
-            $error = 1;
-            $message = '请输入目录名称';
-            return response()->json(compact('error','message'));
-        }
-
         try{
             $merchant = Auth::guard('merchant')->user();
             $style_category = StyleCategory::findOrFail($id);
@@ -132,7 +126,24 @@ class StyleCategoryController extends Controller
                     $cover =  $request->cover->store('images/styles/categories/cover');
                     $style_category->cover = $cover;
                 }
-                $style_category->name = $name;
+
+                if ($request->has('name')){
+                    $name = $request->input('name', '');
+                    if($name == ''){
+                        $error = 1;
+                        $message = '请输入目录名称';
+                        return response()->json(compact('error','message'));
+                    }
+                    $style_category->name = $name;
+                }
+                
+                if($request->has('priority')){
+                    if($request->has('priority')){
+                        $priority = $request->input('priority');
+                        $style_category->priority = $priority;
+                    }
+                }
+
                 $style_category->save();
 
                 $error = 0;
@@ -192,5 +203,24 @@ class StyleCategoryController extends Controller
         $merchant_id = $merchant->id;
         $path = $request->file('file')->store("images/styles/categories/covers");
         return $path;
+    }
+
+    public function getStyleByCategoryID($id){
+        try{
+            $category = StyleCategory::findOrFail($id);
+            $merchant = Auth::guard('merchant')->user();
+            if($merchant->can('view',$category)){
+                $data = Style::select('id','name')->where(['category_id'=>$id])->get()->toArray();
+            }else{
+                $data = [];
+            }
+            $error = 0;
+        }catch(Exception $e){
+            Log::error($e->getMessage());
+            $error = 1;
+            $data = [];
+        }
+
+        return response()->json(compact('error','data'));
     }
 }

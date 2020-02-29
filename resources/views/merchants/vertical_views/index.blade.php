@@ -1,6 +1,6 @@
 @extends('merchants.layouts.app')
 
-@section('title','俯视图列表')
+@section('title','鸟瞰图列表')
 
 @section('styles')
     <link href="{{asset('css/plugins/dataTables/datatables.min.css')}}" rel="stylesheet">
@@ -13,8 +13,8 @@
             <div class="ibox ">
                 <div class="ibox-title">
                     <div class = 'row'>
-                        <span class='col-md-1'><h5>俯视图列表</h5></span>
-                        <a class='btn btn-w-m btn-success' href="{{route('merchant.vertical_view.create')}}">添加俯视图</a>
+                        <span class='col-md-1'><h5>鸟瞰图列表</h5></span>
+                        <a class='btn btn-w-m btn-success' href="{{route('merchant.vertical_view.create')}}">添加鸟瞰图</a>
                     </div>
                 </div>
                 <div class="ibox-content">
@@ -22,8 +22,10 @@
                             <thead>
                             <tr>
                                 <th>序号</th>
+                                <th>材质</th>
+                                <th>风格栏目</th>
                                 <th>风格</th>
-                                <th>俯视图</th>
+                                <th>类型</th>
                                 <th>发布时间</th>
                                 <th>操作</th>
                             </tr>
@@ -33,8 +35,10 @@
                                 @foreach($vertical_views as $i => $vertical_view)
                                 <tr>
                                     <td>{{$i+1}}</td>
-                                    <td>{{$vertical_view->style->name}}</td>
-                                    <td><a href="{{$vertical_view->source_url}}" target="blank">{{$vertical_view->source_url}}</a></td>
+                                    <td>{{$vertical_view->material_name}}</td>
+                                    <td>{{$vertical_view->style_category}}</td>
+                                    <td>{{$vertical_view->style_name}}</td>
+                                    <td>{{$vertical_view->source_type}}</td>
                                     <td>{{$vertical_view->created_at}}</td>
                                     <td><button onclick='deleteItem("{{$vertical_view->id}}")' class='down btn btn-default btn-xs btn-delete'>删除</button></td>
                                 </tr>

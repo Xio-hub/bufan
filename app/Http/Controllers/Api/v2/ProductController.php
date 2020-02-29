@@ -31,7 +31,7 @@ class ProductController extends Controller
     {
         $id = $request->id;
         $user = $request->user();
-        $product = Product::select('id','merchant_id','name','type','hotspot')
+        $product = Product::select('id','merchant_id','name','type')
                         ->where(['id' => $id])
                         ->first();
 
