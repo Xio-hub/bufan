@@ -77,26 +77,13 @@ class StyleController extends Controller
     {
         $id = $request->id;
         $user = $request->user();
-        $style = Style::select('id','merchant_id','name','type','hotspot')
+        $style = Style::select('id','merchant_id','name','type')
                         ->where(['id' => $id])
                         ->first();
 
-        $prev = Style::select('id')
-                    ->where('id','<',$style->id)
-                    ->where('merchant_id','=',$user->id)
-                    ->first();
-    
-        $next = Style::select('id')
-                    ->where('id','>',$style->id)
-                    ->where('merchant_id','=',$user->id)
-                    ->first();
-
         if($style && $user->can('view',$style)){
             $data = $style->toArray();
-            $data['prev'] = $prev ? $prev->id : null;
-            $data['next'] = $next ? $next->id : null;
-
-            $resources = StyleResource::select('source_type as type','source_url')
+            $resources = StyleResource::select('source_type as type','source_url','hotspot')
                             ->where(['style_id' => $id, 'source_type' => $data['type']])    
                             ->orderBy('priority', 'asc')
                             ->get()

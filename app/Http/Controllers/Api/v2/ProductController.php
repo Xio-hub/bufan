@@ -35,22 +35,10 @@ class ProductController extends Controller
                         ->where(['id' => $id])
                         ->first();
 
-        $prev = Product::select('id')
-                            ->where('id','<',$product->id)
-                            ->where('merchant_id','=',$user->id)
-                            ->first();
-        
-        $next = Product::select('id')
-                            ->where('id','>',$product->id)
-                            ->where('merchant_id','=',$user->id)
-                            ->first();
-
         if($product && $user->can('view',$product)){
             $data = $product->toArray();
-            $data['prev'] = $prev ? $prev->id : null;
-            $data['next'] = $next ? $next->id : null;
             
-            $resources = ProductResource::select('source_type as type','source_url')
+            $resources = ProductResource::select('source_type as type','source_url','hotspot')
                             ->where(['product_id' => $id,'source_type' => $data['type']])    
                             ->orderBy('priority', 'asc')
                             ->get()

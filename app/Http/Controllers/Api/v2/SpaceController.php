@@ -77,26 +77,14 @@ class SpaceController extends Controller
     {
         $id = $request->id;
         $user = $request->user();
-        $space = Space::select('id','merchant_id','name','type','hotspot')
+        $space = Space::select('id','merchant_id','name','type')
                         ->where(['id' => $id])
                         ->first();
 
-        $prev = Space::select('id')
-                    ->where('id','<',$space->id)
-                    ->where('merchant_id','=',$user->id)
-                    ->first();
-    
-        $next = Space::select('id')
-                    ->where('id','>',$space->id)
-                    ->where('merchant_id','=',$user->id)
-                    ->first();
-
         if($space && $user->can('view',$space)){
             $data = $space->toArray();
-            $data['prev'] = $prev ? $prev->id : null;
-            $data['next'] = $next ? $next->id : null;
-            
-            $resources = SpaceResource::select('source_type as type','source_url')
+
+            $resources = SpaceResource::select('source_type as type','source_url','hotspot')
                             ->where(['space_id' => $id,'source_type' => $data['type']])    
                             ->orderBy('priority', 'asc')
                             ->get()
