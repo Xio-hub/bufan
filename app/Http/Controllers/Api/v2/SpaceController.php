@@ -81,9 +81,21 @@ class SpaceController extends Controller
                         ->where(['id' => $id])
                         ->first();
 
+        $prev = Space::select('id')
+                    ->where('id','<',$space->id)
+                    ->where('merchant_id','=',$user->id)
+                    ->first();
+    
+        $next = Space::select('id')
+                    ->where('id','>',$space->id)
+                    ->where('merchant_id','=',$user->id)
+                    ->first();
+
         if($space && $user->can('view',$space)){
             $data = $space->toArray();
-            unset($data['merchant_id']);
+            $data['prev'] = $prev ? $prev->id : null;
+            $data['next'] = $next ? $next->id : null;
+            
             $resources = SpaceResource::select('source_type as type','source_url')
                             ->where(['space_id' => $id,'source_type' => $data['type']])    
                             ->orderBy('priority', 'asc')
@@ -94,7 +106,8 @@ class SpaceController extends Controller
                 $resources[$k]['source_url'] = $v['source_url'] ? Storage::url($v['source_url']) : '';
             }
 
-            $data['content'] = $resources;              
+            $data['content'] = $resources;    
+            unset($data['merchant_id']);          
         }else{
             $data = null;
         }

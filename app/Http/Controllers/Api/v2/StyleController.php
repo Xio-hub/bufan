@@ -81,9 +81,21 @@ class StyleController extends Controller
                         ->where(['id' => $id])
                         ->first();
 
+        $prev = Style::select('id')
+                    ->where('id','<',$style->id)
+                    ->where('merchant_id','=',$user->id)
+                    ->first();
+    
+        $next = Style::select('id')
+                    ->where('id','>',$style->id)
+                    ->where('merchant_id','=',$user->id)
+                    ->first();
+
         if($style && $user->can('view',$style)){
             $data = $style->toArray();
-            unset($data['merchant_id']);
+            $data['prev'] = $prev ? $prev->id : null;
+            $data['next'] = $next ? $next->id : null;
+
             $resources = StyleResource::select('source_type as type','source_url')
                             ->where(['style_id' => $id, 'source_type' => $data['type']])    
                             ->orderBy('priority', 'asc')
@@ -94,7 +106,8 @@ class StyleController extends Controller
                 $resources[$k]['source_url'] = $v['source_url'] ? Storage::url($v['source_url']) : '';
             }
             
-            $data['content'] = $resources;              
+            $data['content'] = $resources; 
+            unset($data['merchant_id']);              
         }else{
             $data = null;
         }
