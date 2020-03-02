@@ -40,8 +40,15 @@ class PassportController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function details()
+    public function details(Request $request)
     {
-        return response()->json(['user' => auth()->user()], 200);
+        $user = $request->user();
+        $data = [
+            'id' => $user->id,
+            'username'=> $user->username,
+            'expired_at' => $user->expired_at
+        ];
+        
+        return response()->json($data);
     }
 }

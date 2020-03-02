@@ -106,6 +106,8 @@ Route::group([
     Route::get('articles/{id}', 'ArticleController@detail')->where('id', '\d+');
 
     Route::patch('passwords/reset','PasswordController@update');
+
+    Route::get('user','PassportController@details');
 });
 
 Route::group([
