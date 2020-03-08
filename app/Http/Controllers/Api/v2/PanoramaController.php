@@ -140,7 +140,7 @@ class PanoramaController extends Controller
         if($data && $user->can('view',$data)){
             $data = $data->toArray();
             $resources = PanoramaSingleSpaceResource::select('source_type','source_url','hotspot')
-                            ->where(['single_space_id' => $data['id'],'source_type' => $data['type']])    
+                            ->where(['single_space_id' => $data['id'],'source_type' => $data['source_type']])    
                             ->orderBy('priority', 'asc')
                             ->get()
                             ->toArray();
