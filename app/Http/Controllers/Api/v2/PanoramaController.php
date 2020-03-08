@@ -135,7 +135,7 @@ class PanoramaController extends Controller
         }
 
         $user = $request->user();
-        $data = PanoramaSingleSpace::select('id','merchant_id','type')->where(['style_id'=>$style_id, 'material_id' => $material_id])->first();
+        $data = PanoramaSingleSpace::select('id','merchant_id','source_type')->where(['style_id'=>$style_id, 'material_id' => $material_id])->first();
 
         if($data && $user->can('view',$data)){
             $data = $data->toArray();
