@@ -22,7 +22,7 @@ class PanoramaSingleSpaceController extends Controller
     {
         $merchant = Auth::guard('merchant')->user();
         $single_spaces = $panorama_single_space
-            ->select('style_categories.name as style_category','styles.name as style','materials.name as material','panorama_single_spaces.id','panorama_single_spaces.type','panorama_single_spaces.created_at')
+            ->select('style_categories.name as style_category','styles.name as style','materials.name as material','panorama_single_spaces.id','panorama_single_spaces.source_type','panorama_single_spaces.created_at')
             ->leftJoin('styles','panorama_single_spaces.style_id', '=', 'styles.id')
             ->leftJoin('materials','panorama_single_spaces.material_id', '=', 'materials.id')
             ->leftJoin('style_categories','styles.category_id','style_categories.id')
@@ -30,12 +30,12 @@ class PanoramaSingleSpaceController extends Controller
             ->get();
 
         foreach($single_spaces as $k => $single_space){
-            if($single_space->type == 'image'){
-                $single_space->type = '图片';
-            }elseif($single_space->type == 'video'){
-                $single_space->type = '视频';
-            }elseif($single_space->type == 'pdf'){
-                $single_space->type = 'PDF';
+            if($single_space->source_type == 'image'){
+                $single_space->source_type = '图片';
+            }elseif($single_space->source_type == 'video'){
+                $single_space->source_type = '视频';
+            }elseif($single_space->source_type == 'pdf'){
+                $single_space->source_type = 'PDF';
             }
         }
         return view('merchants.panoramas.single_spaces.index')->with('single_spaces', $single_spaces);
@@ -107,7 +107,7 @@ class PanoramaSingleSpaceController extends Controller
                 'merchant_id' => $merchant->id,
                 'style_id' => $style,
                 'material_id' => $material,
-                'type' => $detail_type,
+                'source_type' => $detail_type,
             ]);
 
             $detail_data = [];
@@ -203,7 +203,7 @@ class PanoramaSingleSpaceController extends Controller
             
             $single_space->style_id = $style;
             $single_space->material_id = $material;
-            $single_space->type = $type;
+            $single_space->source_type = $type;
             $single_space->save();
             $error = 0;
             $message = 'success';

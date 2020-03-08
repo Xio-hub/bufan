@@ -80,9 +80,9 @@
                                         <div class="form-group  row">
                                             <label class="col-sm-2 col-form-label">产品展示类型</label>
                                             <div class="col-sm-5">
-                                                <div class="i-checks"><label> <input type="radio" id="image_type" value="image" name="detail_type" @if($single_space->type == 'image') checked @endif> <i></i>图片</label></div>
-                                                <div class="i-checks"><label> <input type="radio" id="video_type" value="video" name="detail_type" @if($single_space->type == 'video') checked @endif> <i></i>视频</label></div>
-                                                <div class="i-checks"><label> <input type="radio" id="video_type" value="pdf" name="detail_type" @if($single_space->type == 'pdf') checked @endif> <i></i>pdf</label></div>
+                                                <div class="i-checks"><label> <input type="radio" id="image_type" value="image" name="detail_type" @if($single_space->source_type == 'image') checked @endif> <i></i>图片</label></div>
+                                                <div class="i-checks"><label> <input type="radio" id="video_type" value="video" name="detail_type" @if($single_space->source_type == 'video') checked @endif> <i></i>视频</label></div>
+                                                <div class="i-checks"><label> <input type="radio" id="video_type" value="pdf" name="detail_type" @if($single_space->source_type == 'pdf') checked @endif> <i></i>pdf</label></div>
                                             </div>
                                         </div>
 

@@ -38,7 +38,7 @@
                                     <td>{{$single_space->material}}</td>
                                     <td>{{$single_space->style_category}}</td>
                                     <td>{{$single_space->style}}</td>
-                                    <td>{{$single_space->type}}</td>
+                                    <td>{{$single_space->source_type}}</td>
                                     <td>{{$single_space->created_at}}</td>
                                     <td>
                                         <a href="{{route('merchant.panorama.single_space.edit',$single_space->id)}}" class='down btn btn-default btn-xs btn-delete'>修改</a>
