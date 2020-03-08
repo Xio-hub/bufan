@@ -112,7 +112,9 @@ class PanoramaController extends Controller
 
         if($data && $user->can('view',$data)){
             unset($data->merchant_id);
-            $data->source_url = $data->source_url ? Storage::url($data->source_url) : '';
+            if($data->source_type == 'image'){
+                $data->source_url = $data->source_url ? Storage::url($data->source_url) : '';
+            }
         }else{
             $data = null;
         }
@@ -137,7 +139,7 @@ class PanoramaController extends Controller
 
         if($data && $user->can('view',$data)){
             $data = $data->toArray();
-            $resources = PanoramaSingleSpaceResource::select('source_type as type','source_url','hotspot')
+            $resources = PanoramaSingleSpaceResource::select('source_type','source_url','hotspot')
                             ->where(['single_space_id' => $data['id'],'source_type' => $data['type']])    
                             ->orderBy('priority', 'asc')
                             ->get()
